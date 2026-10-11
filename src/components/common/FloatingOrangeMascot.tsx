@@ -9,12 +9,11 @@ interface FloatingOrangeMascotProps {
 }
 
 const FUN_QUOTES = [
-  'Tham gia HMC cùng tớ nha! 🍊🎶',
-  'Gia nhập gia đình HMC thôi nào! 🎤✨',
-  'Đăng ký CTV ngay kẻo lỡ! 🧡',
-  'Âm nhạc là đam mê, quẩy hết mình! 💃🕺',
-  'HMC đang chờ đón bạn tỏa sáng! 🌟',
-  'Casting đợt 2026 siêu đỉnh! 🍊🎵',
+  'nhấn vào mình điii 🍊👆',
+  'HMC - Hai một cún 🐶🎵',
+  'Đăng ký CTV ngay 🎤✨',
+  'Cam vừa hát hay, vừa nhảy đẹp 💃🕺',
+  'Cam đã đăng ký rồi, còn bạn thì sao? 🧡',
 ]
 
 export const FloatingOrangeMascot: React.FC<FloatingOrangeMascotProps> = ({ onOpenRegister }) => {

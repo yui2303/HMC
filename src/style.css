@@ -269,6 +269,34 @@ textarea,
   animation: noteFloat2 6.2s ease-in-out infinite 0.8s;
 }
 
+/* Space Tour Astronaut Floating Animation */
+@keyframes spaceTourFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-16px) rotate(1.8deg);
+  }
+}
+
+.animate-space-tour {
+  animation: spaceTourFloat 6s ease-in-out infinite;
+}
+
+/* Planet Orbit Floating Animation */
+@keyframes planetFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-14px) rotate(-2deg);
+  }
+}
+
+.animate-planet-orbit {
+  animation: planetFloat 7s ease-in-out infinite;
+}
+
 /* Vinyl Slow Rotation: 28-32s linear revolution */
 @keyframes vinylSpinSlow {
   from { transform: rotate(0deg); }

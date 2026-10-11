@@ -425,7 +425,7 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, on
                 <div className="inline-flex flex-wrap items-center justify-center gap-2 sm:gap-3 px-3.5 py-1.5 rounded-xl bg-[#09172B] border border-[#70D7FF]/25 text-xs text-[#C4D5E8] mb-3">
                   <span className="flex items-center gap-1 text-[#70D7FF] font-semibold">
                     <Clock className="w-3.5 h-3.5" />
-                    Đăng ký: 16g00 12/10 – 21g00 04/11/2026
+                    Đăng ký: 19g00 11/10 – 21g00 04/11/2026
                   </span>
                   <span className="text-[#70D7FF]/40 hidden sm:inline">•</span>
                   <span className="flex items-center gap-1 text-[#B8CDE5]">

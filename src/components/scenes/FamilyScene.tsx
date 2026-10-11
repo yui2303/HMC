@@ -115,7 +115,7 @@ export const FamilyScene: React.FC<FamilySceneProps> = () => {
                 <span>THỜI GIAN ĐĂNG KÝ CASTING</span>
               </div>
               <p className="text-[16px] xl:text-[17px] text-white font-medium">
-                Từ <span className="text-[#70D7FF] font-bold">16g00 ngày 12/10/2026</span> đến{' '}
+                Từ <span className="text-[#70D7FF] font-bold">19g00 ngày 11/10/2026</span> đến{' '}
                 <span className="text-[#70D7FF] font-bold">21g00 ngày 04/11/2026</span>.
               </p>
             </div>
@@ -300,7 +300,7 @@ export const FamilyScene: React.FC<FamilySceneProps> = () => {
             <span>THỜI GIAN ĐĂNG KÝ CASTING</span>
           </div>
           <p className="text-[13.5px] sm:text-sm font-medium leading-relaxed">
-            Từ <span className="font-bold text-[#70D7FF]">16g00 ngày 12/10/2026</span> đến{' '}
+            Từ <span className="font-bold text-[#70D7FF]">19g00 ngày 11/10/2026</span> đến{' '}
             <span className="font-bold text-[#70D7FF]">21g00 ngày 04/11/2026</span>.
           </p>
         </div>

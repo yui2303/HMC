@@ -178,7 +178,7 @@ export function generatePersonalizedEmailHtml(
             • <strong>Thời gian Casting:</strong>
           </p>
           <ul style="margin: 4px 0 0 20px; font-size: 12.5px; color: #D2DFEE; padding: 0;">
-            <li><strong>Ngày 06/11/2026:</strong> Sáng (9g00 – 12g00) | Chiều (13g30 – 20g00)</li>
+            <li><strong>Ngày 06/11/2026:</strong> Sáng (09g00 – 12g00) | Chiều (13g30 – 20g00)</li>
             <li><strong>Ngày 07/11/2026:</strong> Sáng (09g00 – 12g00) | Chiều (13g30 – 17g00)</li>
           </ul>
         </div>

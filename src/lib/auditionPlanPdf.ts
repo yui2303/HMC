@@ -8,12 +8,12 @@ export const AUDITION_PLAN_CONTENT = {
   title: 'KẾ HOẠCH TỔ CHỨC TUYỂN THÀNH VIÊN',
   club: 'CLB ÂM NHẠC HUFLIT (HUFLIT MUSIC CLUB)',
   academicYear: 'Năm học 2026 – 2027',
-  registrationTime: 'Từ 16g00 ngày 12/10/2026 đến 21g00 ngày 04/11/2026.',
+  registrationTime: 'Từ 19g00 ngày 11/10/2026 đến 21g00 ngày 04/11/2026.',
   castingSchedule: [
     {
       date: 'Ngày 06/11/2026',
       shifts: [
-        'Buổi sáng: 9g00 – 12g00',
+        'Buổi sáng: 09g00 – 12g00',
         'Buổi chiều: 13g30 – 20g00',
       ],
     },
@@ -579,13 +579,13 @@ export function getAuditionPlanHtml(candidateName?: string, candidateStudentId?:
 
           <div class="subsection-title">2. Thời gian, địa điểm và đối tượng</div>
 
-          <p><span class="accent-cyan">2.1. Thời gian đăng ký:</span> Từ <strong class="highlight-text">16g00 ngày 12/10/2026</strong> đến <strong class="highlight-text">21g00 ngày 04/11/2026</strong>.</p>
+          <p><span class="accent-cyan">2.1. Thời gian đăng ký:</span> Từ <strong class="highlight-text">19g00 ngày 11/10/2026</strong> đến <strong class="highlight-text">21g00 ngày 04/11/2026</strong>.</p>
           <p><span class="accent-cyan">Thời gian Casting chính thức:</span></p>
 
           <div class="schedule-grid">
             <div class="schedule-card">
               <div class="date-title">📅 Ngày 06/11/2026</div>
-              <div class="shift-item">• <strong>Buổi sáng:</strong> 9g00 – 12g00</div>
+              <div class="shift-item">• <strong>Buổi sáng:</strong> 09g00 – 12g00</div>
               <div class="shift-item">• <strong>Buổi chiều:</strong> 13g30 – 20g00</div>
             </div>
 
@@ -629,7 +629,7 @@ export function getAuditionPlanHtml(candidateName?: string, candidateStudentId?:
 
           <div class="subsection-title">Điều 1. Đăng ký tham gia Casting</div>
           <p>Thí sinh đăng ký Casting thông qua Form đăng ký chính thức của CLB.</p>
-          <p>• Thời gian mở đăng ký: <strong class="highlight-text">16g00 ngày 12/10/2026</strong></p>
+          <p>• Thời gian mở đăng ký: <strong class="highlight-text">19g00 ngày 11/10/2026</strong></p>
           <p>• Thời gian đóng đăng ký: <strong class="highlight-text">21g00 ngày 04/11/2026</strong></p>
           <p><em>*Hình thức đăng ký nhiều lĩnh vực:</em> Thí sinh được phép đăng ký nhiều lĩnh vực. Đối với mỗi lĩnh vực đăng ký, thí sinh cần thực hiện một lần đăng ký riêng (Ví dụ: Thí sinh đăng ký cả Hát và Nhảy → thực hiện 02 lần đăng ký tương ứng với từng lĩnh vực).</p>
 

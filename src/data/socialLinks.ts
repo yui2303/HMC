@@ -51,16 +51,16 @@ export interface RecruitmentData {
 export const recruitmentInfo: RecruitmentData = {
   title: "Thời gian Tuyển CTV – CLB Âm nhạc HUFLIT",
   registrationTime: {
-    start: "16g00 ngày 12/10/2026",
+    start: "19g00 ngày 11/10/2026",
     end: "21g00 ngày 04/11/2026",
-    label: "Từ 16g00 ngày 12/10/2026 đến 21g00 ngày 04/11/2026",
+    label: "Từ 19g00 ngày 11/10/2026 đến 21g00 ngày 04/11/2026",
   },
   castingSchedule: [
     {
       date: "06/11/2026",
       label: "Ngày 06/11/2026",
       sessions: [
-        { session: "Buổi sáng", time: "9g00 – 12g00" },
+        { session: "Buổi sáng", time: "09g00 – 12g00" },
         { session: "Buổi chiều", time: "13g30 – 20g00" },
       ],
     },

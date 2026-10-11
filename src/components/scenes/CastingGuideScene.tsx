@@ -13,6 +13,7 @@ import {
 } from 'lucide-react'
 import { sound } from '../../lib/audioSynth'
 import { ReferenceOverlay } from '../common/ReferenceOverlay'
+import { SpaceTourAnimation } from '../effects/SpaceTourAnimation'
 
 interface CastingGuideSceneProps {
   onOpenRegister?: () => void
@@ -92,35 +93,50 @@ export const CastingGuideScene: React.FC<CastingGuideSceneProps> = ({
         />
       </div>
 
-      <div className="contact-soundwave absolute bottom-2 left-0 right-0 h-40 z-[5] pointer-events-none mix-blend-screen opacity-65">
+      <div className="contact-soundwave absolute bottom-4 sm:bottom-6 left-0 right-0 h-36 sm:h-44 z-[5] pointer-events-none mix-blend-screen opacity-65">
         <img
           src="/assets/music-club/scene-04-contact/scene4_soundwave.png"
           alt="Continuous Soundwave Stream"
-          className="w-full h-full object-contain filter drop-shadow-[0_0_20px_#70D7FF]"
+          className="w-full h-full object-cover sm:object-contain filter drop-shadow-[0_0_25px_rgba(112,215,255,0.7)]"
           loading="lazy"
         />
       </div>
 
+      {/* Atmospheric Floor Vignette: Deep blue gradient fading upward */}
+      <div className="absolute bottom-0 left-0 right-0 h-44 sm:h-56 pointer-events-none z-[6] bg-gradient-to-t from-[#020813] via-[#020813]/85 to-transparent" />
+
       {/* LAYER 5: MAIN CONTENT */}
       <div className="relative z-[11] max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 flex flex-col justify-between min-h-[calc(100vh-180px)]">
         <div>
-          {/* Header Title Group */}
-          <div className="casting-heading-group mb-6 sm:mb-12 text-center sm:text-left">
-            <div className="inline-flex items-center gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-[#0E2A4D]/80 border border-[#70D7FF]/30 text-[#70D7FF] text-[10px] sm:text-xs font-semibold uppercase tracking-wider mb-2.5 sm:mb-3.5 glow-text-cyan shadow-sm">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>HƯỚNG DẪN ĐĂNG KÝ CASTING</span>
+          {/* Header Row: Title on Left, Space Tour Astronaut in Empty Area on Right */}
+          <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between gap-4 mb-6 sm:mb-10 relative">
+            <div className="casting-heading-group text-center sm:text-left max-w-2xl">
+              <div className="inline-flex items-center gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-[#0E2A4D]/80 border border-[#70D7FF]/30 text-[#70D7FF] text-[10px] sm:text-xs font-semibold uppercase tracking-wider mb-2.5 sm:mb-3.5 glow-text-cyan shadow-sm">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>HƯỚNG DẪN ĐĂNG KÝ CASTING</span>
+              </div>
+
+              <h2 className="font-sans font-extrabold text-2xl sm:text-5xl lg:text-[54px] text-white tracking-tight leading-[1.15] mb-2 sm:mb-3">
+                <span>LỊCH TRÌNH CASTING </span>
+                <span className="block sm:inline text-transparent bg-clip-text bg-gradient-to-r from-[#70D7FF] via-[#398BFF] to-[#70D7FF] glow-text-cyan">
+                  &amp; ĐỊA ĐIỂM
+                </span>
+              </h2>
+
+              <p className="font-sans text-xs sm:text-base text-[#91A4BB] max-w-2xl leading-relaxed px-1">
+                Hãy theo dõi kỹ khung giờ casting và chuẩn bị trang phục, beat nhạc để tỏa sáng tốt nhất trước Ban giám khảo nhé!
+              </p>
             </div>
 
-            <h2 className="font-sans font-extrabold text-2xl sm:text-5xl lg:text-[54px] text-white tracking-tight leading-[1.15] mb-2 sm:mb-3">
-              <span>LỊCH TRÌNH CASTING </span>
-              <span className="block sm:inline text-transparent bg-clip-text bg-gradient-to-r from-[#70D7FF] via-[#398BFF] to-[#70D7FF] glow-text-cyan">
-                &amp; ĐỊA ĐIỂM
-              </span>
-            </h2>
+            {/* Astronaut Space Tour in the Empty Right Area Between the 2 Scenes */}
+            <div className="hidden lg:block relative -mt-16 xl:-mt-24 mr-2 xl:mr-6 pointer-events-auto">
+              <SpaceTourAnimation width={310} height={350} />
+            </div>
 
-            <p className="font-sans text-xs sm:text-base text-[#91A4BB] max-w-2xl leading-relaxed px-1">
-              Hãy theo dõi kỹ khung giờ casting và chuẩn bị trang phục, beat nhạc để tỏa sáng tốt nhất trước Ban giám khảo nhé!
-            </p>
+            {/* Mobile / Tablet Space Tour View */}
+            <div className="lg:hidden my-2 flex justify-center">
+              <SpaceTourAnimation width={220} height={250} />
+            </div>
           </div>
 
           {/* Grid Layout: Left 2 Casting Schedule Cards | Right Venue & Register CTA */}
@@ -165,7 +181,7 @@ export const CastingGuideScene: React.FC<CastingGuideSceneProps> = ({
                       <span>BUỔI SÁNG</span>
                     </div>
                     <div className="font-serif-display text-base sm:text-lg font-bold text-white">
-                      9g00 – 12g00
+                      09g00 – 12g00
                     </div>
                     <div className="text-[11px] text-[#91A4BB]">
                       Check-in, khởi động giọng hát & vũ đạo
@@ -309,7 +325,7 @@ export const CastingGuideScene: React.FC<CastingGuideSceneProps> = ({
                 </button>
 
                 <p className="text-[11px] text-center text-[#91A4BB] italic">
-                  * Thời gian đăng ký: Từ 16g00 ngày 12/10/2026 đến 21g00 ngày 04/11/2026.
+                  * Thời gian đăng ký: Từ 19g00 ngày 11/10/2026 đến 21g00 ngày 04/11/2026.
                 </p>
               </div>
             </div>
@@ -317,7 +333,7 @@ export const CastingGuideScene: React.FC<CastingGuideSceneProps> = ({
         </div>
 
         {/* BOTTOM FOOTER */}
-        <div className="mt-10 sm:mt-16 pt-5 border-t border-white/10 flex items-center justify-center text-xs text-[#91A4BB]/70 text-center">
+        <div className="mt-10 sm:mt-16 pt-5 border-t border-white/10 flex items-center justify-center text-xs text-[#91A4BB]/80 text-center relative z-[15]">
           <div>
             &copy; {new Date().getFullYear()} HUFLIT MUSIC CLUB. All rights reserved.
           </div>

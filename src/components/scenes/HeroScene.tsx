@@ -3,6 +3,8 @@ import { ArrowRight, Sparkles } from 'lucide-react'
 import { sound } from '../../lib/audioSynth'
 import { ReferenceOverlay } from '../common/ReferenceOverlay'
 import { HeroParticlesBack, HeroParticlesFront } from '../effects/HeroFallingParticles'
+import { HeroAstronautTelescope } from '../effects/HeroAstronautTelescope'
+import { HeroPlanetOrbit } from '../effects/HeroPlanetOrbit'
 
 interface HeroSceneProps {
   onOpenRegister: () => void
@@ -61,6 +63,18 @@ export const HeroScene: React.FC<HeroSceneProps> = ({ onOpenRegister, onExplore,
 
       {/* LAYER 3.5: Back Falling Particles (Far & Mid Layers behind content - z-index 15) */}
       <HeroParticlesBack />
+
+      {/* LAYER 3.8: Floating Cosmic Planet with Orbit Ring & Stars (Upper-Left Corner of Hero) */}
+      <div className="absolute top-20 left-3 sm:top-24 sm:left-6 lg:top-28 lg:left-10 xl:top-32 xl:left-14 z-20 pointer-events-auto">
+        {/* Desktop View */}
+        <div className="hidden sm:block">
+          <HeroPlanetOrbit width={200} height={200} />
+        </div>
+        {/* Mobile View */}
+        <div className="sm:hidden">
+          <HeroPlanetOrbit width={110} height={110} />
+        </div>
+      </div>
 
       {/* LAYER 4: Center HTML Content Group (Eyebrow, Heading, Description, Buttons) */}
       <div className="hero-content relative z-30 max-w-5xl mx-auto px-4 text-center flex flex-col items-center my-auto">
@@ -121,6 +135,18 @@ export const HeroScene: React.FC<HeroSceneProps> = ({ onOpenRegister, onExplore,
 
       {/* LAYER 7: Front Falling Particles (Low density 3D foreground floating - z-index 35) */}
       <HeroParticlesFront />
+
+      {/* LAYER 8: Cute Astronaut with Telescope looking at stars (Bottom-Right Corner of Hero) */}
+      <div className="absolute bottom-2 right-2 sm:bottom-5 sm:right-6 lg:bottom-6 lg:right-10 xl:bottom-8 xl:right-14 z-30 pointer-events-auto">
+        {/* Desktop View */}
+        <div className="hidden sm:block">
+          <HeroAstronautTelescope width={280} height={280} />
+        </div>
+        {/* Mobile View */}
+        <div className="sm:hidden">
+          <HeroAstronautTelescope width={170} height={170} />
+        </div>
+      </div>
     </section>
   )
 }

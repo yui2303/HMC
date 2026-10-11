@@ -172,15 +172,18 @@ export const ContactScene: React.FC<ContactSceneProps> = ({ showReferenceOverlay
         />
       </div>
 
-      {/* LAYER 10: Soundwave Integrated into Lower Studio Floor (z-index 10) */}
-      <div className="contact-soundwave absolute bottom-2 left-0 right-0 h-48 z-[10] pointer-events-none mix-blend-screen opacity-75">
+      {/* LAYER 10: Soundwave Integrated into Lower Studio Floor */}
+      <div className="contact-soundwave absolute bottom-4 sm:bottom-8 left-0 right-0 h-40 sm:h-52 z-[8] pointer-events-none mix-blend-screen opacity-70">
         <img
           src="/assets/music-club/scene-04-contact/scene4_soundwave.png"
           alt="Continuous Soundwave Stream"
-          className="w-full h-full object-contain filter drop-shadow-[0_0_20px_#70D7FF]"
+          className="w-full h-full object-cover sm:object-contain filter drop-shadow-[0_0_25px_rgba(112,215,255,0.7)]"
           loading="lazy"
         />
       </div>
+
+      {/* Atmospheric Floor Vignette: Deep blue gradient fading upward */}
+      <div className="absolute bottom-0 left-0 right-0 h-52 sm:h-64 pointer-events-none z-[9] bg-gradient-to-t from-[#020813] via-[#020813]/90 to-transparent" />
 
       {/* LAYER 11: HTML CONTACT CONTENT (z-index 11) */}
       <div className="relative z-[11] max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8">
@@ -350,7 +353,7 @@ export const ContactScene: React.FC<ContactSceneProps> = ({ showReferenceOverlay
         </div>
 
         {/* BOTTOM FOOTER */}
-        <div className="mt-16 pt-8 border-t border-white/10 flex items-center justify-center text-xs text-[#91A4BB]/70 text-center">
+        <div className="mt-16 pt-8 border-t border-white/10 flex items-center justify-center text-xs text-[#91A4BB]/80 text-center relative z-[15]">
           <div>
             &copy; {new Date().getFullYear()} HUFLIT MUSIC CLUB. All rights reserved.
           </div>
