@@ -25,12 +25,12 @@ export interface EmailProviderConfig {
  * - Nếu dùng Google Apps Script: Đặt provider = 'webhook' và dán webhookUrl
  */
 export const DEFAULT_EMAIL_CONFIG: EmailProviderConfig = {
-  provider: 'resend',
-  senderEmail: 'CLB Âm nhạc HUFLIT <onboarding@resend.dev>',
+  provider: 'emailjs',
+  senderEmail: 'CLB Âm nhạc HUFLIT <clbamnhac.huflit@gmail.com>',
   resendApiKey: (import.meta.env.VITE_RESEND_API_KEY as string) || '',
-  emailjsServiceId: (import.meta.env.VITE_EMAILJS_SERVICE_ID as string) || '',
-  emailjsTemplateId: (import.meta.env.VITE_EMAILJS_TEMPLATE_ID as string) || '',
-  emailjsPublicKey: (import.meta.env.VITE_EMAILJS_PUBLIC_KEY as string) || '',
+  emailjsServiceId: (import.meta.env.VITE_EMAILJS_SERVICE_ID as string) || 'service_fkcpp29',
+  emailjsTemplateId: (import.meta.env.VITE_EMAILJS_TEMPLATE_ID as string) || 'template_bk0piza',
+  emailjsPublicKey: (import.meta.env.VITE_EMAILJS_PUBLIC_KEY as string) || 'q0QNSKxr7xzzPS8nJ',
   webhookUrl: (import.meta.env.VITE_WEBHOOK_URL as string) || '',
   autoSendOnRegistration: true, // true: Tự động gửi mail ngay khi thí sinh đăng ký
 }
