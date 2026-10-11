@@ -165,7 +165,7 @@ export const StagesScene: React.FC<StagesSceneProps> = () => {
 
           {/* RIGHT COLUMN: 3-PHOTO COLLAGE (Col span 5 - 3 ảnh sân khấu / giải thưởng của scene 2 cũ) */}
           <div className="col-span-5 relative min-h-[580px] xl:min-h-[620px] pointer-events-auto">
-            {/* Photo 1: Sân khấu biểu diễn (Top) */}
+            {/* Photo 1: CTV Concert ATVNCG (Top) */}
             <div
               className="stages-photo-1 absolute transition-transform duration-300 hover:scale-[1.02] hover:z-30 cursor-pointer"
               style={{
@@ -178,19 +178,19 @@ export const StagesScene: React.FC<StagesSceneProps> = () => {
             >
               <div className="rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.85),0_0_20px_rgba(57,139,255,0.25)] border border-[#70D7FF]/35 aspect-[3/2] relative group">
                 <img
-                  src="/assets/music-club/scene-02-about/club_stage_performance.jpg"
-                  alt="Đêm nhạc BLOOMING BRAVERY & Concert ATVNCG 2025"
+                  src="/assets/music-club/scene-02-about/hmc_ctv_concert_atvncg.jpg"
+                  alt="Cộng tác viên biểu diễn tại Concert Anh Trai Vượt Ngàn Chông Gai 2025 – Day 3 & Day 4 HCM"
                   className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                   loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#050D1A]/95 via-[#050D1A]/35 to-transparent flex items-end p-3.5">
                   <div>
                     <span className="text-xs font-bold text-white flex items-center gap-1.5">
-                      <Sparkles className="w-3.5 h-3.5 text-[#FFB45C]" />
-                      Đêm nhạc BLOOMING BRAVERY
+                      <Star className="w-3.5 h-3.5 text-[#FFB45C]" />
+                      CONCERT ANH TRAI VƯỢT NGÀN CHÔNG GAI 2025
                     </span>
                     <span className="text-[10px] text-[#C4D5E8] block mt-0.5">
-                      CTV biểu diễn tại Concert Anh Trai Vượt Ngàn Chông Gai 2025
+                      CTV biểu diễn tại Concert ATVNCG – Day 3 &amp; Day 4 TP.HCM
                     </span>
                   </div>
                 </div>
@@ -349,18 +349,18 @@ export const StagesScene: React.FC<StagesSceneProps> = () => {
 
         {/* 3 Photos Mobile Showcase */}
         <div className="w-full space-y-3 mb-5">
-          {/* Main Photo 1 */}
+          {/* Main Photo 1: CTV Concert ATVNCG */}
           <div className="rounded-2xl overflow-hidden shadow-[0_12px_30px_rgba(0,0,0,0.85)] border border-[#70D7FF]/35 aspect-[16/10] bg-[#0A1A2F] relative group">
             <img
-              src="/assets/music-club/scene-02-about/club_stage_performance.jpg"
-              alt="Đêm nhạc BLOOMING BRAVERY & Concert Anh Trai Vượt Ngàn Chông Gai 2025"
+              src="/assets/music-club/scene-02-about/hmc_ctv_concert_atvncg.jpg"
+              alt="Cộng tác viên biểu diễn tại Concert Anh Trai Vượt Ngàn Chông Gai 2025"
               className="w-full h-full object-cover"
               loading="lazy"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#050D1A]/95 via-[#050D1A]/35 to-transparent flex items-end p-3">
               <span className="text-[11px] font-medium text-white flex items-center gap-1.5 text-left">
-                <Sparkles className="w-3.5 h-3.5 text-[#FFB45C] shrink-0" />
-                Đêm nhạc BLOOMING BRAVERY &amp; Concert ATVNCG 2025
+                <Star className="w-3.5 h-3.5 text-[#FFB45C] shrink-0" />
+                Concert Anh Trai Vượt Ngàn Chông Gai 2025
               </span>
             </div>
           </div>
