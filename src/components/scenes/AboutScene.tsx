@@ -136,7 +136,7 @@ export const AboutScene: React.FC<AboutSceneProps> = ({ showReferenceOverlay = f
             <div className="rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.85),0_0_20px_rgba(57,139,255,0.2)] border border-[#70D7FF]/35 aspect-[3/2] relative group">
               <img
                 src="/assets/music-club/scene-02-about/hmc_family_graduation.jpg"
-                alt="Đại gia đình HUFLIT Music Club (HMC)"
+                alt="Gia đình HMC"
                 className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                 loading="lazy"
               />
@@ -144,7 +144,7 @@ export const AboutScene: React.FC<AboutSceneProps> = ({ showReferenceOverlay = f
                 <div>
                   <span className="text-xs font-bold text-white flex items-center gap-1.5">
                     <HeartHandshake className="w-3.5 h-3.5 text-[#FFB45C]" />
-                    ĐẠI GIA ĐÌNH HUFLIT MUSIC CLUB
+                    GIA ĐÌNH HMC
                   </span>
                   <span className="text-[10px] text-[#C4D5E8] block mt-0.5">
                     Nơi gắn kết đam mê, sẻ chia niềm vui và cùng nhau tỏa sáng
@@ -261,14 +261,14 @@ export const AboutScene: React.FC<AboutSceneProps> = ({ showReferenceOverlay = f
           <div className="rounded-2xl overflow-hidden shadow-[0_12px_30px_rgba(0,0,0,0.85)] border border-[#70D7FF]/35 aspect-[16/10] bg-[#0A1A2F] relative group">
             <img
               src="/assets/music-club/scene-02-about/hmc_family_graduation.jpg"
-              alt="Đại gia đình HUFLIT Music Club (HMC)"
+              alt="Gia đình HMC"
               className="w-full h-full object-cover"
               loading="lazy"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#050D1A]/95 via-[#050D1A]/35 to-transparent flex items-end p-3">
               <span className="text-[11px] font-medium text-white flex items-center gap-1.5 text-left">
                 <HeartHandshake className="w-3.5 h-3.5 text-[#FFB45C] shrink-0" />
-                Đại gia đình HUFLIT Music Club (HMC)
+                Gia đình HMC
               </span>
             </div>
           </div>
