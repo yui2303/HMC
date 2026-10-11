@@ -18,7 +18,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenRegister }) => {
       setIsScrolled(window.scrollY > 40)
 
       // Determine active section
-      const sections = ['hero', 'about', 'family', 'casting-guide']
+      const sections = ['hero', 'about', 'stages', 'family', 'casting-guide']
       const scrollPos = window.scrollY + 250
 
       for (const section of sections) {

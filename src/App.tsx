@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Navbar } from './components/navigation/Navbar'
 import { HeroScene } from './components/scenes/HeroScene'
 import { AboutScene } from './components/scenes/AboutScene'
+import { StagesScene } from './components/scenes/StagesScene'
 import { FamilyScene } from './components/scenes/FamilyScene'
 import { CastingGuideScene } from './components/scenes/CastingGuideScene'
 import { SoundWaveLayer } from './components/effects/SoundWaveLayer'
@@ -358,7 +359,46 @@ export function App() {
       })
 
       // ==========================================
-      // 4B. WE ARE FAMILY SCENE ENTRY & REVEAL (100% Reversible)
+      // 4B. STAGES & ACHIEVEMENTS PARALLAX
+      // ==========================================
+      gsap.to('.stages-photo-1', {
+        y: -25,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '#stages',
+          start: 'top 60%',
+          end: 'bottom 40%',
+          scrub: true,
+          invalidateOnRefresh: true,
+        },
+      })
+
+      gsap.to('.stages-photo-2', {
+        y: -35,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '#stages',
+          start: 'top 60%',
+          end: 'bottom 40%',
+          scrub: true,
+          invalidateOnRefresh: true,
+        },
+      })
+
+      gsap.to('.stages-photo-3', {
+        y: -20,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '#stages',
+          start: 'top 60%',
+          end: 'bottom 40%',
+          scrub: true,
+          invalidateOnRefresh: true,
+        },
+      })
+
+      // ==========================================
+      // 4C. WE ARE FAMILY SCENE ENTRY & REVEAL (100% Reversible)
       // ==========================================
       // Family Background gradual blend in
       gsap.fromTo(
@@ -665,22 +705,29 @@ export function App() {
           />
         </div>
 
-        {/* SCENE 02: ABOUT (Club Overview / Backstage - Overlaps Hero ~18vh on Desktop) */}
+        {/* SCENE 02: ABOUT (WE ARE HMC - Overlaps Hero ~18vh on Desktop) */}
         <div className="lg:-mt-[18vh] -mt-0 relative z-[3]">
           <AboutScene
             showReferenceOverlay={showReferenceOverlay}
           />
         </div>
 
+        {/* SCENE 02B: STAGES & ACHIEVEMENTS (Dấu ấn trên những sân khấu) */}
+        <div className="relative z-[4]">
+          <StagesScene
+            onOpenRegister={() => setIsRegisterOpen(true)}
+          />
+        </div>
+
         {/* SCENE 03: TUYỂN CTV (Thời gian đăng ký, 2 ảnh, 3 lĩnh vực tuyển chọn) */}
-        <div className="lg:-mt-[18vh] -mt-0 relative z-[4]">
+        <div className="lg:-mt-[10vh] -mt-0 relative z-[5]">
           <FamilyScene
             onOpenRegister={() => setIsRegisterOpen(true)}
           />
         </div>
 
         {/* SCENE 04: HƯỚNG DẪN & LỊCH CASTING (Thời gian casting, địa điểm, nút đăng ký) */}
-        <div className="relative z-[5]">
+        <div className="relative z-[6]">
           <CastingGuideScene
             onOpenRegister={() => setIsRegisterOpen(true)}
             showReferenceOverlay={showReferenceOverlay}

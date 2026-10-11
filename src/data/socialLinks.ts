@@ -122,7 +122,9 @@ export const clubData: ContactInfo = {
 
 export const navItems = [
   { label: "Trang chủ", href: "#hero" },
-  { label: "Giới thiệu", href: "#about" },
+  { label: "Về HMC", href: "#about" },
+  { label: "Dấu ấn", href: "#stages" },
   { label: "Tuyển CTV", href: "#family" },
   { label: "Lịch Casting", href: "#casting-guide" },
 ]
+

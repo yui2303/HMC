@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import { Sparkles, Trophy, Star, Award } from 'lucide-react'
+import { Sparkles, Users, Music, HeartHandshake } from 'lucide-react'
 import { ReferenceOverlay } from '../common/ReferenceOverlay'
 
 interface AboutSceneProps {
@@ -14,7 +14,7 @@ export const AboutScene: React.FC<AboutSceneProps> = ({ showReferenceOverlay = f
     <section
       id="about"
       ref={sceneRef}
-      className="relative w-full min-h-0 lg:h-screen lg:min-h-[820px] pt-12 sm:pt-16 lg:pt-[18vh] pb-8 lg:pb-0 overflow-visible select-none bg-transparent"
+      className="relative w-full min-h-0 lg:h-screen lg:min-h-[840px] pt-12 sm:pt-16 lg:pt-[18vh] pb-8 lg:pb-0 overflow-visible select-none bg-transparent"
     >
       {/* Reference Overlay (toggled via 'R') */}
       <ReferenceOverlay
@@ -37,22 +37,22 @@ export const AboutScene: React.FC<AboutSceneProps> = ({ showReferenceOverlay = f
           loading="lazy"
         />
         {/* Soft Vignette Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#050D1A]/85 via-[#050D1A]/45 to-[#050D1A]/80" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#050D1A]/90 via-[#050D1A]/55 to-[#050D1A]/85" />
       </div>
 
       {/* DESKTOP TARGET COMPOSITION (lg screens: 1440x900 target artboard) */}
       <div className="hidden lg:block absolute inset-0 w-full h-full pointer-events-auto">
-        {/* TEXT GROUP: left 10%, top 10%, width 35% */}
+        {/* TEXT GROUP: left 8%, top 12%, width 40% */}
         <div
           className="about-text-group absolute z-20 flex flex-col items-start text-left"
           style={{
-            left: '10%',
-            top: '10%',
-            width: '35%',
-            maxWidth: '500px',
+            left: '8%',
+            top: '12%',
+            width: '40%',
+            maxWidth: '540px',
           }}
         >
-          {/* Eyebrow: top ~10% */}
+          {/* Eyebrow */}
           <div className="about-eyebrow flex items-center gap-3 mb-2.5">
             <span className="w-8 h-[1px] bg-[#70D7FF]/80" />
             <span className="text-xs tracking-[0.35em] text-[#70D7FF] font-semibold uppercase flex items-center gap-1.5 glow-text-cyan">
@@ -63,179 +63,155 @@ export const AboutScene: React.FC<AboutSceneProps> = ({ showReferenceOverlay = f
 
           {/* Heading */}
           <h2
-            className="about-heading font-serif-display text-4xl xl:text-5xl text-white tracking-tight leading-[1.06] mb-3"
-            style={{ maxWidth: '460px' }}
+            className="about-heading font-serif-display text-4xl xl:text-5xl text-white tracking-tight leading-[1.06] mb-4"
+            style={{ maxWidth: '480px' }}
           >
             <span>WE ARE </span>
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#70D7FF] via-[#398BFF] to-[#70D7FF] glow-text-cyan">
-              THE SOUND
+            <span className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#70D7FF] via-[#398BFF] to-[#70D7FF] glow-text-cyan">
+              HMC
             </span>
           </h2>
 
-          {/* Description */}
+          {/* Description Paragraph 1 */}
           <p
-            className="about-desc font-sans text-xs xl:text-sm text-[#91A4BB] leading-relaxed mb-3.5"
-            style={{ maxWidth: '440px' }}
+            className="about-desc font-sans text-xs xl:text-sm text-[#E2EBF6] leading-relaxed mb-3.5 text-justify"
+            style={{ maxWidth: '500px' }}
           >
-            CLB Âm nhạc là nơi những người trẻ yêu âm nhạc cùng nhau tạo nên những sân khấu đáng nhớ. Từ những buổi tập nhỏ đến các liên hoan và đại nhạc hội toàn thành, HMC luôn khẳng định bản sắc qua từng giải thưởng và đêm diễn bùng nổ.
+            <strong>HUFLIT MUSIC CLUB (HMC)</strong> là Câu lạc bộ Âm nhạc trực thuộc Hội Sinh viên Trường Đại học Ngoại ngữ – Tin học TP.HCM (HUFLIT), nơi kết nối những người trẻ có chung niềm đam mê âm nhạc, nghệ thuật biểu diễn và khát khao tỏa sáng trên sân khấu.
           </p>
 
-          {/* ACHIEVEMENTS & NOTABLE MILESTONES */}
-          <div className="space-y-2.5 w-full max-w-[460px]">
-            {/* 1. GIẢI VÀNG CHUNG CUỘC */}
-            <div className="p-3 rounded-2xl bg-[#09172B]/85 border border-[#FFB45C]/40 hover:border-[#FFB45C]/70 transition-all shadow-[0_10px_25px_rgba(0,0,0,0.5)]">
-              <div className="flex items-center gap-2 mb-1.5 pb-1 border-b border-white/10">
-                <div className="w-5 h-5 rounded-md bg-[#FFB45C]/20 border border-[#FFB45C]/40 flex items-center justify-center text-[#FFB45C]">
-                  <Trophy className="w-3 h-3" />
-                </div>
-                <span className="text-[12px] xl:text-[12.5px] font-bold text-[#FFB45C] tracking-wide">
-                  GIẢI VÀNG CHUNG CUỘC – DANH HIỆU QUÁN QUÂN
-                </span>
+          {/* Description Paragraph 2 */}
+          <p
+            className="about-desc font-sans text-xs xl:text-sm text-[#91A4BB] leading-relaxed mb-5 text-justify"
+            style={{ maxWidth: '500px' }}
+          >
+            Không chỉ nuôi dưỡng tình yêu âm nhạc, HMC còn là môi trường để mỗi thành viên khám phá tiềm năng, phát triển bản thân và thể hiện cá tính qua từng màn trình diễn. Với HMC, mỗi sân khấu là cơ hội để thử sức, mỗi tiết mục là một câu chuyện được kể bằng âm nhạc, cùng nhau tạo nên những trải nghiệm nghệ thuật sáng tạo, giàu cảm xúc và mang đậm dấu ấn riêng.
+          </p>
+
+          {/* Core Values Badges */}
+          <div className="grid grid-cols-2 gap-3 w-full max-w-[500px]">
+            <div className="p-3 rounded-2xl bg-[#09172B]/85 border border-[#70D7FF]/30 flex items-center gap-2.5 shadow-[0_10px_25px_rgba(0,0,0,0.5)]">
+              <div className="w-8 h-8 rounded-lg bg-[#3C96FF]/20 border border-[#70D7FF]/40 flex items-center justify-center text-[#70D7FF] shrink-0">
+                <Users className="w-4 h-4" />
               </div>
-              <ul className="grid grid-cols-1 gap-1 text-[11px] xl:text-[11.5px] text-[#E1ECF7]">
-                <li className="flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#FFB45C] shrink-0" />
-                  <span><strong>Giải Nhất</strong> thể loại Tốp ca</span>
-                </li>
-                <li className="flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#FFB45C] shrink-0" />
-                  <span><strong>Giải Nhất</strong> thể loại Múa độc lập</span>
-                </li>
-                <li className="flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#70D7FF] shrink-0" />
-                  <span><strong>Giải Ba</strong> thể loại Song / Tam / Tứ ca</span>
-                </li>
-              </ul>
+              <div>
+                <span className="text-[11.5px] font-bold text-white block">Trực thuộc HSV HUFLIT</span>
+                <span className="text-[10px] text-[#91A4BB]">Môi trường kết nối &amp; trưởng thành</span>
+              </div>
             </div>
 
-            {/* 2. DẤU ẤN LIÊN HOAN & SÂN KHẤU LỚN */}
-            <div className="p-3 rounded-2xl bg-[#09172B]/85 border border-[#70D7FF]/30 hover:border-[#70D7FF]/60 transition-all shadow-[0_10px_25px_rgba(0,0,0,0.5)]">
-              <div className="flex items-center gap-2 mb-1.5 pb-1 border-b border-white/10">
-                <div className="w-5 h-5 rounded-md bg-[#3C96FF]/20 border border-[#70D7FF]/40 flex items-center justify-center text-[#70D7FF]">
-                  <Star className="w-3 h-3" />
-                </div>
-                <span className="text-[12px] xl:text-[12.5px] font-bold text-[#70D7FF] tracking-wide">
-                  DẤU ẤN LIÊN HOAN &amp; ĐÊM NHẠC LỚN
-                </span>
+            <div className="p-3 rounded-2xl bg-[#09172B]/85 border border-[#FFB45C]/35 flex items-center gap-2.5 shadow-[0_10px_25px_rgba(0,0,0,0.5)]">
+              <div className="w-8 h-8 rounded-lg bg-[#FFB45C]/20 border border-[#FFB45C]/40 flex items-center justify-center text-[#FFB45C] shrink-0">
+                <Music className="w-4 h-4" />
               </div>
-              <ul className="space-y-1 text-[11px] xl:text-[11.5px] text-[#C4D5E8]">
-                <li className="flex items-start gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#70D7FF] mt-1 shrink-0" />
-                  <span><strong>Giải Ba</strong> Liên hoan Các câu lạc bộ, đội, nhóm nhảy toàn thành năm 2026 - <strong>Youth Fest 2026</strong></span>
-                </li>
-                <li className="flex items-start gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#398BFF] mt-1 shrink-0" />
-                  <span>Đêm nhạc <strong>BLOOMING BRAVERY</strong></span>
-                </li>
-                <li className="flex items-start gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#FFB45C] mt-1 shrink-0" />
-                  <span>CTV biểu diễn tại <strong>Concert Anh Trai Vượt Ngàn Chông Gai 2025 Day 3 Day 4 HCM</strong></span>
-                </li>
-              </ul>
+              <div>
+                <span className="text-[11.5px] font-bold text-white block">Âm Nhạc &amp; Nghệ Thuật</span>
+                <span className="text-[10px] text-[#91A4BB]">Khám phá cá tính riêng</span>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* PHOTO COLLAGE (3D Depth Group) */}
+        {/* PHOTO COLLAGE (3D Depth Group - With 3 New HMC Family & Activity Photos) */}
         <div
           className="photo-cluster scene2-collage absolute z-[5] pointer-events-auto"
           style={{
-            left: '45%',
-            top: '14%',
-            width: '50%',
-            height: '72%',
+            left: '49%',
+            top: '12%',
+            width: '46%',
+            height: '75%',
           }}
         >
-          {/* PHOTO 01: Top photo - Live Theatrical Stage Performance (z-index: 5) */}
+          {/* PHOTO 01: Top photo - HMC Family Celebration & Graduation (z-index: 5) */}
           <div
             className="photo photo-1 about-photo-1 about-photo-slot-1 absolute transition-transform duration-300 hover:scale-[1.02] hover:z-30 cursor-pointer"
             style={{
-              left: '19%',
+              left: '16%',
               top: '0%',
-              width: '67%',
+              width: '70%',
               transform: 'rotate(-1deg)',
               zIndex: 5,
             }}
           >
-            <div className="rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.85),0_0_20px_rgba(57,139,255,0.2)] border border-[#70D7FF]/30 aspect-[3/2] relative group">
+            <div className="rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.85),0_0_20px_rgba(57,139,255,0.2)] border border-[#70D7FF]/35 aspect-[3/2] relative group">
               <img
-                src="/assets/music-club/scene-02-about/club_stage_performance.jpg"
-                alt="Đêm nhạc BLOOMING BRAVERY & Concert Anh Trai Vượt Ngàn Chông Gai 2025 Day 3 Day 4 HCM"
+                src="/assets/music-club/scene-02-about/hmc_family_graduation.jpg"
+                alt="Đại gia đình HUFLIT Music Club (HMC)"
                 className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                 loading="lazy"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#050D1A]/95 via-[#050D1A]/35 to-transparent flex items-end p-3.5">
                 <div>
                   <span className="text-xs font-bold text-white flex items-center gap-1.5">
-                    <Sparkles className="w-3.5 h-3.5 text-[#FFB45C]" />
-                    Đêm nhạc BLOOMING BRAVERY
+                    <HeartHandshake className="w-3.5 h-3.5 text-[#FFB45C]" />
+                    ĐẠI GIA ĐÌNH HUFLIT MUSIC CLUB
                   </span>
                   <span className="text-[10px] text-[#C4D5E8] block mt-0.5">
-                    CTV biểu diễn tại Concert Anh Trai Vượt Ngàn Chông Gai 2025 Day 3 Day 4 HCM
+                    Nơi gắn kết đam mê, sẻ chia niềm vui và cùng nhau tỏa sáng
                   </span>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* PHOTO 02: Far Left photo - Giải Vàng CLB Âm Nhạc (z-index: 7) */}
+          {/* PHOTO 02: Far Left photo - 50 Năm Tự Hào Bản Hùng Ca HUFLIT (z-index: 7) */}
           <div
             className="photo photo-2 about-photo-2 about-photo-slot-2 absolute transition-transform duration-300 hover:scale-[1.02] hover:z-30 cursor-pointer"
             style={{
-              left: '1%',
+              left: '0%',
               top: '42%',
-              width: '52%',
+              width: '54%',
               transform: 'rotate(-2deg)',
               zIndex: 7,
             }}
           >
-            <div className="rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.9),0_0_25px_rgba(112,215,255,0.25)] border border-[#FFB45C]/40 aspect-[3/2] relative group">
+            <div className="rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.9),0_0_25px_rgba(255,180,92,0.25)] border border-[#FFB45C]/45 aspect-[3/2] relative group">
               <img
-                src="/assets/music-club/scene-02-about/club_award_gold.jpg"
-                alt="Lễ trao giải - Giải Vàng Câu lạc bộ Âm nhạc"
+                src="/assets/music-club/scene-02-about/hmc_50_nam_ban_hung_ca.jpg"
+                alt="HMC tại Cuộc thi 50 năm tự hào bản hùng ca HUFLIT"
                 className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                 loading="lazy"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#050D1A]/95 via-[#050D1A]/35 to-transparent flex items-end p-2.5">
                 <div>
                   <span className="text-[11px] font-bold text-[#FFB45C] flex items-center gap-1">
-                    <Trophy className="w-3.5 h-3.5 text-[#FFB45C]" />
-                    GIẢI VÀNG CHUNG CUỘC
+                    <Sparkles className="w-3.5 h-3.5 text-[#FFB45C]" />
+                    BẢN HÙNG CA HUFLIT
                   </span>
                   <span className="text-[9.5px] text-[#C4D5E8] block mt-0.5">
-                    Quán quân • Nhất Tốp ca • Nhất Múa • Ba Song/Tam/Tứ ca
+                    Tập thể HMC bùng nổ tài năng &amp; nhiệt huyết
                   </span>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* PHOTO 03: Bottom photo - Youth Fest 2026 Live Performance (z-index: 8) */}
+          {/* PHOTO 03: Bottom Right photo - Đấu Trường Tài Năng HUFLIT (z-index: 8) */}
           <div
             className="photo photo-3 about-photo-3 about-photo-slot-3 absolute transition-transform duration-300 hover:scale-[1.02] hover:z-30 cursor-pointer"
             style={{
               left: '48%',
               top: '50%',
-              width: '50%',
+              width: '52%',
               transform: 'rotate(2deg)',
               zIndex: 8,
             }}
           >
             <div className="rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.9),0_0_25px_rgba(57,139,255,0.25)] border border-[#70D7FF]/35 aspect-[3/2] relative group">
               <img
-                src="/assets/music-club/scene-02-about/club_youth_fest.jpg"
-                alt="Tiết mục biểu diễn tại Youth Fest 2026"
+                src="/assets/music-club/scene-02-about/hmc_dau_truong_tai_nang.jpg"
+                alt="HMC tại Đấu Trường Tài Năng HUFLIT"
                 className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                 loading="lazy"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#050D1A]/95 via-[#050D1A]/35 to-transparent flex items-end p-2.5">
                 <div>
                   <span className="text-[11px] font-bold text-[#70D7FF] flex items-center gap-1">
-                    <Award className="w-3.5 h-3.5 text-[#70D7FF]" />
-                    YOUTH FEST 2026
+                    <Music className="w-3.5 h-3.5 text-[#70D7FF]" />
+                    ĐẤU TRƯỜNG TÀI NĂNG
                   </span>
                   <span className="text-[9.5px] text-[#C4D5E8] block mt-0.5 truncate">
-                    Giải Ba Liên hoan Nhóm nhảy toàn thành
+                    Vòng Groundbreaking – Khẳng định dấu ấn riêng
                   </span>
                 </div>
               </div>
@@ -255,75 +231,44 @@ export const AboutScene: React.FC<AboutSceneProps> = ({ showReferenceOverlay = f
           <span className="w-5 h-[1px] bg-[#70D7FF]" />
         </div>
 
-        <h2 className="font-serif-display text-3xl sm:text-4xl text-white mb-2.5 tracking-tight">
-          WE ARE <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#70D7FF] via-[#398BFF] to-[#70D7FF] glow-text-cyan">THE SOUND</span>
+        <h2 className="font-serif-display text-3xl sm:text-4xl text-white mb-3 tracking-tight">
+          WE ARE <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#70D7FF] via-[#398BFF] to-[#70D7FF] glow-text-cyan">HMC</span>
         </h2>
 
-        <p className="font-sans text-xs sm:text-sm text-[#91A4BB] leading-relaxed mb-4 max-w-md px-2">
-          CLB Âm nhạc là nơi những người trẻ yêu âm nhạc cùng nhau tạo nên những sân khấu đáng nhớ. Từ những buổi tập nhỏ đến các liên hoan và đại nhạc hội toàn thành, HMC luôn khẳng định bản sắc qua từng giải thưởng và đêm diễn bùng nổ.
+        <p className="font-sans text-xs sm:text-sm text-[#E2EBF6] leading-relaxed mb-3 max-w-md px-1 text-justify">
+          <strong>HUFLIT MUSIC CLUB (HMC)</strong> là Câu lạc bộ Âm nhạc trực thuộc Hội Sinh viên Trường Đại học Ngoại ngữ – Tin học TP.HCM (HUFLIT), nơi kết nối những người trẻ có chung niềm đam mê âm nhạc, nghệ thuật biểu diễn và khát khao tỏa sáng trên sân khấu.
         </p>
 
-        {/* Mobile Achievement Cards */}
-        <div className="w-full space-y-2.5 mb-4 text-left">
-          {/* Card 1: Giải Vàng */}
-          <div className="p-3 rounded-xl bg-[#09172B]/90 border border-[#FFB45C]/40">
-            <div className="flex items-center gap-1.5 mb-1 text-xs font-bold text-[#FFB45C]">
-              <Trophy className="w-3.5 h-3.5" />
-              <span>GIẢI VÀNG CHUNG CUỘC – DANH HIỆU QUÁN QUÂN</span>
-            </div>
-            <ul className="text-[11px] text-[#E1ECF7] space-y-0.5 pl-1">
-              <li className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#FFB45C]" />
-                <span><strong>Giải Nhất</strong> thể loại Tốp ca</span>
-              </li>
-              <li className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#FFB45C]" />
-                <span><strong>Giải Nhất</strong> thể loại Múa độc lập</span>
-              </li>
-              <li className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#70D7FF]" />
-                <span><strong>Giải Ba</strong> thể loại Song / Tam / Tứ ca</span>
-              </li>
-            </ul>
-          </div>
+        <p className="font-sans text-xs sm:text-sm text-[#91A4BB] leading-relaxed mb-5 max-w-md px-1 text-justify">
+          Không chỉ nuôi dưỡng tình yêu âm nhạc, HMC còn là môi trường để mỗi thành viên khám phá tiềm năng, phát triển bản thân và thể hiện cá tính qua từng màn trình diễn. Với HMC, mỗi sân khấu là cơ hội để thử sức, mỗi tiết mục là một câu chuyện được kể bằng âm nhạc, cùng nhau tạo nên những trải nghiệm nghệ thuật sáng tạo, giàu cảm xúc và mang đậm dấu ấn riêng.
+        </p>
 
-          {/* Card 2: Sân khấu & Liên hoan */}
-          <div className="p-3 rounded-xl bg-[#09172B]/90 border border-[#70D7FF]/30">
-            <div className="flex items-center gap-1.5 mb-1 text-xs font-bold text-[#70D7FF]">
-              <Star className="w-3.5 h-3.5" />
-              <span>DẤU ẤN LIÊN HOAN &amp; ĐÊM NHẠC LỚN</span>
-            </div>
-            <ul className="text-[11px] text-[#C4D5E8] space-y-1 pl-1">
-              <li className="flex items-start gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#70D7FF] mt-1 shrink-0" />
-                <span><strong>Giải Ba</strong> Liên hoan Các câu lạc bộ, đội, nhóm nhảy toàn thành năm 2026 - <strong>Youth Fest 2026</strong></span>
-              </li>
-              <li className="flex items-start gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#398BFF] mt-1 shrink-0" />
-                <span>Đêm nhạc <strong>BLOOMING BRAVERY</strong></span>
-              </li>
-              <li className="flex items-start gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#FFB45C] mt-1 shrink-0" />
-                <span>CTV biểu diễn tại <strong>Concert Anh Trai Vượt Ngàn Chông Gai 2025 Day 3 Day 4 HCM</strong></span>
-              </li>
-            </ul>
+        {/* Mobile Badges */}
+        <div className="grid grid-cols-2 gap-2.5 w-full mb-6">
+          <div className="p-2.5 rounded-xl bg-[#09172B]/90 border border-[#70D7FF]/30 flex items-center gap-2 text-left">
+            <Users className="w-4 h-4 text-[#70D7FF] shrink-0" />
+            <span className="text-[11px] font-bold text-white">Trực thuộc HSV HUFLIT</span>
+          </div>
+          <div className="p-2.5 rounded-xl bg-[#09172B]/90 border border-[#FFB45C]/40 flex items-center gap-2 text-left">
+            <Music className="w-4 h-4 text-[#FFB45C] shrink-0" />
+            <span className="text-[11px] font-bold text-white">Khám phá &amp; Tỏa sáng</span>
           </div>
         </div>
 
         {/* Clean Responsive 3-Photo Showcase for Mobile */}
         <div className="w-full space-y-3">
           {/* Main Photo 1 */}
-          <div className="rounded-2xl overflow-hidden shadow-[0_12px_30px_rgba(0,0,0,0.85)] border border-[#70D7FF]/30 aspect-[16/10] bg-[#0A1A2F] relative group">
+          <div className="rounded-2xl overflow-hidden shadow-[0_12px_30px_rgba(0,0,0,0.85)] border border-[#70D7FF]/35 aspect-[16/10] bg-[#0A1A2F] relative group">
             <img
-              src="/assets/music-club/scene-02-about/club_stage_performance.jpg"
-              alt="Đêm nhạc BLOOMING BRAVERY & Concert Anh Trai Vượt Ngàn Chông Gai 2025 Day 3 Day 4 HCM"
+              src="/assets/music-club/scene-02-about/hmc_family_graduation.jpg"
+              alt="Đại gia đình HUFLIT Music Club (HMC)"
               className="w-full h-full object-cover"
               loading="lazy"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#050D1A]/95 via-[#050D1A]/35 to-transparent flex items-end p-3">
               <span className="text-[11px] font-medium text-white flex items-center gap-1.5 text-left">
-                <Sparkles className="w-3.5 h-3.5 text-[#FFB45C] shrink-0" />
-                Đêm nhạc BLOOMING BRAVERY &amp; Concert ATVNCG 2025
+                <HeartHandshake className="w-3.5 h-3.5 text-[#FFB45C] shrink-0" />
+                Đại gia đình HUFLIT Music Club (HMC)
               </span>
             </div>
           </div>
@@ -332,30 +277,30 @@ export const AboutScene: React.FC<AboutSceneProps> = ({ showReferenceOverlay = f
           <div className="grid grid-cols-2 gap-2.5">
             <div className="rounded-xl overflow-hidden shadow-[0_10px_25px_rgba(0,0,0,0.85)] border border-[#FFB45C]/40 aspect-[4/3] bg-[#0A1A2F] relative">
               <img
-                src="/assets/music-club/scene-02-about/club_award_gold.jpg"
-                alt="Giải Vàng CLB Âm nhạc"
+                src="/assets/music-club/scene-02-about/hmc_50_nam_ban_hung_ca.jpg"
+                alt="50 năm tự hào bản hùng ca HUFLIT"
                 className="w-full h-full object-cover"
                 loading="lazy"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#050D1A]/95 via-[#050D1A]/30 to-transparent flex items-end p-2">
                 <span className="text-[10px] font-bold text-[#FFB45C] truncate flex items-center gap-1">
-                  <Trophy className="w-3 h-3 shrink-0" />
-                  Giải Vàng Quán Quân
+                  <Sparkles className="w-3 h-3 shrink-0" />
+                  Bản Hùng Ca HUFLIT
                 </span>
               </div>
             </div>
 
-            <div className="rounded-xl overflow-hidden shadow-[0_10px_25px_rgba(0,0,0,0.85)] border border-[#70D7FF]/30 aspect-[4/3] bg-[#0A1A2F] relative">
+            <div className="rounded-xl overflow-hidden shadow-[0_10px_25px_rgba(0,0,0,0.85)] border border-[#70D7FF]/35 aspect-[4/3] bg-[#0A1A2F] relative">
               <img
-                src="/assets/music-club/scene-02-about/club_youth_fest.jpg"
-                alt="Youth Fest 2026"
+                src="/assets/music-club/scene-02-about/hmc_dau_truong_tai_nang.jpg"
+                alt="Đấu Trường Tài Năng HUFLIT"
                 className="w-full h-full object-cover"
                 loading="lazy"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#050D1A]/95 via-[#050D1A]/30 to-transparent flex items-end p-2">
                 <span className="text-[10px] font-bold text-[#70D7FF] truncate flex items-center gap-1">
-                  <Award className="w-3 h-3 shrink-0" />
-                  Youth Fest 2026
+                  <Music className="w-3 h-3 shrink-0" />
+                  Đấu Trường Tài Năng
                 </span>
               </div>
             </div>
