@@ -136,7 +136,7 @@ export const AboutScene: React.FC<AboutSceneProps> = ({ showReferenceOverlay = f
           </div>
         </div>
 
-        {/* PHOTO & SOUNDWAVE WEAVING COLLAGE (Single Integrated 3D Depth Group) */}
+        {/* PHOTO COLLAGE (3D Depth Group) */}
         <div
           className="photo-cluster scene2-collage absolute z-[5] pointer-events-auto"
           style={{
@@ -146,27 +146,7 @@ export const AboutScene: React.FC<AboutSceneProps> = ({ showReferenceOverlay = f
             height: '72%',
           }}
         >
-          {/* 1. WAVE-BACK: Behind all photos (z-index: 3, opacity: 0.32, soft ambient glow) */}
-          <div
-            className="wave wave-back absolute pointer-events-none mix-blend-screen"
-            style={{
-              left: '-6%',
-              top: '-8%',
-              width: '112%',
-              height: '112%',
-              zIndex: 3,
-              opacity: 0.32,
-            }}
-          >
-            <img
-              src="/assets/music-club/scene-02-about/soundwave_main.png"
-              alt="Soundwave Back Layer"
-              className="w-full h-full object-contain filter drop-shadow-[0_0_20px_rgba(112,215,255,0.4)]"
-              loading="lazy"
-            />
-          </div>
-
-          {/* 2. PHOTO 01: Top photo - Live Theatrical Stage Performance (z-index: 5) */}
+          {/* PHOTO 01: Top photo - Live Theatrical Stage Performance (z-index: 5) */}
           <div
             className="photo photo-1 about-photo-1 about-photo-slot-1 absolute transition-transform duration-300 hover:scale-[1.02] hover:z-30 cursor-pointer"
             style={{
@@ -198,28 +178,7 @@ export const AboutScene: React.FC<AboutSceneProps> = ({ showReferenceOverlay = f
             </div>
           </div>
 
-          {/* 3. WAVE-MID: In the gap between Photo 01 and Photo 02/03 (z-index: 6, opacity: 0.42) */}
-          <div
-            className="wave wave-mid absolute pointer-events-none mix-blend-screen"
-            style={{
-              left: '8%',
-              top: '20%',
-              width: '88%',
-              height: '70%',
-              zIndex: 6,
-              opacity: 0.42,
-              clipPath: 'polygon(0% 0%, 100% 0%, 100% 70%, 0% 70%)',
-            }}
-          >
-            <img
-              src="/assets/music-club/scene-02-about/soundwave_main.png"
-              alt="Soundwave Mid Layer"
-              className="w-full h-full object-contain filter drop-shadow-[0_0_15px_rgba(112,215,255,0.5)]"
-              loading="lazy"
-            />
-          </div>
-
-          {/* 4. PHOTO 02: Far Left photo - Giải Vàng CLB Âm Nhạc (z-index: 7) */}
+          {/* PHOTO 02: Far Left photo - Giải Vàng CLB Âm Nhạc (z-index: 7) */}
           <div
             className="photo photo-2 about-photo-2 about-photo-slot-2 absolute transition-transform duration-300 hover:scale-[1.02] hover:z-30 cursor-pointer"
             style={{
@@ -251,7 +210,7 @@ export const AboutScene: React.FC<AboutSceneProps> = ({ showReferenceOverlay = f
             </div>
           </div>
 
-          {/* 5. PHOTO 03: Bottom photo - Youth Fest 2026 Live Performance (z-index: 8) */}
+          {/* PHOTO 03: Bottom photo - Youth Fest 2026 Live Performance (z-index: 8) */}
           <div
             className="photo photo-3 about-photo-3 about-photo-slot-3 absolute transition-transform duration-300 hover:scale-[1.02] hover:z-30 cursor-pointer"
             style={{
@@ -281,27 +240,6 @@ export const AboutScene: React.FC<AboutSceneProps> = ({ showReferenceOverlay = f
                 </div>
               </div>
             </div>
-          </div>
-
-          {/* 6. WAVE-FRONT: Only a short visible segment in front of Photo 03 */}
-          <div
-            className="wave wave-front absolute pointer-events-none mix-blend-screen"
-            style={{
-              left: '36%',
-              top: '46%',
-              width: '66%',
-              height: '60%',
-              zIndex: 9,
-              opacity: 0.55,
-              clipPath: 'polygon(35% 25%, 100% 20%, 100% 100%, 25% 100%)',
-            }}
-          >
-            <img
-              src="/assets/music-club/scene-02-about/soundwave_main.png"
-              alt="Soundwave Front Segment"
-              className="w-full h-full object-contain filter drop-shadow-[0_0_15px_#70D7FF]"
-              loading="lazy"
-            />
           </div>
         </div>
       </div>

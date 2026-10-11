@@ -292,7 +292,7 @@ export function App() {
       )
 
       // ==========================================
-      // 4. ABOUT PHOTO PARALLAX & SOUNDWAVE WEAVE
+      // 4. ABOUT PHOTO PARALLAX
       // ==========================================
       // Subtle depth parallax while scrolling through About scene
       gsap.to('.about-photo-1', {
@@ -330,58 +330,6 @@ export function App() {
           invalidateOnRefresh: true,
         },
       })
-
-      // 3D Weaving Soundwave light motion
-      gsap.fromTo(
-        '.wave-back',
-        { y: 15, x: -5 },
-        {
-          y: -10,
-          x: 5,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: '#about',
-            start: 'top 80%',
-            end: 'bottom 50%',
-            scrub: true,
-            invalidateOnRefresh: true,
-          },
-        }
-      )
-
-      gsap.fromTo(
-        '.wave-mid',
-        { y: 10, x: 5 },
-        {
-          y: -15,
-          x: -5,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: '#about',
-            start: 'top 80%',
-            end: 'bottom 50%',
-            scrub: true,
-            invalidateOnRefresh: true,
-          },
-        }
-      )
-
-      gsap.fromTo(
-        '.wave-front',
-        { y: 8, x: -3 },
-        {
-          y: -10,
-          x: 3,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: '#about',
-            start: 'top 80%',
-            end: 'bottom 50%',
-            scrub: true,
-            invalidateOnRefresh: true,
-          },
-        }
-      )
 
       // About exit transition toward WE ARE FAMILY (last ~15-18vh of About)
       gsap.to('.about-heading, .about-desc', {
