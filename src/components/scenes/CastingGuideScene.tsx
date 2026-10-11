@@ -184,7 +184,7 @@ export const CastingGuideScene: React.FC<CastingGuideSceneProps> = ({
                       09g00 – 12g00
                     </div>
                     <div className="text-[11px] text-[#91A4BB]">
-                      Check-in, khởi động giọng hát & vũ đạo
+                      Check-in ca sáng và casting
                     </div>
                   </div>
 
@@ -198,7 +198,7 @@ export const CastingGuideScene: React.FC<CastingGuideSceneProps> = ({
                       13g30 – 20g00
                     </div>
                     <div className="text-[11px] text-[#91A4BB]">
-                      Casting biểu diễn và phỏng vấn trực tiếp
+                      Check-in ca chiều và tiếp tục casting
                     </div>
                   </div>
                 </div>
@@ -234,7 +234,7 @@ export const CastingGuideScene: React.FC<CastingGuideSceneProps> = ({
                       09g00 – 12g00
                     </div>
                     <div className="text-[11px] text-[#91A4BB]">
-                      Casting biểu diễn các mảng
+                      Check-in ca sáng và casting
                     </div>
                   </div>
 
@@ -248,7 +248,7 @@ export const CastingGuideScene: React.FC<CastingGuideSceneProps> = ({
                       13g30 – 17g00
                     </div>
                     <div className="text-[11px] text-[#91A4BB]">
-                      Phỏng vấn bổ sung &amp; tổng kết casting
+                      Check-in ca chiều và tiếp tục casting
                     </div>
                   </div>
                 </div>
