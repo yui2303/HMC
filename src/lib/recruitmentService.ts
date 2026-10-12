@@ -35,69 +35,72 @@ export async function submitApplication(
   const now = new Date().toISOString()
   let createdApp: ApplicationItem | null = null
 
-  // 1. Try server endpoint first
-  try {
-    const res = await fetch('/api/applications', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
+  // 1. Try server endpoints (standard rewrite & direct Netlify function)
+  const candidateEndpoints = ['/api/applications', '/.netlify/functions/applications']
+  for (const endpoint of candidateEndpoints) {
+    try {
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
 
-    const contentType = res.headers.get('content-type') || ''
-    if (res.ok && contentType.includes('application/json')) {
-      const result = await res.json()
-      if (result.success) {
-        try {
-          if (result.application) {
-            createdApp = addClientApplication(
-              {
-                fullName: result.application.fullName,
-                email: result.application.email,
-                studentId: result.application.studentId,
-                castingDivision: result.application.castingDivision,
-                castingSong: result.application.castingSong,
-                beatUrl: result.application.beatUrl,
-                hasPerformanceExperience: result.application.hasPerformanceExperience,
-                performanceUrl: result.application.performanceUrl,
-                passion: result.application.passion,
-              },
-              result.application.id || result.id
-            )
-          } else {
-            createdApp = addClientApplication(data, result.id)
-          }
-
-          if (typeof window !== 'undefined') {
-            window.dispatchEvent(new CustomEvent('hmc_application_created', { detail: createdApp }))
-          }
-        } catch {
-          // ignore
-        }
-
-        // Tự động gửi email xác nhận cho thí sinh
-        let emailResult = { success: false, error: '' }
-        if (createdApp) {
+      const contentType = res.headers.get('content-type') || ''
+      if (res.ok && contentType.includes('application/json')) {
+        const result = await res.json()
+        if (result && result.success) {
           try {
-            emailResult = await sendAutomaticRegistrationEmail(createdApp)
-          } catch (e: any) {
-            console.warn('Auto email dispatch error:', e)
-          }
-        }
+            if (result.application) {
+              createdApp = addClientApplication(
+                {
+                  fullName: result.application.fullName,
+                  email: result.application.email,
+                  studentId: result.application.studentId,
+                  castingDivision: result.application.castingDivision,
+                  castingSong: result.application.castingSong,
+                  beatUrl: result.application.beatUrl,
+                  hasPerformanceExperience: result.application.hasPerformanceExperience,
+                  performanceUrl: result.application.performanceUrl,
+                  passion: result.application.passion,
+                },
+                result.application.id || result.id
+              )
+            } else {
+              createdApp = addClientApplication(data, result.id)
+            }
 
-        return {
-          success: true,
-          id: result.id,
-          submittedAt: now,
-          message: result.message || 'Đơn đăng ký đã được ghi nhận thành công!',
-          emailSent: emailResult.success,
-          emailError: emailResult.error,
+            if (typeof window !== 'undefined') {
+              window.dispatchEvent(new CustomEvent('hmc_application_created', { detail: createdApp }))
+            }
+          } catch {
+            // ignore
+          }
+
+          // Tự động gửi email xác nhận cho thí sinh
+          let emailResult = { success: false, error: '' }
+          if (createdApp) {
+            try {
+              emailResult = await sendAutomaticRegistrationEmail(createdApp)
+            } catch (e: any) {
+              console.warn('Auto email dispatch error:', e)
+            }
+          }
+
+          return {
+            success: true,
+            id: result.id,
+            submittedAt: now,
+            message: result.message || 'Đơn đăng ký đã được ghi nhận thành công!',
+            emailSent: emailResult.success,
+            emailError: emailResult.error,
+          }
         }
       }
+    } catch {
+      // try next endpoint
     }
-  } catch {
-    // Static hosting fallback
   }
 
   // 2. Client-side storage fallback (Netlify)

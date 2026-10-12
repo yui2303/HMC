@@ -94,13 +94,49 @@ function getAuthHeaders(): HeadersInit {
   return headers
 }
 
+async function apiFetch(path: string, options: RequestInit = {}): Promise<Response> {
+  const headers = getAuthHeaders()
+  const combinedHeaders: HeadersInit = {
+    ...headers,
+    ...((options.headers as Record<string, string>) || {}),
+  }
+
+  // Determine alternative direct Netlify function path
+  // e.g. /api/applications -> /.netlify/functions/applications
+  // /api/auth/login -> /.netlify/functions/auth/login
+  const netlifyPath = path.startsWith('/api/')
+    ? path.replace(/^\/api\//, '/.netlify/functions/')
+    : path
+
+  try {
+    const res = await fetch(path, { ...options, headers: combinedHeaders })
+    const contentType = res.headers.get('content-type') || ''
+    // If valid JSON response or standard 401/403/400
+    if (res.ok && contentType.includes('application/json')) {
+      return res
+    }
+    // If Netlify served SPA index.html (text/html) or 404, fallback to direct Netlify function
+    if (contentType.includes('text/html') || res.status === 404) {
+      const netlifyRes = await fetch(netlifyPath, { ...options, headers: combinedHeaders })
+      const netlifyContentType = netlifyRes.headers.get('content-type') || ''
+      if (netlifyContentType.includes('application/json') || netlifyRes.ok) {
+        return netlifyRes
+      }
+    }
+    return res
+  } catch {
+    // Network or CORS error on primary path, try netlifyPath
+    return fetch(netlifyPath, { ...options, headers: combinedHeaders })
+  }
+}
+
 export async function loginAdmin(
   email: string,
   password: string
 ): Promise<{ success: boolean; user?: AdminUser; error?: string }> {
   // 1. Try server endpoint first (e.g. during local dev or custom backend)
   try {
-    const res = await fetch('/api/auth/login', {
+    const res = await apiFetch('/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
@@ -139,9 +175,8 @@ export async function loginAdmin(
 
 export async function logoutAdmin(): Promise<void> {
   try {
-    await fetch('/api/auth/logout', {
+    await apiFetch('/api/auth/logout', {
       method: 'POST',
-      headers: getAuthHeaders(),
     })
   } catch {
     // ignore
@@ -160,9 +195,8 @@ export async function checkAuth(): Promise<{ authenticated: boolean; user?: Admi
 
   // 2. Check server session if client session not set
   try {
-    const res = await fetch('/api/auth/me', {
+    const res = await apiFetch('/api/auth/me', {
       method: 'GET',
-      headers: getAuthHeaders(),
     })
     const contentType = res.headers.get('content-type') || ''
     if (res.ok && contentType.includes('application/json')) {
@@ -188,8 +222,8 @@ export async function fetchApplications(params: ApplicationQueryParams = {}): Pr
     if (params.limit) searchParams.set('limit', String(params.limit))
 
     const url = `/api/applications?${searchParams.toString()}`
-    const res = await fetch(url, {
-      headers: getAuthHeaders(),
+    const res = await apiFetch(url, {
+      method: 'GET',
     })
     const contentType = res.headers.get('content-type') || ''
 
@@ -221,9 +255,7 @@ export async function fetchApplications(params: ApplicationQueryParams = {}): Pr
 
 export async function fetchApplicationById(id: string): Promise<ApplicationItem> {
   try {
-    const res = await fetch(`/api/applications/${id}`, {
-      headers: getAuthHeaders(),
-    })
+    const res = await apiFetch(`/api/applications/${id}`)
     const contentType = res.headers.get('content-type') || ''
     if (res.ok && contentType.includes('application/json')) {
       const data = await res.json()
@@ -244,9 +276,8 @@ export async function updateApplication(
   payload: { status?: CastingStatus; adminNote?: string }
 ): Promise<ApplicationItem> {
   try {
-    const res = await fetch(`/api/applications/${id}`, {
+    const res = await apiFetch(`/api/applications/${id}`, {
       method: 'PATCH',
-      headers: getAuthHeaders(),
       body: JSON.stringify(payload),
     })
     const contentType = res.headers.get('content-type') || ''
@@ -274,9 +305,8 @@ export async function editApplication(
   payload: Partial<ApplicationItem>
 ): Promise<ApplicationItem> {
   try {
-    const res = await fetch(`/api/applications/${id}/edit`, {
+    const res = await apiFetch(`/api/applications/${id}/edit`, {
       method: 'PUT',
-      headers: getAuthHeaders(),
       body: JSON.stringify(payload),
     })
     const contentType = res.headers.get('content-type') || ''
@@ -301,9 +331,8 @@ export async function editApplication(
  */
 export async function deleteApplication(id: string): Promise<void> {
   try {
-    const res = await fetch(`/api/applications/${id}`, {
+    const res = await apiFetch(`/api/applications/${id}`, {
       method: 'DELETE',
-      headers: getAuthHeaders(),
     })
     if (res.ok) {
       try {
@@ -325,9 +354,8 @@ export async function deleteApplication(id: string): Promise<void> {
  */
 export async function deleteBatchApplications(ids: string[]): Promise<{ deletedCount: number }> {
   try {
-    const res = await fetch('/api/applications/batch-delete', {
+    const res = await apiFetch('/api/applications/batch-delete', {
       method: 'POST',
-      headers: getAuthHeaders(),
       body: JSON.stringify({ ids }),
     })
     if (res.ok) {
@@ -352,9 +380,8 @@ export async function createManualApplication(
   data: Partial<ApplicationItem>
 ): Promise<ApplicationItem> {
   try {
-    const res = await fetch('/api/applications/manual', {
+    const res = await apiFetch('/api/applications/manual', {
       method: 'POST',
-      headers: getAuthHeaders(),
       body: JSON.stringify(data),
     })
     const contentType = res.headers.get('content-type') || ''

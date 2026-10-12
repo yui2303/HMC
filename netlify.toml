@@ -7,25 +7,27 @@
   from = "/api/send-email"
   to = "/.netlify/functions/send-email"
   status = 200
+  force = true
 
 [[redirects]]
   from = "/api/applications"
   to = "/.netlify/functions/applications"
   status = 200
+  force = true
 
 [[redirects]]
   from = "/api/applications/*"
-  to = "/.netlify/functions/applications"
+  to = "/.netlify/functions/applications/:splat"
   status = 200
+  force = true
 
 [[redirects]]
   from = "/api/auth/*"
-  to = "/.netlify/functions/auth"
+  to = "/.netlify/functions/auth/:splat"
   status = 200
+  force = true
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-
-

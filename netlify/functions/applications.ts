@@ -1,5 +1,6 @@
 import type { Handler, HandlerEvent } from '@netlify/functions'
 import { getStore } from '@netlify/blobs'
+import { EMAILJS_BACKFILLED_CANDIDATES } from '../../src/data/emailjsCandidates'
 
 interface ApplicationItem {
   id: string
@@ -19,6 +20,7 @@ interface ApplicationItem {
 }
 
 const INITIAL_SAMPLE_APPLICATIONS: ApplicationItem[] = [
+  ...EMAILJS_BACKFILLED_CANDIDATES,
   {
     id: 'HMC-2026-001',
     fullName: 'Nguyễn Hoàng Minh',
@@ -141,8 +143,15 @@ async function getStoredApplications(): Promise<ApplicationItem[]> {
     const store = getStore('hmc_recruitment_data')
     const data = await store.get('applications', { type: 'json' })
     if (Array.isArray(data) && data.length > 0) {
-      memoryApps = data
-      return data
+      const map = new Map<string, ApplicationItem>()
+      // Seed with initial applications (including 24 backfilled candidates)
+      INITIAL_SAMPLE_APPLICATIONS.forEach((a) => map.set(a.id, a))
+      // Overlay with stored Blobs applications
+      data.forEach((a: ApplicationItem) => map.set(a.id, a))
+      const merged = Array.from(map.values())
+      merged.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      memoryApps = merged
+      return merged
     }
   } catch (err) {
     // Netlify Blobs not available (local or non-blobs context)

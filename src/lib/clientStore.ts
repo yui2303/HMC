@@ -1,10 +1,12 @@
 import { ApplicationItem, ApplicationQueryParams, ApplicationsResponse, CastingStatus, AdminUser } from './adminApi'
 import { RecruitmentFormData } from './recruitmentService'
+import { EMAILJS_BACKFILLED_CANDIDATES } from '../data/emailjsCandidates'
 
 const STORAGE_KEY = 'hmc_recruitment_store_v1'
 const SESSION_KEY = 'hmc_client_admin_session'
 
 export const INITIAL_SAMPLE_APPLICATIONS: ApplicationItem[] = [
+  ...EMAILJS_BACKFILLED_CANDIDATES,
   {
     id: 'HMC-2026-001',
     fullName: 'Nguyễn Hoàng Minh',
@@ -122,16 +124,24 @@ export const INITIAL_SAMPLE_APPLICATIONS: ApplicationItem[] = [
 export function getClientApplications(): ApplicationItem[] {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    if (!raw) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(INITIAL_SAMPLE_APPLICATIONS))
-      return INITIAL_SAMPLE_APPLICATIONS
+    let list: ApplicationItem[] = []
+    if (raw) {
+      try {
+        const parsed = JSON.parse(raw)
+        if (Array.isArray(parsed)) list = parsed
+      } catch {
+        // ignore
+      }
     }
-    const parsed = JSON.parse(raw)
-    if (!Array.isArray(parsed) || parsed.length === 0) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(INITIAL_SAMPLE_APPLICATIONS))
-      return INITIAL_SAMPLE_APPLICATIONS
-    }
-    return parsed
+
+    // Merge seed candidates (including all 24 real candidates) with stored data
+    const map = new Map<string, ApplicationItem>()
+    INITIAL_SAMPLE_APPLICATIONS.forEach((a) => map.set(a.id, a))
+    list.forEach((a) => map.set(a.id, a))
+
+    const merged = Array.from(map.values())
+    merged.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    return merged
   } catch {
     return INITIAL_SAMPLE_APPLICATIONS
   }
