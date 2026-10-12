@@ -80,117 +80,11 @@ export function initDatabase() {
   }
 }
 
-function seedSampleApplications() {
-  const sampleApps = [
-    {
-      id: 'HMC-2026-001',
-      fullName: 'Nguyễn Hoàng Minh',
-      email: 'minh.nguyen@student.edu.vn',
-      studentId: '23DH101234',
-      castingDivision: 'vocal',
-      castingSong: 'Linh thiêng Việt Nam',
-      beatUrl: 'https://drive.google.com/file/d/1A2B3C4D_sample_beat/view',
-      hasPerformanceExperience: 1,
-      performanceUrl: 'https://youtube.com/watch?v=sample_minh_live',
-      passion: 'Mình đam mê ca hát từ nhỏ và có 2 năm sinh hoạt văn nghệ tại trường THPT. Mình mong muốn được học hỏi thêm về kỹ thuật bè, hòa thanh và tỏa sáng trên các sân khấu lớn cùng đại gia đình HMC.',
-      status: 'shortlisted',
-      adminNote: 'Giọng nam trầm ấm, phát âm rõ chữ, rất tự tin trên sân khấu. Ưu tiên xếp lịch casting ca 1.',
-      createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-    },
-    {
-      id: 'HMC-2026-002',
-      fullName: 'Trần Thảo Linh',
-      email: 'linh.tt@student.edu.vn',
-      studentId: '23DH202345',
-      castingDivision: 'vocal',
-      castingSong: 'Tàu anh qua núi',
-      beatUrl: 'https://soundcloud.com/sample_tau_anh_qua_nui',
-      hasPerformanceExperience: 1,
-      performanceUrl: 'https://tiktok.com/@linh_vocals/video/123456789',
-      passion: 'Âm nhạc là hơi thở của mình. Mình yêu thích các dòng nhạc truyền thống cách mạng kết hợp pop đương đại. Mong muốn mang giọng ca của mình hòa cùng dàn vocal đầy nhiệt huyết của HMC.',
-      status: 'reviewing',
-      adminNote: 'Cao độ tốt, xử lý nốt cao mượt mà. Cần kiểm tra kỹ năng đọc xướng âm.',
-      createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-    },
-    {
-      id: 'HMC-2026-003',
-      fullName: 'Lê Quốc Bảo',
-      email: 'bao.le@student.edu.vn',
-      studentId: '24DH303456',
-      castingDivision: 'dancer',
-      castingSong: 'Supernova – aespa',
-      beatUrl: 'https://drive.google.com/file/d/sample_dancer_track_1/view',
-      hasPerformanceExperience: 1,
-      performanceUrl: 'https://facebook.com/watch/?v=sample_dance_clip',
-      passion: 'Mình chuyên về Urban Dance và Hiphop Choreography. Tham gia HMC là ước mơ ngay từ khi bước chân vào giảng đường đại học để cùng cháy hết mình trong các đêm diễn của trường.',
-      status: 'accepted',
-      adminNote: 'Kỹ thuật popping và bắt beat rất chuẩn. Năng lượng làm chủ sân khấu tuyệt vời.',
-      createdAt: new Date(Date.now() - 36 * 60 * 60 * 1000).toISOString(),
-    },
-    {
-      id: 'HMC-2026-004',
-      fullName: 'Phạm Quỳnh Như',
-      email: 'quynhnhu.pham@student.edu.vn',
-      studentId: '24DH404567',
-      castingDivision: 'dancer',
-      castingSong: 'Mantra – Jennie',
-      beatUrl: 'https://youtube.com/watch?v=sample_dance_track_2',
-      hasPerformanceExperience: 0,
-      performanceUrl: '',
-      passion: 'Em tự học nhảy qua các video K-Pop và dance cover. Tuy chưa có kinh nghiệm diễn sân khấu lớn nhưng em rất kiên trì, học vũ đạo nhanh và luôn sẵn sàng luyện tập cùng đội ngũ HMC.',
-      status: 'new',
-      adminNote: '',
-      createdAt: new Date(Date.now() - 14 * 60 * 60 * 1000).toISOString(),
-    },
-    {
-      id: 'HMC-2026-005',
-      fullName: 'Vũ Đức Thịnh',
-      email: 'thinh.vu@student.edu.vn',
-      studentId: '22DH505678',
-      castingDivision: 'vocal',
-      castingSong: 'Khát vọng tuổi trẻ',
-      beatUrl: 'https://drive.google.com/file/d/sample_khat_vong/view',
-      hasPerformanceExperience: 0,
-      performanceUrl: '',
-      passion: 'Mình yêu ca hát và muốn thử thách bản thân ở môi trường câu lạc bộ chuyên nghiệp. HMC là nơi tràn đầy năng lượng và tình cảm anh em mà mình luôn tìm kiếm.',
-      status: 'new',
-      adminNote: '',
-      createdAt: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
-    },
-    {
-      id: 'HMC-2026-006',
-      fullName: 'Đặng Mai Phương',
-      email: 'phuong.dang@student.edu.vn',
-      studentId: '23DH606789',
-      castingDivision: 'vocal',
-      castingSong: 'Ngày chưa giông bão',
-      beatUrl: 'https://drive.google.com/file/d/sample_ngay_chua_giong_bao/view',
-      hasPerformanceExperience: 1,
-      performanceUrl: 'https://youtube.com/watch?v=sample_phuong_dan_ca',
-      passion: 'Âm hưởng đương đại luôn là niềm đam mê lớn nhất của mình. Hy vọng có cơ hội cống hiến màu giọng đặc trưng này cho các tiết mục đặc sắc của CLB.',
-      status: 'shortlisted',
-      adminNote: 'Màu giọng dân ca ngọt ngào, cảm xúc rất sâu lắng.',
-      createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-    },
-    {
-      id: 'HMC-2026-007',
-      fullName: 'Hoàng Yến Nhi',
-      email: 'yennhi.hoang@student.edu.vn',
-      studentId: '24DH707890',
-      castingDivision: 'traditional_dance',
-      castingSong: 'Múa Dân Gian – Cò Lả',
-      beatUrl: 'https://youtube.com/watch?v=sample_mua_dan_gian',
-      hasPerformanceExperience: 1,
-      performanceUrl: 'https://tiktok.com/@yennhi_dance/video/987654321',
-      passion: 'Em theo học múa dân gian và đương đại được 3 năm. Em muốn mang nét đẹp truyền thống kết hợp biểu diễn đương đại vào các sân khấu văn nghệ trẻ trung của HMC.',
-      status: 'shortlisted',
-      adminNote: 'Độ dẻo tốt, biểu cảm sân khấu xuất sắc. Rất tiềm năng cho ban Múa.',
-      createdAt: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
-    },
-  ]
+import { EMAILJS_BACKFILLED_CANDIDATES } from '../data/emailjsCandidates.ts'
 
+function seedSampleApplications() {
   const insertStmt = db.prepare(`
-    INSERT INTO applications (
+    INSERT OR IGNORE INTO applications (
       id, full_name, email, student_id, casting_division,
       casting_song, beat_url, has_performance_experience,
       performance_url, passion, status, admin_note,
@@ -198,7 +92,7 @@ function seedSampleApplications() {
     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `)
 
-  for (const app of sampleApps) {
+  for (const app of EMAILJS_BACKFILLED_CANDIDATES) {
     insertStmt.run(
       app.id,
       app.fullName,
@@ -207,13 +101,13 @@ function seedSampleApplications() {
       app.castingDivision,
       app.castingSong,
       app.beatUrl,
-      app.hasPerformanceExperience,
+      app.hasPerformanceExperience ? 1 : 0,
       app.performanceUrl,
       app.passion,
       app.status,
       app.adminNote,
       app.createdAt,
-      app.createdAt
+      app.updatedAt
     )
   }
 }

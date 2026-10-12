@@ -163,8 +163,10 @@ export const AdminApplicationsPage: React.FC<AdminApplicationsPageProps> = ({
   }
 
   // Fetch applications
-  const loadData = async () => {
-    setIsLoading(true)
+  const loadData = async (isBackground = false) => {
+    if (!isBackground) {
+      setIsLoading(true)
+    }
     setErrorMessage('')
     try {
       const data = await fetchApplications({
@@ -187,9 +189,13 @@ export const AdminApplicationsPage: React.FC<AdminApplicationsPageProps> = ({
         onLogout()
         return
       }
-      setErrorMessage(err.message || 'Không thể tải danh sách đăng ký.')
+      if (!isBackground) {
+        setErrorMessage(err.message || 'Không thể tải danh sách đăng ký.')
+      }
     } finally {
-      setIsLoading(false)
+      if (!isBackground) {
+        setIsLoading(false)
+      }
     }
   }
 
@@ -207,23 +213,23 @@ export const AdminApplicationsPage: React.FC<AdminApplicationsPageProps> = ({
   }
 
   useEffect(() => {
-    loadData()
+    loadData(false)
   }, [debouncedQuery, divisionFilter, statusFilter, experienceFilter, sortOption, currentPage])
 
-  // Real-time synchronization: Auto-refresh when candidate registers in another tab, modal, or store
+  // Real-time synchronization: Silent auto-refresh when candidate registers in another tab, modal, or store
   useEffect(() => {
     const handleSync = () => {
-      loadData()
+      loadData(true)
     }
 
     window.addEventListener('hmc_application_created', handleSync)
     window.addEventListener('hmc_applications_updated', handleSync)
     window.addEventListener('storage', handleSync)
 
-    // Auto-refresh every 15s to pull any incoming candidate applications seamlessly
+    // Smooth silent background polling every 5s to pull incoming candidate applications seamlessly without UI jitter
     const interval = setInterval(() => {
-      loadData()
-    }, 15000)
+      loadData(true)
+    }, 5000)
 
     return () => {
       window.removeEventListener('hmc_application_created', handleSync)
@@ -231,7 +237,7 @@ export const AdminApplicationsPage: React.FC<AdminApplicationsPageProps> = ({
       window.removeEventListener('storage', handleSync)
       clearInterval(interval)
     }
-  }, [])
+  }, [debouncedQuery, divisionFilter, statusFilter, experienceFilter, sortOption, currentPage])
 
   const handleResetFilters = () => {
     setSearchQuery('')
@@ -677,6 +683,11 @@ export const AdminApplicationsPage: React.FC<AdminApplicationsPageProps> = ({
           </div>
 
           <div className="flex items-center gap-2.5">
+            <div className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-[11px] font-medium text-emerald-400">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span>Đồng bộ thời gian thực</span>
+            </div>
+
             <button
               type="button"
               onClick={() => handleOpenPdfModal(divisionFilter as any)}
@@ -689,7 +700,7 @@ export const AdminApplicationsPage: React.FC<AdminApplicationsPageProps> = ({
 
             <button
               type="button"
-              onClick={loadData}
+              onClick={() => loadData(false)}
               className="p-2 sm:p-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-[#91A4BB] hover:text-white border border-white/10 transition-colors cursor-pointer"
               title="Tải lại dữ liệu"
             >
