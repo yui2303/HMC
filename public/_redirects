@@ -1,1 +1,5 @@
-/*    /index.html   200
+/api/send-email          /.netlify/functions/send-email          200!
+/api/applications        /.netlify/functions/applications        200!
+/api/applications/*      /.netlify/functions/applications/:splat  200!
+/api/auth/*              /.netlify/functions/auth/:splat          200!
+/*                       /index.html                             200
