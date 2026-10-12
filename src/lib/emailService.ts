@@ -704,3 +704,50 @@ export async function sendAutomaticRegistrationEmail(
   }
 }
 
+/**
+ * Tự động đồng bộ thí sinh mới vào Google Trang Tính (Google Sheets) qua Apps Script Webhook
+ */
+export async function syncToGoogleSheetWebhook(
+  candidate: ApplicationItem
+): Promise<void> {
+  const config = getSavedEmailConfig()
+  const webhookUrl = (config.webhookUrl || (import.meta.env.VITE_WEBHOOK_URL as string) || '').trim()
+  if (!webhookUrl) return
+
+  const payload = {
+    type: 'new_registration',
+    candidate,
+    timestamp: new Date().toISOString(),
+  }
+
+  // 1. Thử gửi qua serverless proxy Netlify (server-to-server)
+  try {
+    const res = await fetch('/api/send-email', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        provider: 'webhook',
+        webhookUrl,
+        candidate,
+        subject: `[HMC 2026] Đăng ký mới: ${candidate.fullName}`,
+        html: `<p>Đăng ký mới: ${candidate.fullName}</p>`,
+      }),
+    })
+    if (res.ok) return
+  } catch {
+    // ignore
+  }
+
+  // 2. Dự phòng gửi trực tiếp từ trình duyệt (CORS safe via text/plain & no-cors)
+  try {
+    await fetch(webhookUrl, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload),
+    })
+  } catch {
+    // ignore
+  }
+}
+

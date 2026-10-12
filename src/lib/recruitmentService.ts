@@ -1,5 +1,5 @@
 import { addClientApplication } from './clientStore'
-import { sendAutomaticRegistrationEmail } from './emailService'
+import { sendAutomaticRegistrationEmail, syncToGoogleSheetWebhook } from './emailService'
 import { ApplicationItem } from './adminApi'
 
 export interface RecruitmentFormData {
@@ -78,9 +78,12 @@ export async function submitApplication(
             // ignore
           }
 
-          // Tự động gửi email xác nhận cho thí sinh
+          // Tự động gửi email xác nhận cho thí sinh & đồng bộ Google Sheets
           let emailResult = { success: false, error: '' }
           if (createdApp) {
+            // Đồng bộ tức thì vào Google Sheets Webhook nếu cấu hình
+            syncToGoogleSheetWebhook(createdApp).catch((e) => console.warn('Google Sheets sync error:', e))
+
             try {
               emailResult = await sendAutomaticRegistrationEmail(createdApp)
             } catch (e: any) {
@@ -110,6 +113,9 @@ export async function submitApplication(
     if (typeof window !== 'undefined') {
       window.dispatchEvent(new CustomEvent('hmc_application_created', { detail: newApp }))
     }
+
+    // Đồng bộ tức thì vào Google Sheets Webhook nếu cấu hình
+    syncToGoogleSheetWebhook(newApp).catch((e) => console.warn('Google Sheets sync error:', e))
 
     // Tự động gửi email xác nhận cho thí sinh
     let emailResult = { success: false, error: '' }
