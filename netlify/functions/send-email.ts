@@ -50,7 +50,11 @@ export const handler: Handler = async (event: HandlerEvent) => {
     // 1. GOOGLE APPS SCRIPT / WEBHOOK PROVIDER
     // ==========================================
     if (provider === 'webhook') {
-      const webhookUrl = (body.webhookUrl || '').trim()
+      const webhookUrl = (
+        body.webhookUrl ||
+        process.env.VITE_WEBHOOK_URL ||
+        'https://script.google.com/macros/s/AKfycbyQxZJByqKQp6k0wgI73DuYx9uzOh5mRK9nTJhBTw2fMHPawxRKuGAW6d-qO5lCCmNJxg/exec'
+      ).trim()
       if (!webhookUrl) {
         return {
           statusCode: 400,

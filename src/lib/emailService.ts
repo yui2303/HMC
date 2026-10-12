@@ -43,7 +43,11 @@ export function getSavedEmailConfig(): EmailProviderConfig {
       return { ...DEFAULT_EMAIL_CONFIG }
     }
     const parsed = JSON.parse(raw)
-    return { ...DEFAULT_EMAIL_CONFIG, ...parsed }
+    const config = { ...DEFAULT_EMAIL_CONFIG, ...parsed }
+    if (!config.webhookUrl || !config.webhookUrl.trim()) {
+      config.webhookUrl = DEFAULT_EMAIL_CONFIG.webhookUrl
+    }
+    return config
   } catch {
     return { ...DEFAULT_EMAIL_CONFIG }
   }
@@ -710,8 +714,8 @@ export async function sendAutomaticRegistrationEmail(
 export async function syncToGoogleSheetWebhook(
   candidate: ApplicationItem
 ): Promise<void> {
-  const config = getSavedEmailConfig()
-  const webhookUrl = (config.webhookUrl || (import.meta.env.VITE_WEBHOOK_URL as string) || '').trim()
+  const fallbackWebhook = 'https://script.google.com/macros/s/AKfycbyQxZJByqKQp6k0wgI73DuYx9uzOh5mRK9nTJhBTw2fMHPawxRKuGAW6d-qO5lCCmNJxg/exec'
+  const webhookUrl = (config.webhookUrl?.trim() || (import.meta.env.VITE_WEBHOOK_URL as string)?.trim() || fallbackWebhook).trim()
   if (!webhookUrl) return
 
   const payload = {

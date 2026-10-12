@@ -31,6 +31,6 @@ export const DEFAULT_EMAIL_CONFIG: EmailProviderConfig = {
   emailjsServiceId: (import.meta.env.VITE_EMAILJS_SERVICE_ID as string) || 'service_fkcpp29',
   emailjsTemplateId: (import.meta.env.VITE_EMAILJS_TEMPLATE_ID as string) || 'template_bk0piza',
   emailjsPublicKey: (import.meta.env.VITE_EMAILJS_PUBLIC_KEY as string) || 'q0QNSKxr7xzzPS8nJ',
-  webhookUrl: (import.meta.env.VITE_WEBHOOK_URL as string) || '',
+  webhookUrl: (import.meta.env.VITE_WEBHOOK_URL as string) || 'https://script.google.com/macros/s/AKfycbyQxZJByqKQp6k0wgI73DuYx9uzOh5mRK9nTJhBTw2fMHPawxRKuGAW6d-qO5lCCmNJxg/exec',
   autoSendOnRegistration: true, // true: Tự động gửi mail ngay khi thí sinh đăng ký
 }
