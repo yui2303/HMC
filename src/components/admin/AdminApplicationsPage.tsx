@@ -222,19 +222,27 @@ export const AdminApplicationsPage: React.FC<AdminApplicationsPageProps> = ({
       loadData(true)
     }
 
-    window.addEventListener('hmc_application_created', handleSync)
-    window.addEventListener('hmc_applications_updated', handleSync)
-    window.addEventListener('storage', handleSync)
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        loadData(true)
+      }
+    }
 
-    // Smooth silent background polling every 5s to pull incoming candidate applications seamlessly without UI jitter
+    window.addEventListener('hmc_application_created', handleSync)
+    window.addEventListener('storage', handleSync)
+    window.addEventListener('focus', handleSync)
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+
+    // Smooth silent background polling every 3s with cache-busting to pull incoming candidate applications seamlessly
     const interval = setInterval(() => {
       loadData(true)
-    }, 5000)
+    }, 3000)
 
     return () => {
       window.removeEventListener('hmc_application_created', handleSync)
-      window.removeEventListener('hmc_applications_updated', handleSync)
       window.removeEventListener('storage', handleSync)
+      window.removeEventListener('focus', handleSync)
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
       clearInterval(interval)
     }
   }, [debouncedQuery, divisionFilter, statusFilter, experienceFilter, sortOption, currentPage])

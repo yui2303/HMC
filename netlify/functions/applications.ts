@@ -63,6 +63,9 @@ export const handler: Handler = async (event: HandlerEvent) => {
     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
     'Content-Type': 'application/json; charset=utf-8',
+    'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0',
+    'Pragma': 'no-cache',
+    'Expires': '0',
   }
 
   if (event.httpMethod === 'OPTIONS') {
@@ -89,17 +92,17 @@ export const handler: Handler = async (event: HandlerEvent) => {
       const email = String(body.email || '').trim().toLowerCase()
       const studentId = String(body.studentId || '').trim().toUpperCase()
       const castingDivision = String(body.castingDivision || 'vocal').trim().toLowerCase()
-      const castingSong = String(body.castingSong || '').trim()
-      const beatUrl = String(body.beatUrl || '').trim()
+      const castingSong = String(body.castingSong || 'Tự chọn').trim()
+      const beatUrl = String(body.beatUrl || 'Nộp beat tại bàn Check-in').trim()
       const hasPerformanceExperience = Boolean(body.hasPerformanceExperience)
       const performanceUrl = String(body.performanceUrl || '').trim()
       const passion = String(body.passion || '').trim()
 
-      if (!fullName || !email || !studentId || !castingDivision || !castingSong || !beatUrl) {
+      if (!fullName || !email || !studentId) {
         return {
           statusCode: 400,
           headers,
-          body: JSON.stringify({ error: 'Vui lòng điền đầy đủ các thông tin bắt buộc.' }),
+          body: JSON.stringify({ error: 'Vui lòng điền họ tên, email và MSSV hợp lệ.' }),
         }
       }
 

@@ -220,10 +220,16 @@ export async function fetchApplications(params: ApplicationQueryParams = {}): Pr
     if (params.sort) searchParams.set('sort', params.sort)
     if (params.page) searchParams.set('page', String(params.page))
     if (params.limit) searchParams.set('limit', String(params.limit))
+    // Cache buster to ensure real-time fresh responses
+    searchParams.set('_t', Date.now().toString())
 
     const url = `/api/applications?${searchParams.toString()}`
     const res = await apiFetch(url, {
       method: 'GET',
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+      },
     })
     const contentType = res.headers.get('content-type') || ''
 
