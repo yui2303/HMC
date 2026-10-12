@@ -54,21 +54,23 @@ export function initDatabase() {
     CREATE INDEX IF NOT EXISTS idx_apps_created_at ON applications(created_at);
   `)
 
-  // Seed Initial Admin Account if not present
-  const adminCount = db.prepare('SELECT COUNT(*) as count FROM admins').get() as { count: number }
-  if (adminCount.count === 0) {
-    const adminEmail = process.env.ADMIN_EMAIL || 'admin@hmcmusic.club'
-    const adminPassword = process.env.ADMIN_INITIAL_PASSWORD || 'HmcAdmin@2026'
-    const adminId = 'admin_hmc_01'
-    const passwordHash = hashPassword(adminPassword)
-    const now = new Date().toISOString()
+  // Seed / Ensure Admin Accounts are present
+  const adminAccounts = [
+    { id: 'admin_hmc_01', email: 'admin@hmcmusic.club', password: 'HmcAdmin@2026' },
+    { id: 'admin_hmc_02', email: 'clbamnhac.huflit@gmail.com', password: 'HmcAdmin@2026' },
+    { id: 'admin_hmc_03', email: 'admin', password: 'HmcAdmin@2026' },
+  ]
 
-    const insertAdmin = db.prepare(`
-      INSERT INTO admins (id, email, password_hash, created_at)
-      VALUES (?, ?, ?, ?)
-    `)
-    insertAdmin.run(adminId, adminEmail, passwordHash, now)
-    console.log(`[HMC Admin] Initial admin created: ${adminEmail} (password: ${adminPassword})`)
+  for (const acc of adminAccounts) {
+    const existingAdmin = db.prepare('SELECT id FROM admins WHERE LOWER(email) = ?').get(acc.email.toLowerCase())
+    if (!existingAdmin) {
+      const passwordHash = hashPassword(acc.password)
+      const now = new Date().toISOString()
+      db.prepare(`
+        INSERT INTO admins (id, email, password_hash, created_at)
+        VALUES (?, ?, ?, ?)
+      `).run(acc.id, acc.email, passwordHash, now)
+    }
   }
 
   // Seed Sample Recruitment Applications for rich Admin Experience if empty

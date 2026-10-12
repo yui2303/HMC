@@ -10,6 +10,7 @@ import {
   deleteClientApplication,
   deleteBatchClientApplications,
   createManualClientApplication,
+  syncServerApplicationsToClient,
 } from './clientStore'
 
 export interface AdminUser {
@@ -111,6 +112,11 @@ export async function loginAdmin(
         if (data.token) {
           saveToken(data.token)
         }
+        try {
+          clientLogin(email, password)
+        } catch {
+          // ignore
+        }
         return { success: true, user: data.user }
       }
     }
@@ -188,7 +194,15 @@ export async function fetchApplications(params: ApplicationQueryParams = {}): Pr
     const contentType = res.headers.get('content-type') || ''
 
     if (res.ok && contentType.includes('application/json')) {
-      return await res.json()
+      const data: ApplicationsResponse = await res.json()
+      if (data && Array.isArray(data.applications)) {
+        try {
+          syncServerApplicationsToClient(data.applications)
+        } catch {
+          // ignore
+        }
+      }
+      return data
     }
 
     if (res.status === 401) {

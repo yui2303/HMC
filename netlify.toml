@@ -9,7 +9,23 @@
   status = 200
 
 [[redirects]]
+  from = "/api/applications"
+  to = "/.netlify/functions/applications"
+  status = 200
+
+[[redirects]]
+  from = "/api/applications/*"
+  to = "/.netlify/functions/applications"
+  status = 200
+
+[[redirects]]
+  from = "/api/auth/*"
+  to = "/.netlify/functions/auth"
+  status = 200
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+
 

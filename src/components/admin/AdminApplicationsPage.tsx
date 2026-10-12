@@ -210,6 +210,29 @@ export const AdminApplicationsPage: React.FC<AdminApplicationsPageProps> = ({
     loadData()
   }, [debouncedQuery, divisionFilter, statusFilter, experienceFilter, sortOption, currentPage])
 
+  // Real-time synchronization: Auto-refresh when candidate registers in another tab, modal, or store
+  useEffect(() => {
+    const handleSync = () => {
+      loadData()
+    }
+
+    window.addEventListener('hmc_application_created', handleSync)
+    window.addEventListener('hmc_applications_updated', handleSync)
+    window.addEventListener('storage', handleSync)
+
+    // Auto-refresh every 15s to pull any incoming candidate applications seamlessly
+    const interval = setInterval(() => {
+      loadData()
+    }, 15000)
+
+    return () => {
+      window.removeEventListener('hmc_application_created', handleSync)
+      window.removeEventListener('hmc_applications_updated', handleSync)
+      window.removeEventListener('storage', handleSync)
+      clearInterval(interval)
+    }
+  }, [])
+
   const handleResetFilters = () => {
     setSearchQuery('')
     setDebouncedQuery('')

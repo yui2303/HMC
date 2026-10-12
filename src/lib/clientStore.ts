@@ -140,15 +140,52 @@ export function getClientApplications(): ApplicationItem[] {
 export function saveClientApplications(apps: ApplicationItem[]) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(apps))
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('hmc_applications_updated', { detail: apps }))
+    }
   } catch (err) {
     console.error('Failed to save to localStorage:', err)
   }
 }
 
-export function addClientApplication(data: RecruitmentFormData): ApplicationItem {
+export function saveSingleClientApplication(app: ApplicationItem): ApplicationItem {
+  const apps = getClientApplications()
+  const index = apps.findIndex(
+    (a) => a.id === app.id || (a.studentId && a.studentId.toUpperCase() === app.studentId.toUpperCase())
+  )
+  if (index >= 0) {
+    apps[index] = { ...apps[index], ...app }
+  } else {
+    apps.unshift(app)
+  }
+  saveClientApplications(apps)
+  return app
+}
+
+export function syncServerApplicationsToClient(serverApps: ApplicationItem[]): void {
+  if (!Array.isArray(serverApps) || serverApps.length === 0) return
+  const clientApps = getClientApplications()
+  const map = new Map<string, ApplicationItem>()
+
+  // 1. Add server apps
+  serverApps.forEach((app) => map.set(app.id, app))
+
+  // 2. Retain any unique client apps
+  clientApps.forEach((cApp) => {
+    if (!map.has(cApp.id)) {
+      map.set(cApp.id, cApp)
+    }
+  })
+
+  const merged = Array.from(map.values())
+  merged.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+  saveClientApplications(merged)
+}
+
+export function addClientApplication(data: RecruitmentFormData, customId?: string): ApplicationItem {
   const apps = getClientApplications()
   const randomSuffix = Math.random().toString(36).substring(2, 6).toUpperCase()
-  const id = `HMC-2026-${Date.now().toString(36).toUpperCase().slice(-4)}-${randomSuffix}`
+  const id = customId || `HMC-2026-${Date.now().toString(36).toUpperCase().slice(-4)}-${randomSuffix}`
   const now = new Date().toISOString()
 
   const newApp: ApplicationItem = {
@@ -168,7 +205,16 @@ export function addClientApplication(data: RecruitmentFormData): ApplicationItem
     updatedAt: now,
   }
 
-  apps.unshift(newApp)
+  // If already exists with this ID or studentId, update instead of duplicating
+  const existingIndex = apps.findIndex(
+    (a) => a.id === id || (a.studentId && a.studentId === newApp.studentId)
+  )
+  if (existingIndex >= 0) {
+    apps[existingIndex] = { ...apps[existingIndex], ...newApp }
+  } else {
+    apps.unshift(newApp)
+  }
+
   saveClientApplications(apps)
   return newApp
 }

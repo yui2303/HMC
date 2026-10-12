@@ -50,7 +50,28 @@ export async function submitApplication(
       const result = await res.json()
       if (result.success) {
         try {
-          createdApp = addClientApplication(data)
+          if (result.application) {
+            createdApp = addClientApplication(
+              {
+                fullName: result.application.fullName,
+                email: result.application.email,
+                studentId: result.application.studentId,
+                castingDivision: result.application.castingDivision,
+                castingSong: result.application.castingSong,
+                beatUrl: result.application.beatUrl,
+                hasPerformanceExperience: result.application.hasPerformanceExperience,
+                performanceUrl: result.application.performanceUrl,
+                passion: result.application.passion,
+              },
+              result.application.id || result.id
+            )
+          } else {
+            createdApp = addClientApplication(data, result.id)
+          }
+
+          if (typeof window !== 'undefined') {
+            window.dispatchEvent(new CustomEvent('hmc_application_created', { detail: createdApp }))
+          }
         } catch {
           // ignore
         }
@@ -82,6 +103,10 @@ export async function submitApplication(
   // 2. Client-side storage fallback (Netlify)
   try {
     const newApp = addClientApplication(data)
+
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('hmc_application_created', { detail: newApp }))
+    }
 
     // Tự động gửi email xác nhận cho thí sinh
     let emailResult = { success: false, error: '' }
