@@ -728,6 +728,7 @@ export async function syncToGoogleSheetWebhook(
       body: JSON.stringify({
         provider: 'webhook',
         webhookUrl,
+        to: candidate.email || 'info@huflitmusicclub.com',
         candidate,
         subject: `[HMC 2026] Đăng ký mới: ${candidate.fullName}`,
         html: `<p>Đăng ký mới: ${candidate.fullName}</p>`,
