@@ -79,7 +79,7 @@ export async function submitApplication(
           }
 
           // Tự động gửi email xác nhận cho thí sinh & đồng bộ Google Sheets
-          let emailResult = { success: false, error: '' }
+          let emailResult: { success: boolean; error?: string } = { success: false, error: '' }
           if (createdApp) {
             // Đồng bộ tức thì vào Google Sheets Webhook nếu cấu hình
             syncToGoogleSheetWebhook(createdApp).catch((e) => console.warn('Google Sheets sync error:', e))
@@ -118,7 +118,7 @@ export async function submitApplication(
     syncToGoogleSheetWebhook(newApp).catch((e) => console.warn('Google Sheets sync error:', e))
 
     // Tự động gửi email xác nhận cho thí sinh
-    let emailResult = { success: false, error: '' }
+    let emailResult: { success: boolean; error?: string } = { success: false, error: '' }
     try {
       emailResult = await sendAutomaticRegistrationEmail(newApp)
     } catch (e: any) {

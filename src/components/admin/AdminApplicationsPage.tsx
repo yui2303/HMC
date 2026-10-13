@@ -1081,7 +1081,7 @@ export const AdminApplicationsPage: React.FC<AdminApplicationsPageProps> = ({
                 <p className="text-sm text-[#FF8E8E]">{errorMessage}</p>
                 <button
                   type="button"
-                  onClick={loadData}
+                  onClick={() => { loadData() }}
                   className="btn-primary-glow px-5 py-2 rounded-xl text-xs font-semibold text-white cursor-pointer"
                 >
                   Thử lại

@@ -1,5 +1,4 @@
 import { ApplicationItem } from './adminApi'
-import { getAuditionPlanHtml } from './auditionPlanPdf'
 import { DEFAULT_EMAIL_CONFIG, EmailProviderConfig } from '../config/emailConfig'
 
 export type { EmailProviderConfig }
@@ -146,25 +145,65 @@ export function generatePersonalizedEmailHtml(
           </div>
           <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
             <tr>
-              <td style="padding: 5px 0; color: #91A4BB; width: 140px;">Mã hồ sơ:</td>
-              <td style="padding: 5px 0; color: #70D7FF; font-family: monospace; font-weight: 700;">${candidate.id}</td>
+              <td style="padding: 6px 0; color: #91A4BB; width: 145px;">Mã hồ sơ:</td>
+              <td style="padding: 6px 0; color: #70D7FF; font-family: monospace; font-weight: 700;">${candidate.id}</td>
             </tr>
             <tr>
-              <td style="padding: 5px 0; color: #91A4BB;">Họ và tên:</td>
-              <td style="padding: 5px 0; color: #FFFFFF; font-weight: 700;">${candidate.fullName}</td>
+              <td style="padding: 6px 0; color: #91A4BB;">Họ và tên:</td>
+              <td style="padding: 6px 0; color: #FFFFFF; font-weight: 700;">${candidate.fullName}</td>
             </tr>
             <tr>
-              <td style="padding: 5px 0; color: #91A4BB;">Mã số sinh viên:</td>
-              <td style="padding: 5px 0; color: #FFFFFF; font-weight: 600;">${candidate.studentId}</td>
+              <td style="padding: 6px 0; color: #91A4BB;">Mã số sinh viên:</td>
+              <td style="padding: 6px 0; color: #FFFFFF; font-weight: 600;">${candidate.studentId}</td>
             </tr>
             <tr>
-              <td style="padding: 5px 0; color: #91A4BB;">Mảng đăng ký:</td>
-              <td style="padding: 5px 0; color: #FFE082; font-weight: 700;">${divisionLabel}</td>
+              <td style="padding: 6px 0; color: #91A4BB;">Email thí sinh:</td>
+              <td style="padding: 6px 0; color: #FFFFFF;"><a href="mailto:${candidate.email}" style="color: #70D7FF; text-decoration: none;">${candidate.email}</a></td>
             </tr>
             <tr>
-              <td style="padding: 5px 0; color: #91A4BB;">Bài / Tác phẩm:</td>
-              <td style="padding: 5px 0; color: #FFFFFF;">${candidate.castingSong}</td>
+              <td style="padding: 6px 0; color: #91A4BB;">Mảng đăng ký:</td>
+              <td style="padding: 6px 0; color: #FFE082; font-weight: 700;">${divisionLabel}</td>
             </tr>
+            <tr>
+              <td style="padding: 6px 0; color: #91A4BB;">Bài / Tác phẩm:</td>
+              <td style="padding: 6px 0; color: #FFFFFF; font-weight: 600;">${candidate.castingSong || 'Tự chọn'}</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px 0; color: #FFE082; font-weight: 700; vertical-align: top;">🎵 Link Beat / Nhạc:</td>
+              <td style="padding: 8px 0; word-break: break-all;">
+                ${
+                  candidate.beatUrl && (candidate.beatUrl.startsWith('http://') || candidate.beatUrl.startsWith('https://'))
+                    ? `<a href="${candidate.beatUrl}" target="_blank" rel="noopener noreferrer" style="display: inline-block; background: rgba(112, 215, 255, 0.15); border: 1px solid #70D7FF; color: #70D7FF; font-weight: 700; text-decoration: none; padding: 4px 12px; border-radius: 6px; font-size: 12.5px;">🔗 Mở Link Beat (${candidate.beatUrl.length > 50 ? candidate.beatUrl.slice(0, 47) + '...' : candidate.beatUrl})</a>`
+                    : `<span style="color: #FFE082; font-weight: 600;">${candidate.beatUrl || 'Nộp beat trực tiếp tại bàn Check-in'}</span>`
+                }
+              </td>
+            </tr>
+            <tr>
+              <td style="padding: 6px 0; color: #91A4BB;">Kinh nghiệm sân khấu:</td>
+              <td style="padding: 6px 0; color: #FFFFFF;">${candidate.hasPerformanceExperience ? '✅ Đã từng biểu diễn / có kinh nghiệm' : 'Chưa có kinh nghiệm'}</td>
+            </tr>
+            ${
+              candidate.performanceUrl && (candidate.performanceUrl.startsWith('http://') || candidate.performanceUrl.startsWith('https://'))
+                ? `
+            <tr>
+              <td style="padding: 6px 0; color: #91A4BB; vertical-align: top;">Video biểu diễn:</td>
+              <td style="padding: 6px 0; word-break: break-all;">
+                <a href="${candidate.performanceUrl}" target="_blank" rel="noopener noreferrer" style="color: #70D7FF; text-decoration: underline;">${candidate.performanceUrl}</a>
+              </td>
+            </tr>
+                `
+                : ''
+            }
+            ${
+              candidate.passion
+                ? `
+            <tr>
+              <td style="padding: 6px 0; color: #91A4BB; vertical-align: top;">Chia sẻ / Động lực:</td>
+              <td style="padding: 6px 0; color: #D2DFEE; font-style: italic; white-space: pre-line;">"${candidate.passion}"</td>
+            </tr>
+                `
+                : ''
+            }
           </table>
         </div>
 
@@ -285,7 +324,7 @@ export async function sendSingleRealEmail(
       const directRes = await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${activeConfig.resendApiKey.trim()}`,
+          Authorization: `Bearer ${apiKey}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -320,6 +359,13 @@ export async function sendSingleRealEmail(
     }
 
     try {
+      const divisionLabel =
+        candidate.castingDivision === 'vocal'
+          ? 'Hát (Vocal)'
+          : candidate.castingDivision === 'dancer'
+          ? 'Nhảy (Dance)'
+          : 'Múa (Traditional / Contemporary)'
+
       const res = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
         method: 'POST',
         headers: {
@@ -332,9 +378,20 @@ export async function sendSingleRealEmail(
           template_params: {
             to_name: candidate.fullName,
             to_email: toEmail.trim(),
+            candidate_name: candidate.fullName,
+            candidate_email: candidate.email,
             student_id: candidate.studentId,
-            division: candidate.castingDivision,
-            casting_song: candidate.castingSong,
+            division: divisionLabel,
+            division_code: candidate.castingDivision,
+            casting_song: candidate.castingSong || 'Tự chọn',
+            // Beat URL field variations to match any template placeholder
+            beat_url: candidate.beatUrl || '',
+            link_beat: candidate.beatUrl || '',
+            beatUrl: candidate.beatUrl || '',
+            has_experience: candidate.hasPerformanceExperience ? 'Đã có kinh nghiệm' : 'Chưa có',
+            performance_url: candidate.performanceUrl || 'Không có',
+            passion: candidate.passion || '',
+            created_at: new Date(candidate.createdAt || Date.now()).toLocaleString('vi-VN'),
             subject: subject,
             message_html: htmlBody,
             custom_note: options.customNote || '',
@@ -701,6 +758,16 @@ export async function sendAutomaticRegistrationEmail(
     if (res.success) {
       markEmailIdsAsSent([candidate.id])
     }
+
+    // Gửi bản sao thông báo hồ sơ mới cho Ban Tổ Chức HMC (nếu email thí sinh khác email BTC)
+    const adminEmail = (config.senderEmail?.match(/<([^>]+)>/)?.[1] || config.senderEmail || 'clbamnhac.huflit@gmail.com').trim()
+    if (adminEmail && adminEmail.includes('@') && candidate.email.toLowerCase() !== adminEmail.toLowerCase()) {
+      sendSingleRealEmail(adminEmail, candidate, {
+        customNote: `[THÔNG BÁO TỰ ĐỘNG CHO BAN TỔ CHỨC / CTV]\nThí sinh ${candidate.fullName} (MSSV: ${candidate.studentId}) vừa hoàn tất đăng ký casting. Vui lòng kiểm tra thông tin hồ sơ và link beat bên dưới.`,
+        config,
+      }).catch((e) => console.warn('Lỗi gửi thông báo cho BTC:', e))
+    }
+
     return res
   } catch (err: any) {
     console.warn('Lỗi khi tự động gửi email cho thí sinh:', err)
@@ -715,12 +782,15 @@ export async function syncToGoogleSheetWebhook(
   candidate: ApplicationItem
 ): Promise<void> {
   const fallbackWebhook = 'https://script.google.com/macros/s/AKfycbyQxZJByqKQp6k0wgI73DuYx9uzOh5mRK9nTJhBTw2fMHPawxRKuGAW6d-qO5lCCmNJxg/exec'
+  const config = getSavedEmailConfig()
   const webhookUrl = (config.webhookUrl?.trim() || (import.meta.env.VITE_WEBHOOK_URL as string)?.trim() || fallbackWebhook).trim()
   if (!webhookUrl) return
 
   const payload = {
     type: 'new_registration',
     candidate,
+    beatUrl: candidate.beatUrl,
+    linkBeat: candidate.beatUrl,
     timestamp: new Date().toISOString(),
   }
 

@@ -73,11 +73,8 @@ export function initDatabase() {
     }
   }
 
-  // Seed Sample Recruitment Applications for rich Admin Experience if empty
-  const appCount = db.prepare('SELECT COUNT(*) as count FROM applications').get() as { count: number }
-  if (appCount.count === 0) {
-    seedSampleApplications()
-  }
+  // Upsert/Seed all candidates from EmailJS backfilled list
+  seedSampleApplications()
 }
 
 import { EMAILJS_BACKFILLED_CANDIDATES } from '../data/emailjsCandidates.ts'

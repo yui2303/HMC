@@ -41,32 +41,149 @@ import {
 import { exportAuditionPlanPdf, getAuditionPlanHtml } from '../../lib/auditionPlanPdf'
 import { sound } from '../../lib/audioSynth'
 
-const APPS_SCRIPT_SAMPLE_CODE = `function doPost(e) {
+const APPS_SCRIPT_SAMPLE_CODE = `/**
+ * 1. Hàm lấy hoặc tạo trang tính Google Sheet cho HMC
+ */
+function getHmcSheet() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  if (!ss) {
+    throw new Error("Vui lòng mở Google Sheet -> Tiện ích mở rộng -> Apps Script để liên kết với trang tính.");
+  }
+  
+  var sheet = ss.getSheetByName("Danh Sách Casting") || ss.getActiveSheet();
+  
+  // Tự động khởi tạo dòng tiêu đề nếu sheet còn trống
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow([
+      "Thời Gian Nộp",
+      "Mã Hồ Sơ",
+      "Họ Và Tên",
+      "MSSV",
+      "Email Thí Sinh",
+      "Mảng Casting",
+      "Bài Hát / Tác Phẩm",
+      "Link Beat (Nhạc Nền)",
+      "Kinh Nghiệm Sân Khấu",
+      "Link Clip Biểu Diễn",
+      "Động Lực / Lời Nhắn"
+    ]);
+    sheet.getRange(1, 1, 1, 11).setFontWeight("bold").setBackground("#D9E1F2");
+    sheet.setFrozenRows(1);
+  }
+  
+  return sheet;
+}
+
+/**
+ * 2. Hàm test thử nghiệm: Bạn có thể chọn hàm này và bấm nút "▶ Chạy" trên thanh công cụ
+ */
+function testRun() {
+  var testCandidate = {
+    id: "HMC-TEST-" + Math.floor(Math.random() * 1000),
+    fullName: "Thí Sinh Thử Nghiệm",
+    studentId: "24DH123456",
+    email: "test@gmail.com",
+    castingDivision: "Hát (Vocal)",
+    castingSong: "Linh thiêng Việt Nam",
+    beatUrl: "https://www.youtube.com/watch?v=sample-beat",
+    hasPerformanceExperience: true,
+    performanceUrl: "https://www.youtube.com/watch?v=sample-clip",
+    passion: "Đam mê ca hát và muốn tham gia HMC."
+  };
+  
+  var sheet = getHmcSheet();
+  sheet.appendRow([
+    new Date().toLocaleString("vi-VN"),
+    testCandidate.id,
+    testCandidate.fullName,
+    testCandidate.studentId,
+    testCandidate.email,
+    testCandidate.castingDivision,
+    testCandidate.castingSong,
+    testCandidate.beatUrl,
+    "Đã có kinh nghiệm",
+    testCandidate.performanceUrl,
+    testCandidate.passion
+  ]);
+  
+  Logger.log("✅ Đã ghi thành công 1 dòng thử nghiệm vào Google Sheet!");
+}
+
+/**
+ * 3. Hàm nhận dữ liệu tự động từ Website HMC khi thí sinh nộp hồ sơ
+ */
+function doPost(e) {
   try {
-    var rawContents = e.postData ? e.postData.contents : "{}";
+    var rawContents = (e && e.postData && e.postData.contents) ? e.postData.contents : "{}";
     var data = JSON.parse(rawContents);
-    var to = data.to || data.email || data.recipient;
+    var candidate = data.candidate || {};
+    var to = data.to || data.email || candidate.email || data.recipient;
     var subject = data.subject || "[HMC 2026] Xác nhận đăng ký Casting CTV - CLB Âm nhạc HUFLIT";
     var htmlBody = data.html || data.message || data.body || "<p>Xác nhận đăng ký casting HMC 2026</p>";
     
-    if (!to) {
-      return ContentService.createTextOutput(JSON.stringify({ 
-        success: false, 
-        error: "Thiếu email người nhận" 
-      })).setMimeType(ContentService.MimeType.JSON);
+    // ========================================================
+    // TỰ ĐỘNG LƯU VÀO GOOGLE SHEET (ĐẦY ĐỦ CỘT & LINK BEAT)
+    // ========================================================
+    try {
+      var sheet = getHmcSheet();
+      sheet.appendRow([
+        new Date().toLocaleString("vi-VN"),
+        candidate.id || data.id || "",
+        candidate.fullName || data.fullName || "",
+        candidate.studentId || data.studentId || "",
+        to || candidate.email || "",
+        candidate.castingDivision || data.castingDivision || "",
+        candidate.castingSong || data.castingSong || "",
+        candidate.beatUrl || data.beatUrl || "",
+        candidate.hasPerformanceExperience ? "Đã có kinh nghiệm" : "Chưa có",
+        candidate.performanceUrl || data.performanceUrl || "",
+        candidate.passion || data.passion || ""
+      ]);
+    } catch (sheetErr) {
+      Logger.log("Lỗi ghi Sheet: " + sheetErr.toString());
     }
     
-    // Gửi email tự động từ Gmail của bạn (Miễn phí hoàn toàn)
-    MailApp.sendEmail({
-      to: to,
-      subject: subject,
-      htmlBody: htmlBody,
-      name: "CLB Âm nhạc HUFLIT (HMC)"
-    });
+    // ========================================================
+    // GỬI EMAIL XÁC NHẬN CHO THÍ SINH
+    // ========================================================
+    if (to && to.indexOf("@") !== -1) {
+      try {
+        MailApp.sendEmail({
+          to: to,
+          subject: subject,
+          htmlBody: htmlBody,
+          name: "CLB Âm nhạc HUFLIT (HMC)"
+        });
+      } catch (mailErr) {
+        Logger.log("Lỗi gửi mail: " + mailErr.toString());
+      }
+    }
+    
+    // ========================================================
+    // GỬI BẢN SAO CHO BAN TỔ CHỨC (HMC ADMIN)
+    // ========================================================
+    var btcEmail = "clbamnhac.huflit@gmail.com";
+    if (to && to.toLowerCase() !== btcEmail.toLowerCase()) {
+      try {
+        MailApp.sendEmail({
+          to: btcEmail,
+          subject: "[ĐƠN CASTING MỚI] " + (candidate.fullName || "Thí sinh") + " (" + (candidate.studentId || "") + ")",
+          htmlBody: "<div style='font-family:sans-serif;font-size:13px;'><h3>⚡ HỒ SƠ ĐĂNG KÝ CASTING CTV MỚI:</h3>" +
+                    "<p><strong>Họ tên:</strong> " + (candidate.fullName || "") + "</p>" +
+                    "<p><strong>MSSV:</strong> " + (candidate.studentId || "") + "</p>" +
+                    "<p><strong>Email:</strong> " + (to || "") + "</p>" +
+                    "<p><strong>Mảng:</strong> " + (candidate.castingDivision || "") + "</p>" +
+                    "<p><strong>Bài hát:</strong> " + (candidate.castingSong || "") + "</p>" +
+                    "<p><strong>Link Beat:</strong> <a href='" + (candidate.beatUrl || "#") + "'>" + (candidate.beatUrl || "Nộp tại bàn check-in") + "</a></p>" +
+                    "<hr/></div>" + htmlBody,
+          name: "HMC Casting Notifier"
+        });
+      } catch (adminMailErr) {}
+    }
     
     return ContentService.createTextOutput(JSON.stringify({ 
       success: true, 
-      message: "Đã gửi email thành công tới " + to 
+      message: "Đã lưu vào Google Sheet và gửi email thành công!" 
     })).setMimeType(ContentService.MimeType.JSON);
   } catch (error) {
     return ContentService.createTextOutput(JSON.stringify({ 
@@ -76,8 +193,11 @@ const APPS_SCRIPT_SAMPLE_CODE = `function doPost(e) {
   }
 }
 
+/**
+ * 4. Hàm kiểm tra trạng thái Online của Webhook
+ */
 function doGet(e) {
-  return ContentService.createTextOutput("HMC Email Webhook is ONLINE & Ready!")
+  return ContentService.createTextOutput("HMC Webhook & Google Sheets Sync is ONLINE & Ready!")
     .setMimeType(ContentService.MimeType.TEXT);
 }`
 
