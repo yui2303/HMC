@@ -53,7 +53,7 @@ export const handler: Handler = async (event: HandlerEvent) => {
       const webhookUrl = (
         body.webhookUrl ||
         process.env.VITE_WEBHOOK_URL ||
-        'https://script.google.com/macros/s/AKfycbyQxZJByqKQp6k0wgI73DuYx9uzOh5mRK9nTJhBTw2fMHPawxRKuGAW6d-qO5lCCmNJxg/exec'
+        'https://script.google.com/macros/s/AKfycbzpEErb2FDabdq7MXR0WwoMZ1GKUF4G4ML7XUQEuEfJyUp3oa-zkezxsIIJrt3PpjYQWA/exec'
       ).trim()
       if (!webhookUrl) {
         return {
