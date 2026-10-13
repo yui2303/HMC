@@ -159,31 +159,9 @@ function doPost(e) {
       }
     }
     
-    // ========================================================
-    // GỬI BẢN SAO CHO BAN TỔ CHỨC (HMC ADMIN)
-    // ========================================================
-    var btcEmail = "clbamnhac.huflit@gmail.com";
-    if (to && to.toLowerCase() !== btcEmail.toLowerCase()) {
-      try {
-        MailApp.sendEmail({
-          to: btcEmail,
-          subject: "[ĐƠN CASTING MỚI] " + (candidate.fullName || "Thí sinh") + " (" + (candidate.studentId || "") + ")",
-          htmlBody: "<div style='font-family:sans-serif;font-size:13px;'><h3>⚡ HỒ SƠ ĐĂNG KÝ CASTING CTV MỚI:</h3>" +
-                    "<p><strong>Họ tên:</strong> " + (candidate.fullName || "") + "</p>" +
-                    "<p><strong>MSSV:</strong> " + (candidate.studentId || "") + "</p>" +
-                    "<p><strong>Email:</strong> " + (to || "") + "</p>" +
-                    "<p><strong>Mảng:</strong> " + (candidate.castingDivision || "") + "</p>" +
-                    "<p><strong>Bài hát:</strong> " + (candidate.castingSong || "") + "</p>" +
-                    "<p><strong>Link Beat:</strong> <a href='" + (candidate.beatUrl || "#") + "'>" + (candidate.beatUrl || "Nộp tại bàn check-in") + "</a></p>" +
-                    "<hr/></div>" + htmlBody,
-          name: "HMC Casting Notifier"
-        });
-      } catch (adminMailErr) {}
-    }
-    
     return ContentService.createTextOutput(JSON.stringify({ 
       success: true, 
-      message: "Đã lưu vào Google Sheet và gửi email thành công!" 
+      message: "Đã lưu vào Google Sheet và gửi email cho thí sinh thành công!" 
     })).setMimeType(ContentService.MimeType.JSON);
   } catch (error) {
     return ContentService.createTextOutput(JSON.stringify({ 

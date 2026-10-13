@@ -759,15 +759,6 @@ export async function sendAutomaticRegistrationEmail(
       markEmailIdsAsSent([candidate.id])
     }
 
-    // Gửi bản sao thông báo hồ sơ mới cho Ban Tổ Chức HMC (nếu email thí sinh khác email BTC)
-    const adminEmail = (config.senderEmail?.match(/<([^>]+)>/)?.[1] || config.senderEmail || 'clbamnhac.huflit@gmail.com').trim()
-    if (adminEmail && adminEmail.includes('@') && candidate.email.toLowerCase() !== adminEmail.toLowerCase()) {
-      sendSingleRealEmail(adminEmail, candidate, {
-        customNote: `[THÔNG BÁO TỰ ĐỘNG CHO BAN TỔ CHỨC / CTV]\nThí sinh ${candidate.fullName} (MSSV: ${candidate.studentId}) vừa hoàn tất đăng ký casting. Vui lòng kiểm tra thông tin hồ sơ và link beat bên dưới.`,
-        config,
-      }).catch((e) => console.warn('Lỗi gửi thông báo cho BTC:', e))
-    }
-
     return res
   } catch (err: any) {
     console.warn('Lỗi khi tự động gửi email cho thí sinh:', err)
