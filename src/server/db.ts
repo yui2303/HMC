@@ -81,12 +81,25 @@ import { EMAILJS_BACKFILLED_CANDIDATES } from '../data/emailjsCandidates.ts'
 
 function seedSampleApplications() {
   const insertStmt = db.prepare(`
-    INSERT OR IGNORE INTO applications (
+    INSERT INTO applications (
       id, full_name, email, student_id, casting_division,
       casting_song, beat_url, has_performance_experience,
       performance_url, passion, status, admin_note,
       created_at, updated_at
     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ON CONFLICT(id) DO UPDATE SET
+      full_name = excluded.full_name,
+      email = excluded.email,
+      student_id = excluded.student_id,
+      casting_division = excluded.casting_division,
+      casting_song = excluded.casting_song,
+      beat_url = excluded.beat_url,
+      has_performance_experience = excluded.has_performance_experience,
+      performance_url = excluded.performance_url,
+      passion = excluded.passion,
+      admin_note = CASE WHEN applications.admin_note IS NULL OR applications.admin_note = '' THEN excluded.admin_note ELSE applications.admin_note END,
+      created_at = excluded.created_at,
+      updated_at = excluded.updated_at
   `)
 
   for (const app of EMAILJS_BACKFILLED_CANDIDATES) {

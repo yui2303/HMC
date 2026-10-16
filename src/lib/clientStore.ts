@@ -25,10 +25,22 @@ export function getClientApplications(): ApplicationItem[] {
     // Purge any old fake sample applications (HMC-2026-001..008 or @student.edu.vn demo emails)
     list = list.filter((a) => !a.id.startsWith('HMC-2026-00') && !a.email.endsWith('@student.edu.vn'))
 
-    // Merge seed candidates (real 24 candidates from EmailJS) with stored data
+    // Merge seed candidates (real 62 candidates from EmailJS) with stored data
     const map = new Map<string, ApplicationItem>()
-    INITIAL_SAMPLE_APPLICATIONS.forEach((a) => map.set(a.id, a))
     list.forEach((a) => map.set(a.id, a))
+    INITIAL_SAMPLE_APPLICATIONS.forEach((a) => {
+      const existing = map.get(a.id)
+      if (!existing) {
+        map.set(a.id, a)
+      } else {
+        map.set(a.id, {
+          ...a,
+          status: existing.status || a.status,
+          adminNote: existing.adminNote || a.adminNote,
+          updatedAt: existing.updatedAt || a.updatedAt,
+        })
+      }
+    })
 
     const merged = Array.from(map.values())
     merged.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
