@@ -104,8 +104,8 @@ export const handler: Handler = async (event: HandlerEvent) => {
       const email = String(body.email || '').trim().toLowerCase()
       const studentId = String(body.studentId || '').trim().toUpperCase()
       const castingDivision = String(body.castingDivision || 'vocal').trim().toLowerCase()
-      const castingSong = String(body.castingSong || 'Tự chọn').trim()
-      const beatUrl = String(body.beatUrl || 'Nộp beat tại bàn Check-in').trim()
+      const castingSong = String(body.castingSong || 'Chưa điền (bổ sung khi casting)').trim()
+      const beatUrl = String(body.beatUrl || 'Nộp beat tại bàn Check-in Casting').trim()
       const hasPerformanceExperience = Boolean(body.hasPerformanceExperience)
       const performanceUrl = String(body.performanceUrl || '').trim()
       const passion = String(body.passion || '').trim()
@@ -367,8 +367,8 @@ export const handler: Handler = async (event: HandlerEvent) => {
         email: String(body.email || '').trim().toLowerCase(),
         studentId: String(body.studentId || '').trim().toUpperCase(),
         castingDivision: (body.castingDivision || 'vocal') as any,
-        castingSong: String(body.castingSong || 'Chưa cập nhật').trim(),
-        beatUrl: String(body.beatUrl || 'https://youtube.com').trim(),
+        castingSong: String(body.castingSong || 'Chưa điền (bổ sung khi casting)').trim(),
+        beatUrl: String(body.beatUrl || 'Nộp beat tại bàn Check-in Casting').trim(),
         hasPerformanceExperience: Boolean(body.hasPerformanceExperience),
         performanceUrl: String(body.performanceUrl || '').trim(),
         passion: String(body.passion || '').trim(),

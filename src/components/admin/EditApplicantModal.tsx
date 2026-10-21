@@ -229,28 +229,27 @@ export const EditApplicantModal: React.FC<EditApplicantModalProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-semibold text-[#91A4BB] uppercase tracking-wider mb-1">
-                Bài hát / Tác phẩm casting <span className="text-[#FF7070]">*</span>
+                Bài hát / Tác phẩm casting <span className="text-[#91A4BB] text-[10px] font-normal normal-case">(Không bắt buộc)</span>
               </label>
               <input
                 type="text"
-                required
                 value={formData.castingSong}
                 onChange={(e) => setFormData({ ...formData, castingSong: e.target.value })}
+                placeholder="Để trống nếu bổ sung tại buổi casting"
                 className="w-full px-3.5 py-2.5 rounded-xl bg-[#050D1A]/80 border border-white/15 text-white text-sm focus:border-[#70D7FF] focus:outline-none transition-colors"
               />
             </div>
 
             <div>
               <label className="block text-xs font-semibold text-[#91A4BB] uppercase tracking-wider mb-1">
-                Link Beat / Nhạc nền <span className="text-[#FF7070]">*</span>
+                Link Beat / Nhạc nền <span className="text-[#91A4BB] text-[10px] font-normal normal-case">(Không bắt buộc)</span>
               </label>
               <div className="flex gap-2">
                 <input
                   type="url"
-                  required
                   value={formData.beatUrl}
                   onChange={(e) => setFormData({ ...formData, beatUrl: e.target.value })}
-                  placeholder="https://..."
+                  placeholder="https://... hoặc nộp tại bàn Check-in"
                   className="w-full px-3.5 py-2.5 rounded-xl bg-[#050D1A]/80 border border-white/15 text-white text-sm focus:border-[#70D7FF] focus:outline-none transition-colors"
                 />
                 {formData.beatUrl && (

@@ -139,26 +139,12 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, on
       newErrors.castingDivision = 'Vui lòng chọn mảng casting (Hát, Nhảy hoặc Múa).'
     }
 
-    // Casting Song / Track
-    if (!formData.castingSong.trim()) {
-      newErrors.castingSong =
-        formData.castingDivision === 'vocal'
-          ? 'Vui lòng nhập tên bài hát cá nhân tự chọn của bạn.'
-          : formData.castingDivision === 'traditional_dance'
-          ? 'Vui lòng nhập tên bài múa / tác phẩm bạn chọn cho phần Múa.'
-          : 'Vui lòng nhập tên bài hát / track bạn chọn cho phần casting.'
-    }
+    // Casting Song / Track - Không bắt buộc (có thể đợi tới buổi casting để điền)
 
-    // Beat / Music URL
+    // Beat / Music URL - Không bắt buộc (có thể đợi tới buổi casting nộp)
+    // Nếu có nhập thì kiểm tra định dạng URL hợp lệ
     const urlRegex = /^https?:\/\/.+/i
-    if (!formData.beatUrl.trim()) {
-      newErrors.beatUrl =
-        formData.castingDivision === 'vocal'
-          ? 'Vui lòng cung cấp link beat cho bài hát cá nhân tự chọn (1–3 phút).'
-          : formData.castingDivision === 'traditional_dance'
-          ? 'Vui lòng cung cấp link nhạc / beat múa (1–3 phút).'
-          : 'Vui lòng cung cấp link nhạc casting (1–3 phút).'
-    } else if (!urlRegex.test(formData.beatUrl.trim())) {
+    if (formData.beatUrl.trim() && !urlRegex.test(formData.beatUrl.trim())) {
       newErrors.beatUrl = 'Link chưa đúng định dạng URL (bắt đầu bằng http:// hoặc https://).'
     }
 
@@ -252,9 +238,10 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, on
   // Calculate Progress
   const calculateProgress = (): number => {
     let score = 0
-    if (formData.fullName && formData.email && formData.studentId) score += 34
-    if (formData.castingDivision) score += 33
-    if (formData.castingSong && formData.beatUrl) score += 33
+    if (formData.fullName.trim() && formData.email.trim() && formData.studentId.trim()) score += 50
+    if (formData.castingDivision) score += 30
+    if (formData.castingSong.trim()) score += 10
+    if (formData.beatUrl.trim()) score += 10
     return Math.min(100, score)
   }
 
@@ -836,6 +823,15 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, on
                     : 'Hãy chuẩn bị một phần trình diễn thể hiện kỹ thuật, năng lượng và khả năng làm chủ sân khấu của bạn.'}
                 </p>
 
+                {/* Optional Song & Beat Callout */}
+                <div className="p-3.5 sm:p-4 rounded-xl sm:rounded-2xl bg-[#398BFF]/10 border border-[#70D7FF]/30 flex items-start gap-2.5 text-xs sm:text-sm text-[#C9D9EC]">
+                  <Sparkles className="w-4 h-4 text-[#70D7FF] shrink-0 mt-0.5" />
+                  <div className="leading-relaxed">
+                    <span className="text-[#70D7FF] font-semibold">Lưu ý tiện lợi: </span>
+                    <span>Bạn <strong>không bắt buộc phải ghi tên bài hát và nộp link beat ngay lúc này</strong>. Nếu chưa chuẩn bị xong, bạn hoàn toàn có thể để trống và <strong className="text-[#FFE082]">đợi tới buổi casting điền thông tin và nộp beat trực tiếp tại bàn Check-in</strong> nhé!</span>
+                  </div>
+                </div>
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 pt-1">
                   {/* Vocal Mandatory Songs Notice Box */}
                   {formData.castingDivision === 'vocal' && (
@@ -877,18 +873,19 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, on
                         : formData.castingDivision === 'traditional_dance'
                         ? 'Tác phẩm / bài múa bạn chọn khi đi casting'
                         : 'Bài hát / track nhảy bạn chọn khi đi casting'}{' '}
-                      <span className="text-[#70D7FF] font-bold">*</span>
+                      <span className="text-xs font-normal text-[#91A4BB] ml-1">
+                        (Không bắt buộc - Có thể điền tại buổi casting)
+                      </span>
                     </label>
                     <input
                       id={`${formId}-song`}
                       type="text"
-                      required
                       placeholder={
                         formData.castingDivision === 'vocal'
-                          ? 'Ví dụ: Ngày chưa giông bão, Nàng thơ, Có chàng trai viết lên cây...'
+                          ? 'Ví dụ: Ngày chưa giông bão... (hoặc để trống điền tại buổi casting)'
                           : formData.castingDivision === 'traditional_dance'
-                          ? 'Ví dụ: Múa Dân Gian – Cò Lả, Múa Đương Đại...'
-                          : 'Ví dụ: Supernova – aespa, Hiphop Choreography...'
+                          ? 'Ví dụ: Cò Lả, Múa Đương Đại... (hoặc để trống điền tại buổi casting)'
+                          : 'Ví dụ: Supernova, Hiphop... (hoặc để trống điền tại buổi casting)'
                       }
                       value={formData.castingSong}
                       onChange={(e) => {
@@ -904,13 +901,13 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, on
                     />
                     <p
                       key={`song-helper-${formData.castingDivision || 'default'}`}
-                      className="text-xs text-[#91A4BB]/70 animate-division-change"
+                      className="text-xs text-[#91A4BB]/75 animate-division-change"
                     >
                       {formData.castingDivision === 'vocal'
-                        ? 'Bài hát cá nhân 1–3 phút bạn sẽ thể hiện trước Ban giám khảo.'
+                        ? '💡 Bài hát cá nhân bạn sẽ thể hiện trước BGK. Có thể để trống và đợi tới buổi casting điền tại bàn Check-in.'
                         : formData.castingDivision === 'traditional_dance'
-                        ? 'Tác phẩm múa bạn sẽ sử dụng cho phần Casting.'
-                        : 'Track bạn sẽ sử dụng cho phần Dancer Casting.'}
+                        ? '💡 Tác phẩm múa bạn thể hiện. Có thể để trống và đợi tới buổi casting điền tại bàn Check-in.'
+                        : '💡 Track nhạc biểu diễn vũ đạo. Có thể để trống và đợi tới buổi casting điền tại bàn Check-in.'}
                     </p>
                     {errors.castingSong && (
                       <p className="text-xs text-[#FF6B6B] flex items-center gap-1 mt-1">
@@ -931,13 +928,14 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, on
                         : formData.castingDivision === 'traditional_dance'
                         ? 'Link nhạc / beat múa (1–3 phút)'
                         : 'Link nhạc casting (1–3 phút)'}{' '}
-                      <span className="text-[#70D7FF] font-bold">*</span>
+                      <span className="text-xs font-normal text-[#91A4BB] ml-1">
+                        (Không bắt buộc - Có thể nộp tại buổi casting)
+                      </span>
                     </label>
                     <input
                       id={`${formId}-beat`}
                       type="url"
-                      required
-                      placeholder="https://drive.google.com/... hoặc YouTube, SoundCloud"
+                      placeholder="https://drive.google.com/... (hoặc để trống nộp tại buổi casting)"
                       value={formData.beatUrl}
                       onChange={(e) => {
                         setFormData({ ...formData, beatUrl: e.target.value })
@@ -952,13 +950,9 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, on
                     />
                     <p
                       key={`beat-helper-${formData.castingDivision || 'default'}`}
-                      className="text-xs text-[#91A4BB]/70 animate-division-change"
+                      className="text-xs text-[#91A4BB]/75 animate-division-change"
                     >
-                      {formData.castingDivision === 'vocal'
-                        ? 'Vui lòng gửi beat hoặc instrumental cho bài hát cá nhân bạn đã chọn.'
-                        : formData.castingDivision === 'traditional_dance'
-                        ? 'Vui lòng gửi đoạn nhạc bạn sẽ sử dụng cho phần biểu diễn Múa.'
-                        : 'Vui lòng gửi đoạn nhạc bạn sẽ sử dụng cho phần trình diễn Dancer.'}
+                      💡 Bạn có thể dán link tại đây (Drive/YouTube/SoundCloud) hoặc đợi tới buổi casting để nộp USB / gửi file trực tiếp tại bàn Check-in.
                     </p>
                     {errors.beatUrl && (
                       <p className="text-xs text-[#FF6B6B] flex items-center gap-1 mt-1">

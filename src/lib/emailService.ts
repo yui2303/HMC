@@ -166,7 +166,7 @@ export function generatePersonalizedEmailHtml(
             </tr>
             <tr>
               <td style="padding: 6px 0; color: #91A4BB;">Bài / Tác phẩm:</td>
-              <td style="padding: 6px 0; color: #FFFFFF; font-weight: 600;">${candidate.castingSong || 'Tự chọn'}</td>
+              <td style="padding: 6px 0; color: #FFFFFF; font-weight: 600;">${candidate.castingSong && candidate.castingSong.trim() !== '' ? candidate.castingSong : 'Chưa điền (Bổ sung tại buổi casting)'}</td>
             </tr>
             <tr>
               <td style="padding: 8px 0; color: #FFE082; font-weight: 700; vertical-align: top;">🎵 Link Beat / Nhạc:</td>
@@ -383,11 +383,11 @@ export async function sendSingleRealEmail(
             student_id: candidate.studentId,
             division: divisionLabel,
             division_code: candidate.castingDivision,
-            casting_song: candidate.castingSong || 'Tự chọn',
+            casting_song: candidate.castingSong || 'Chưa điền (Bổ sung tại buổi casting)',
             // Beat URL field variations to match any template placeholder
-            beat_url: candidate.beatUrl || '',
-            link_beat: candidate.beatUrl || '',
-            beatUrl: candidate.beatUrl || '',
+            beat_url: candidate.beatUrl || 'Nộp beat tại bàn Check-in Casting',
+            link_beat: candidate.beatUrl || 'Nộp beat tại bàn Check-in Casting',
+            beatUrl: candidate.beatUrl || 'Nộp beat tại bàn Check-in Casting',
             has_experience: candidate.hasPerformanceExperience ? 'Đã có kinh nghiệm' : 'Chưa có',
             performance_url: candidate.performanceUrl || 'Không có',
             passion: candidate.passion || '',

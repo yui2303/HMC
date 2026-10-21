@@ -324,25 +324,37 @@ export const ApplicantDetailDrawer: React.FC<ApplicantDetailDrawerProps> = ({
                   ? 'Bài nhảy / Track casting:'
                   : 'Tác phẩm múa / Nhạc nền:'}
               </span>
-              <p className="text-sm font-semibold text-white">{application.castingSong}</p>
+              <p className="text-sm font-semibold text-white">
+                {application.castingSong || (
+                  <span className="text-[#91A4BB]/60 italic font-normal">
+                    (Chưa điền - Bổ sung tại buổi casting)
+                  </span>
+                )}
+              </p>
             </div>
 
             <div className="space-y-1 pt-1">
               <span className="text-xs text-[#91A4BB]">Link Beat / Instrumental:</span>
-              <div className="flex items-center gap-3">
-                <a
-                  href={application.beatUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#398BFF]/20 hover:bg-[#398BFF]/30 text-[#70D7FF] border border-[#70D7FF]/30 text-xs font-semibold transition-all cursor-pointer"
-                >
-                  <span>Mở link Beat</span>
-                  <ExternalLink className="w-3.5 h-3.5" />
-                </a>
-                <span className="text-xs text-[#91A4BB]/60 truncate max-w-[220px]">
-                  {application.beatUrl}
-                </span>
-              </div>
+              {application.beatUrl && (application.beatUrl.startsWith('http://') || application.beatUrl.startsWith('https://')) ? (
+                <div className="flex items-center gap-3">
+                  <a
+                    href={application.beatUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#398BFF]/20 hover:bg-[#398BFF]/30 text-[#70D7FF] border border-[#70D7FF]/30 text-xs font-semibold transition-all cursor-pointer"
+                  >
+                    <span>Mở link Beat</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+                  <span className="text-xs text-[#91A4BB]/60 truncate max-w-[220px]">
+                    {application.beatUrl}
+                  </span>
+                </div>
+              ) : (
+                <p className="text-xs text-[#FFE082] font-medium bg-[#FFE082]/10 border border-[#FFE082]/20 rounded-lg px-3 py-1.5 inline-block">
+                  {application.beatUrl || 'Chưa nộp beat (Nộp tại bàn Check-in Casting)'}
+                </p>
+              )}
             </div>
           </div>
 

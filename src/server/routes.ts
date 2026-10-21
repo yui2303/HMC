@@ -140,15 +140,15 @@ export async function handleApiRequest(req: IncomingMessage, res: ServerResponse
       const email = String(body.email || '').trim().toLowerCase()
       const studentId = String(body.studentId || '').trim().toUpperCase()
       const castingDivision = String(body.castingDivision || '').trim().toLowerCase()
-      const castingSong = String(body.castingSong || '').trim()
-      const beatUrl = String(body.beatUrl || '').trim()
+      const castingSong = String(body.castingSong || '').trim() || 'Chưa điền (bổ sung khi casting)'
+      const beatUrl = String(body.beatUrl || '').trim() || 'Nộp beat tại bàn Check-in Casting'
       const hasPerformanceExperience = body.hasPerformanceExperience ? 1 : 0
       const performanceUrl = String(body.performanceUrl || '').trim()
       const passion = String(body.passion || '').trim()
 
-      if (!fullName || !email || !studentId || !castingDivision || !castingSong || !beatUrl) {
+      if (!fullName || !email || !studentId || !castingDivision) {
         sendJson(res, 400, {
-          error: 'Vui lòng điền đầy đủ các thông tin bắt buộc.',
+          error: 'Vui lòng điền đầy đủ các thông tin bắt buộc (Họ tên, Email, MSSV, Mảng casting).',
         })
         return true
       }
