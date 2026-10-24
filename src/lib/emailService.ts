@@ -46,6 +46,16 @@ export function getSavedEmailConfig(): EmailProviderConfig {
     if (!config.webhookUrl || !config.webhookUrl.trim() || config.webhookUrl.includes('AKfycbyQxZJByqKQp')) {
       config.webhookUrl = DEFAULT_EMAIL_CONFIG.webhookUrl
     }
+    // Tự động nâng cấp nếu trình duyệt lưu key EmailJS cũ
+    if (!config.emailjsServiceId || config.emailjsServiceId === 'service_fkcpp29') {
+      config.emailjsServiceId = DEFAULT_EMAIL_CONFIG.emailjsServiceId
+    }
+    if (!config.emailjsTemplateId || config.emailjsTemplateId === 'template_bk0piza') {
+      config.emailjsTemplateId = DEFAULT_EMAIL_CONFIG.emailjsTemplateId
+    }
+    if (!config.emailjsPublicKey || config.emailjsPublicKey === 'q0QNSKxr7xzzPS8nJ') {
+      config.emailjsPublicKey = DEFAULT_EMAIL_CONFIG.emailjsPublicKey
+    }
     return config
   } catch {
     return { ...DEFAULT_EMAIL_CONFIG }

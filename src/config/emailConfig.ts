@@ -28,9 +28,9 @@ export const DEFAULT_EMAIL_CONFIG: EmailProviderConfig = {
   provider: 'emailjs',
   senderEmail: 'CLB Âm nhạc HUFLIT <clbamnhac.huflit@gmail.com>',
   resendApiKey: (import.meta.env.VITE_RESEND_API_KEY as string) || '',
-  emailjsServiceId: (import.meta.env.VITE_EMAILJS_SERVICE_ID as string) || 'service_fkcpp29',
-  emailjsTemplateId: (import.meta.env.VITE_EMAILJS_TEMPLATE_ID as string) || 'template_bk0piza',
-  emailjsPublicKey: (import.meta.env.VITE_EMAILJS_PUBLIC_KEY as string) || 'q0QNSKxr7xzzPS8nJ',
+  emailjsServiceId: (import.meta.env.VITE_EMAILJS_SERVICE_ID as string) || 'service_hw5gzpb',
+  emailjsTemplateId: (import.meta.env.VITE_EMAILJS_TEMPLATE_ID as string) || 'template_yxu0us4',
+  emailjsPublicKey: (import.meta.env.VITE_EMAILJS_PUBLIC_KEY as string) || 'wbOlEEN_Ie8IJ-A3V',
   webhookUrl: (import.meta.env.VITE_WEBHOOK_URL as string) || 'https://script.google.com/macros/s/AKfycbzpEErb2FDabdq7MXR0WwoMZ1GKUF4G4ML7XUQEuEfJyUp3oa-zkezxsIIJrt3PpjYQWA/exec',
   autoSendOnRegistration: true, // true: Tự động gửi mail ngay khi thí sinh đăng ký
 }
