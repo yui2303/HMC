@@ -29,8 +29,8 @@ export interface EmailDispatchResult {
 const SENT_EMAILS_STORAGE_KEY = 'hmc_recruitment_sent_confirmation_emails_v1'
 const EMAIL_CONFIG_STORAGE_KEY = 'hmc_recruitment_email_config_v1'
 
-export const LIVE_WEBSITE_URL = 'https://huflitmusicclub.netlify.app'
-export const LIVE_CASTING_GUIDE_URL = 'https://huflitmusicclub.netlify.app/#casting-guide'
+export const LIVE_WEBSITE_URL = 'https://ctvhmc.netlify.app'
+export const LIVE_CASTING_GUIDE_URL = 'https://ctvhmc.netlify.app/#casting-guide'
 
 /**
  * Returns saved email provider configuration from local storage merged with defaults

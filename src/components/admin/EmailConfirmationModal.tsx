@@ -1167,7 +1167,7 @@ export const EmailConfirmationModal: React.FC<EmailConfirmationModalProps> = ({
               <span>
                 Nút thể lệ trong email dẫn trực tiếp tới:{' '}
                 <a href={LIVE_CASTING_GUIDE_URL} target="_blank" rel="noopener noreferrer" className="text-[#70D7FF] underline">
-                  huflitmusicclub.netlify.app
+                  ctvhmc.netlify.app
                 </a>
               </span>
             )}
