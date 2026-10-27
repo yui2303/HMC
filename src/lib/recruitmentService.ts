@@ -58,7 +58,7 @@ export async function submitApplication(
                   fullName: result.application.fullName,
                   email: result.application.email,
                   studentId: result.application.studentId,
-                  castingDivision: result.application.castingDivision,
+                  castingDivision: result.application.castingDivision || data.castingDivision,
                   castingSong: result.application.castingSong,
                   beatUrl: result.application.beatUrl,
                   hasPerformanceExperience: result.application.hasPerformanceExperience,

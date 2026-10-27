@@ -25,6 +25,25 @@ export function getClientApplications(): ApplicationItem[] {
     // Purge any old fake sample applications (HMC-2026-001..008 or @student.edu.vn demo emails)
     list = list.filter((a) => !a.id.startsWith('HMC-2026-00') && !a.email.endsWith('@student.edu.vn'))
 
+    // Ensure all stored applications have a valid castingDivision (fix previously corrupted entries)
+    list = list.map((a: ApplicationItem) => {
+      let div = (a.castingDivision as string) || ''
+      if (div !== 'vocal' && div !== 'dancer' && div !== 'traditional_dance') {
+        const raw = div.toLowerCase()
+        if (raw === 'dancer' || raw === 'dance' || raw.includes('nhảy') || raw.includes('nhay')) {
+          div = 'dancer'
+        } else if (raw === 'traditional_dance' || raw.includes('múa') || raw.includes('mua')) {
+          div = 'traditional_dance'
+        } else {
+          div = 'vocal'
+        }
+      }
+      return {
+        ...a,
+        castingDivision: div as 'vocal' | 'dancer' | 'traditional_dance',
+      }
+    })
+
     // Merge seed candidates (real 62 candidates from EmailJS) with stored data
     const map = new Map<string, ApplicationItem>()
     list.forEach((a) => map.set(a.id, a))
@@ -35,6 +54,7 @@ export function getClientApplications(): ApplicationItem[] {
       } else {
         map.set(a.id, {
           ...a,
+          castingDivision: existing.castingDivision || a.castingDivision || 'vocal',
           status: existing.status || a.status,
           adminNote: existing.adminNote || a.adminNote,
           updatedAt: existing.updatedAt || a.updatedAt,
@@ -101,11 +121,22 @@ export function addClientApplication(data: RecruitmentFormData, customId?: strin
   const id = customId || `HMC-2026-${Date.now().toString(36).toUpperCase().slice(-4)}-${randomSuffix}`
   const now = new Date().toISOString()
 
+  let normalizedDivision: 'vocal' | 'dancer' | 'traditional_dance' = 'vocal'
+  const rawDiv = String(data.castingDivision || '').trim().toLowerCase()
+  if (rawDiv === 'dancer' || rawDiv === 'dance' || rawDiv.includes('nhảy') || rawDiv.includes('nhay')) {
+    normalizedDivision = 'dancer'
+  } else if (rawDiv === 'traditional_dance' || rawDiv.includes('múa') || rawDiv.includes('mua') || rawDiv.includes('traditional')) {
+    normalizedDivision = 'traditional_dance'
+  } else {
+    normalizedDivision = 'vocal'
+  }
+
   const newApp: ApplicationItem = {
     id,
     fullName: data.fullName.trim(),
     email: data.email.trim(),
     studentId: data.studentId.trim().toUpperCase(),
+    castingDivision: normalizedDivision,
     castingSong: (data.castingSong || '').trim() || 'Chưa điền (bổ sung khi casting)',
     beatUrl: (data.beatUrl || '').trim() || 'Nộp beat tại bàn Check-in Casting',
     hasPerformanceExperience: Boolean(data.hasPerformanceExperience),

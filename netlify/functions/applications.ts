@@ -103,7 +103,15 @@ export const handler: Handler = async (event: HandlerEvent) => {
       const fullName = String(body.fullName || '').trim()
       const email = String(body.email || '').trim().toLowerCase()
       const studentId = String(body.studentId || '').trim().toUpperCase()
-      const castingDivision = String(body.castingDivision || 'vocal').trim().toLowerCase()
+      let castingDivision: 'vocal' | 'dancer' | 'traditional_dance' = 'vocal'
+      const rawDiv = String(body.castingDivision || '').trim().toLowerCase()
+      if (rawDiv === 'dancer' || rawDiv === 'dance' || rawDiv.includes('nhảy') || rawDiv.includes('nhay')) {
+        castingDivision = 'dancer'
+      } else if (rawDiv === 'traditional_dance' || rawDiv.includes('múa') || rawDiv.includes('mua') || rawDiv.includes('traditional')) {
+        castingDivision = 'traditional_dance'
+      } else {
+        castingDivision = 'vocal'
+      }
       const castingSong = String(body.castingSong || 'Chưa điền (bổ sung khi casting)').trim()
       const beatUrl = String(body.beatUrl || 'Nộp beat tại bàn Check-in Casting').trim()
       const hasPerformanceExperience = Boolean(body.hasPerformanceExperience)
@@ -128,7 +136,7 @@ export const handler: Handler = async (event: HandlerEvent) => {
         fullName,
         email,
         studentId,
-        castingDivision: castingDivision as any,
+        castingDivision,
         castingSong,
         beatUrl,
         hasPerformanceExperience,
@@ -361,12 +369,22 @@ export const handler: Handler = async (event: HandlerEvent) => {
       const id = body.id || `HMC-2026-${Date.now().toString(36).toUpperCase().slice(-4)}-${randomSuffix}`
       const now = new Date().toISOString()
 
+      let manualDivision: 'vocal' | 'dancer' | 'traditional_dance' = 'vocal'
+      const rawManualDiv = String(body.castingDivision || '').trim().toLowerCase()
+      if (rawManualDiv === 'dancer' || rawManualDiv === 'dance' || rawManualDiv.includes('nhảy') || rawManualDiv.includes('nhay')) {
+        manualDivision = 'dancer'
+      } else if (rawManualDiv === 'traditional_dance' || rawManualDiv.includes('múa') || rawManualDiv.includes('mua') || rawManualDiv.includes('traditional')) {
+        manualDivision = 'traditional_dance'
+      } else {
+        manualDivision = 'vocal'
+      }
+
       const newApp: ApplicationItem = {
         id,
         fullName: String(body.fullName || 'Thí sinh mới').trim(),
         email: String(body.email || '').trim().toLowerCase(),
         studentId: String(body.studentId || '').trim().toUpperCase(),
-        castingDivision: (body.castingDivision || 'vocal') as any,
+        castingDivision: manualDivision,
         castingSong: String(body.castingSong || 'Chưa điền (bổ sung khi casting)').trim(),
         beatUrl: String(body.beatUrl || 'Nộp beat tại bàn Check-in Casting').trim(),
         hasPerformanceExperience: Boolean(body.hasPerformanceExperience),

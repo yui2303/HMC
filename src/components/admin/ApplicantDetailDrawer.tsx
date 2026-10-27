@@ -241,7 +241,9 @@ export const ApplicantDetailDrawer: React.FC<ApplicantDetailDrawerProps> = ({
                     ? 'bg-[#398BFF]/20 text-[#70D7FF] border-[#70D7FF]/40'
                     : application.castingDivision === 'dancer'
                     ? 'bg-[#A855F7]/20 text-[#D8B4FE] border-[#C084FC]/40'
-                    : 'bg-[#F43F5E]/20 text-[#FDA4AF] border-[#FB7185]/40'
+                    : application.castingDivision === 'traditional_dance'
+                    ? 'bg-[#F43F5E]/20 text-[#FDA4AF] border-[#FB7185]/40'
+                    : 'bg-[#398BFF]/20 text-[#70D7FF] border-[#70D7FF]/40'
                 }`}
               >
                 {application.castingDivision === 'vocal' ? (
@@ -254,10 +256,15 @@ export const ApplicantDetailDrawer: React.FC<ApplicantDetailDrawerProps> = ({
                     <Activity className="w-3.5 h-3.5" />
                     <span>NHẢY (DANCE)</span>
                   </>
-                ) : (
+                ) : application.castingDivision === 'traditional_dance' ? (
                   <>
                     <Sparkles className="w-3.5 h-3.5" />
                     <span>MÚA</span>
+                  </>
+                ) : (
+                  <>
+                    <Mic className="w-3.5 h-3.5" />
+                    <span>HÁT (VOCAL)</span>
                   </>
                 )}
               </div>

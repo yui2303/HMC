@@ -47,13 +47,13 @@ export function getSavedEmailConfig(): EmailProviderConfig {
       config.webhookUrl = DEFAULT_EMAIL_CONFIG.webhookUrl
     }
     // Tự động nâng cấp nếu trình duyệt lưu key EmailJS cũ
-    if (!config.emailjsServiceId || config.emailjsServiceId === 'service_fkcpp29') {
+    if (!config.emailjsServiceId || config.emailjsServiceId === 'service_fkcpp29' || config.emailjsServiceId === 'service_hw5gzpb') {
       config.emailjsServiceId = DEFAULT_EMAIL_CONFIG.emailjsServiceId
     }
-    if (!config.emailjsTemplateId || config.emailjsTemplateId === 'template_bk0piza') {
+    if (!config.emailjsTemplateId || config.emailjsTemplateId === 'template_bk0piza' || config.emailjsTemplateId === 'template_yxu0us4') {
       config.emailjsTemplateId = DEFAULT_EMAIL_CONFIG.emailjsTemplateId
     }
-    if (!config.emailjsPublicKey || config.emailjsPublicKey === 'q0QNSKxr7xzzPS8nJ') {
+    if (!config.emailjsPublicKey || config.emailjsPublicKey === 'q0QNSKxr7xzzPS8nJ' || config.emailjsPublicKey === 'wbOlEEN_Ie8IJ-A3V') {
       config.emailjsPublicKey = DEFAULT_EMAIL_CONFIG.emailjsPublicKey
     }
     return config
@@ -112,7 +112,9 @@ export function generatePersonalizedEmailHtml(
       ? 'Hát (Vocal)'
       : candidate.castingDivision === 'dancer'
       ? 'Nhảy (Dance)'
-      : 'Múa (Traditional / Contemporary)'
+      : candidate.castingDivision === 'traditional_dance'
+      ? 'Múa (Traditional / Contemporary)'
+      : 'Hát (Vocal)'
 
   const customNoteBlock = options.customNote
     ? `
@@ -374,7 +376,9 @@ export async function sendSingleRealEmail(
           ? 'Hát (Vocal)'
           : candidate.castingDivision === 'dancer'
           ? 'Nhảy (Dance)'
-          : 'Múa (Traditional / Contemporary)'
+          : candidate.castingDivision === 'traditional_dance'
+          ? 'Múa (Traditional / Contemporary)'
+          : 'Hát (Vocal)'
 
       const res = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
         method: 'POST',

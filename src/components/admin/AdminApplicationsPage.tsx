@@ -1203,10 +1203,15 @@ export const AdminApplicationsPage: React.FC<AdminApplicationsPageProps> = ({
                                   <Activity className="w-3 h-3" />
                                   <span>Nhảy</span>
                                 </span>
-                              ) : (
+                              ) : app.castingDivision === 'traditional_dance' ? (
                                 <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-[#F43F5E]/20 text-[#FDA4AF] border border-[#FB7185]/35">
                                   <Sparkles className="w-3 h-3" />
                                   <span>Múa</span>
+                                </span>
+                              ) : (
+                                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-[#398BFF]/20 text-[#70D7FF] border border-[#70D7FF]/35">
+                                  <Mic className="w-3 h-3" />
+                                  <span>Hát</span>
                                 </span>
                               )}
                             </td>
