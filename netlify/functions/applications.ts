@@ -160,6 +160,9 @@ export const handler: Handler = async (event: HandlerEvent) => {
           body: JSON.stringify({
             candidate: newApp,
             type: 'new_registration',
+            action: 'sync_sheet_only',
+            skipEmail: true,
+            sendEmail: false,
             timestamp: now,
           }),
         }).catch(() => {})

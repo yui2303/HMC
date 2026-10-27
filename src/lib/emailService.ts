@@ -791,34 +791,19 @@ export async function syncToGoogleSheetWebhook(
   const webhookUrl = (config.webhookUrl?.trim() || (import.meta.env.VITE_WEBHOOK_URL as string)?.trim() || fallbackWebhook).trim()
   if (!webhookUrl) return
 
+  // Payload chỉ phục vụ ghi nhận dữ liệu vào Google Sheet, tuyệt đối không gửi email thông báo
   const payload = {
+    action: 'sync_sheet_only',
     type: 'new_registration',
+    skipEmail: true,
+    sendEmail: false,
     candidate,
     beatUrl: candidate.beatUrl,
     linkBeat: candidate.beatUrl,
     timestamp: new Date().toISOString(),
   }
 
-  // 1. Thử gửi qua serverless proxy Netlify (server-to-server)
-  try {
-    const res = await fetch('/api/send-email', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        provider: 'webhook',
-        webhookUrl,
-        to: candidate.email || 'info@huflitmusicclub.com',
-        candidate,
-        subject: `[HMC 2026] Đăng ký mới: ${candidate.fullName}`,
-        html: `<p>Đăng ký mới: ${candidate.fullName}</p>`,
-      }),
-    })
-    if (res.ok) return
-  } catch {
-    // ignore
-  }
-
-  // 2. Dự phòng gửi trực tiếp từ trình duyệt (CORS safe via text/plain & no-cors)
+  // Gửi trực tiếp tới Google Apps Script Webhook (chỉ để lưu dòng vào Google Sheets)
   try {
     await fetch(webhookUrl, {
       method: 'POST',
