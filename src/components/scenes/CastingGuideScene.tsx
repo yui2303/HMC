@@ -17,11 +17,13 @@ import { SpaceTourAnimation } from '../effects/SpaceTourAnimation'
 
 interface CastingGuideSceneProps {
   onOpenRegister?: () => void
+  onNavigateCastingShift?: () => void
   showReferenceOverlay?: boolean
 }
 
 export const CastingGuideScene: React.FC<CastingGuideSceneProps> = ({
   onOpenRegister,
+  onNavigateCastingShift,
   showReferenceOverlay = false,
 }) => {
   const sceneRef = useRef<HTMLElement>(null)
@@ -312,17 +314,37 @@ export const CastingGuideScene: React.FC<CastingGuideSceneProps> = ({
                   <span>Cổng đăng ký trực tuyến đang mở</span>
                 </div>
 
-                <button
-                  type="button"
-                  onClick={handleRegisterClick}
-                  onMouseEnter={() => sound.playHover()}
-                  className="btn-primary-glow w-full flex items-center justify-center gap-2.5 py-4 rounded-2xl text-base font-bold text-white tracking-wide cursor-pointer shadow-[0_0_25px_rgba(57,139,255,0.7)] active:scale-98 transition-all"
-                  style={{ minHeight: '54px' }}
-                >
-                  <Sparkles className="w-5 h-5" />
-                  <span>Đăng ký Casting ngay</span>
-                  <ArrowRight className="w-5 h-5" />
-                </button>
+                <div className="space-y-2.5">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      sound.playClick()
+                      if (onNavigateCastingShift) {
+                        onNavigateCastingShift()
+                      } else {
+                        window.history.pushState({}, '', '/dangkica')
+                        window.dispatchEvent(new PopStateEvent('popstate'))
+                      }
+                    }}
+                    onMouseEnter={() => sound.playHover()}
+                    className="btn-primary-glow w-full flex items-center justify-center gap-2.5 py-3.5 rounded-2xl text-base font-bold text-white tracking-wide cursor-pointer shadow-[0_0_25px_rgba(57,139,255,0.7)] active:scale-98 transition-all"
+                    style={{ minHeight: '52px' }}
+                  >
+                    <Calendar className="w-5 h-5 text-[#FFE082]" />
+                    <span>Chọn Ca &amp; Khung Giờ Casting</span>
+                    <ArrowRight className="w-5 h-5" />
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleRegisterClick}
+                    onMouseEnter={() => sound.playHover()}
+                    className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl text-xs sm:text-sm font-semibold text-[#70D7FF] bg-[#0E2A4D]/80 hover:bg-[#0E2A4D] border border-[#70D7FF]/35 active:scale-98 transition-all cursor-pointer"
+                  >
+                    <Sparkles className="w-4 h-4" />
+                    <span>Nộp Đơn Đăng Ký Mới (Chưa nộp hồ sơ)</span>
+                  </button>
+                </div>
 
                 <p className="text-[11px] text-center text-[#91A4BB] italic">
                   * Thời gian đăng ký: Từ 19g00 ngày 11/10/2026 đến 21g00 ngày 04/11/2026.

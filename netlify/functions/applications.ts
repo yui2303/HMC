@@ -95,10 +95,96 @@ export const handler: Handler = async (event: HandlerEvent) => {
 
   try {
     // ----------------------------------------------------
-    // 1. PUBLIC: POST /api/applications (CTV Registration)
+    // 1. PUBLIC: POST /api/applications (CTV Registration & Shift Selection)
     // ----------------------------------------------------
-    if ((cleanPath === '' || cleanPath === '/') && method === 'POST') {
+    if ((cleanPath === '' || cleanPath === '/' || cleanPath === '/shift') && method === 'POST') {
       const body = JSON.parse(event.body || '{}')
+
+      // Xử lý riêng cho Đăng Ký Ca Casting (/dangkica)
+      if (body.action === 'register_shift' || cleanPath === '/shift') {
+        const apps = await getStoredApplications()
+        const studentId = String(body.studentId || '').trim().toUpperCase()
+        const email = String(body.email || '').trim().toLowerCase()
+        const fullName = String(body.fullName || '').trim()
+        const fullShiftLabel = String(body.fullShiftLabel || '').trim()
+        const phone = String(body.phone || '').trim()
+        const note = String(body.note || '').trim()
+        const now = new Date().toISOString()
+
+        const existingIndex = apps.findIndex(
+          (a) =>
+            (studentId && a.studentId.toUpperCase() === studentId) ||
+            (email && a.email.toLowerCase() === email)
+        )
+
+        let targetApp: ApplicationItem
+        if (existingIndex >= 0) {
+          const prev = apps[existingIndex]
+          const shiftNote = `[Ca Casting: ${fullShiftLabel} | SĐT: ${phone}]${note ? ` [Ghi chú: ${note}]` : ''}`
+          apps[existingIndex] = {
+            ...prev,
+            adminNote: prev.adminNote && !prev.adminNote.includes(fullShiftLabel)
+              ? `${shiftNote} ${prev.adminNote}`
+              : shiftNote,
+            updatedAt: now,
+          }
+          targetApp = apps[existingIndex]
+        } else {
+          const randomSuffix = Math.random().toString(36).substring(2, 6).toUpperCase()
+          const id = `HMC-2026-${Date.now().toString(36).toUpperCase().slice(-4)}-${randomSuffix}`
+          targetApp = {
+            id,
+            fullName: fullName || 'Thí sinh đăng ký ca',
+            studentId: studentId || 'N/A',
+            email: email || 'N/A',
+            castingDivision: body.castingDivision || 'vocal',
+            castingSong: body.castingSong || '',
+            beatUrl: body.beatUrl || '',
+            hasPerformanceExperience: false,
+            performanceUrl: '',
+            passion: `[ĐĂNG KÝ CA]: ${fullShiftLabel}. SĐT: ${phone}`,
+            status: 'new',
+            adminNote: `[Ca Casting: ${fullShiftLabel} | SĐT: ${phone}]`,
+            createdAt: now,
+            updatedAt: now,
+          }
+          apps.unshift(targetApp)
+        }
+
+        await persistApplications(apps)
+
+        // Đồng bộ sang Google Apps Script Webhook
+        const webhookUrl =
+          process.env.VITE_WEBHOOK_URL ||
+          process.env.WEBHOOK_URL ||
+          'https://script.google.com/macros/s/AKfycbzpEErb2FDabdq7MXR0WwoMZ1GKUF4G4ML7XUQEuEfJyUp3oa-zkezxsIIJrt3PpjYQWA/exec'
+        
+        fetch(webhookUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({
+            action: 'register_shift',
+            type: 'casting_shift_registration',
+            sheetName: 'Đăng Ký Ca Casting',
+            skipEmail: true,
+            sendEmail: false,
+            candidate: targetApp,
+            fullShiftLabel,
+            phone,
+            timestamp: now,
+          }),
+        }).catch(() => {})
+
+        return {
+          statusCode: 200,
+          headers,
+          body: JSON.stringify({
+            success: true,
+            message: 'Đã ghi nhận ca casting thành công!',
+            application: targetApp,
+          }),
+        }
+      }
 
       const fullName = String(body.fullName || '').trim()
       const email = String(body.email || '').trim().toLowerCase()

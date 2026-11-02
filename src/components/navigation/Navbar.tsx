@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { sound } from '../../lib/audioSynth'
-import { Volume2, VolumeX, Menu, X, ArrowRight } from 'lucide-react'
+import { Volume2, VolumeX, Menu, X, ArrowRight, Calendar } from 'lucide-react'
 import { navItems } from '../../data/socialLinks'
 
 interface NavbarProps {
   onOpenRegister: () => void
+  onNavigateCastingShift?: () => void
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenRegister }) => {
+export const Navbar: React.FC<NavbarProps> = ({ onOpenRegister, onNavigateCastingShift }) => {
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [isMuted, setIsMuted] = useState(false)
@@ -144,6 +145,25 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenRegister }) => {
               {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4 text-[#70D7FF]" />}
             </button>
 
+            {/* Casting Shift Register Button */}
+            <button
+              type="button"
+              onClick={() => {
+                sound.playClick()
+                if (onNavigateCastingShift) {
+                  onNavigateCastingShift()
+                } else {
+                  window.history.pushState({}, '', '/dangkica')
+                  window.dispatchEvent(new PopStateEvent('popstate'))
+                }
+              }}
+              onMouseEnter={() => sound.playHover()}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-semibold text-[#70D7FF] bg-[#0E2A4D]/80 hover:bg-[#0E2A4D] hover:text-white border border-[#70D7FF]/35 shadow-[0_0_12px_rgba(112,215,255,0.25)] transition-all cursor-pointer"
+            >
+              <Calendar className="w-3.5 h-3.5" />
+              <span>Đăng ký ca</span>
+            </button>
+
             {/* Primary CTA */}
             <button
               type="button"
@@ -240,6 +260,29 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenRegister }) => {
             </div>
 
             <div className="pt-3 border-t border-white/10 flex flex-col gap-2.5">
+              <button
+                type="button"
+                onClick={() => {
+                  sound.playClick()
+                  setMobileMenuOpen(false)
+                  if (onNavigateCastingShift) {
+                    onNavigateCastingShift()
+                  } else {
+                    window.history.pushState({}, '', '/dangkica')
+                    window.dispatchEvent(new PopStateEvent('popstate'))
+                  }
+                }}
+                className="w-full flex items-center justify-between p-3.5 rounded-2xl bg-[#0E2A4D]/90 border border-[#70D7FF]/35 text-white font-semibold text-sm active:scale-98 transition-all"
+              >
+                <span className="flex items-center gap-2">
+                  <Calendar className="w-4 h-4 text-[#70D7FF]" />
+                  <span>Đăng ký Ca &amp; Khung giờ</span>
+                </span>
+                <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#398BFF]/20 text-[#70D7FF] border border-[#70D7FF]/30">
+                  /dangkica
+                </span>
+              </button>
+
               <button
                 type="button"
                 onClick={() => {

@@ -15,6 +15,7 @@ import { useLenis } from './hooks/useLenis'
 import { useReducedMotion } from './hooks/useReducedMotion'
 import { gsap, ScrollTrigger } from './lib/gsap'
 import { Loader2 } from 'lucide-react'
+import { CastingShiftRegistrationPage } from './components/casting/CastingShiftRegistrationPage'
 
 export function App() {
   const [currentPath, setCurrentPath] = useState(() => window.location.pathname)
@@ -27,6 +28,7 @@ export function App() {
   const appRef = useRef<HTMLDivElement>(null)
 
   const isAdminRoute = currentPath.startsWith('/admin')
+  const isCastingShiftRoute = currentPath.toLowerCase().startsWith('/dangkica')
 
   // Navigation Helper
   const navigate = (path: string) => {
@@ -65,11 +67,11 @@ export function App() {
   }, [currentPath])
 
   // Initialize Lenis smooth scroll if on public website and reduced motion is disabled
-  useLenis(!prefersReducedMotion && !isAdminRoute)
+  useLenis(!prefersReducedMotion && !isAdminRoute && !isCastingShiftRoute)
 
   // Keyboard shortcut 'R' to toggle design reference overlay during development
   useEffect(() => {
-    if (isAdminRoute) return
+    if (isAdminRoute || isCastingShiftRoute) return
 
     const handleKeyDown = (e: KeyboardEvent) => {
       const activeEl = document.activeElement as HTMLElement
@@ -80,11 +82,11 @@ export function App() {
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [isAdminRoute])
+  }, [isAdminRoute, isCastingShiftRoute])
 
   // GSAP Animations: 100% Reversible, Cinematic Scroll-Linked Scrub System (Public website only)
   useEffect(() => {
-    if (prefersReducedMotion || isAdminRoute) return
+    if (prefersReducedMotion || isAdminRoute || isCastingShiftRoute) return
 
     const ctx = gsap.context(() => {
       // ==========================================
@@ -684,6 +686,11 @@ export function App() {
     )
   }
 
+  // 1B. CASTING SHIFT REGISTRATION ROUTE (/dangkica)
+  if (isCastingShiftRoute) {
+    return <CastingShiftRegistrationPage onNavigateHome={() => navigate('/')} />
+  }
+
   // 2. PUBLIC WEBSITE BRANCH
   return (
     <div ref={appRef} className="min-h-screen bg-[#050D1A] text-[#F4F7FB] relative selection:bg-[#398BFF] selection:text-white overflow-x-hidden">
@@ -691,7 +698,10 @@ export function App() {
       <SoundWaveLayer />
 
       {/* Global Navigation Bar */}
-      <Navbar onOpenRegister={() => setIsRegisterOpen(true)} />
+      <Navbar
+        onOpenRegister={() => setIsRegisterOpen(true)}
+        onNavigateCastingShift={() => navigate('/dangkica')}
+      />
 
 
       {/* Main Continuous Musical World with Seamless Overlaps */}
@@ -730,6 +740,7 @@ export function App() {
         <div className="relative z-[6]">
           <CastingGuideScene
             onOpenRegister={() => setIsRegisterOpen(true)}
+            onNavigateCastingShift={() => navigate('/dangkica')}
             showReferenceOverlay={showReferenceOverlay}
           />
         </div>
