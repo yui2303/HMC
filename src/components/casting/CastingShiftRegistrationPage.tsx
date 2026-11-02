@@ -216,17 +216,12 @@ export const CastingShiftRegistrationPage: React.FC<CastingShiftRegistrationPage
               </div>
             </div>
 
-            {/* Lưu ý */}
-            <div className="p-4 rounded-2xl bg-[#FFE082]/10 border border-[#FFE082]/30 text-xs text-[#E2EBF6] space-y-1 mb-6">
-              <div className="font-bold text-[#FFE082] flex items-center gap-1.5">
-                <AlertCircle className="w-4 h-4" />
-                <span>LƯU Ý DÀNH CHO BẠN:</span>
+            {/* Xác nhận đồng bộ trực tiếp vào Sheet */}
+            <div className="p-4 rounded-2xl bg-emerald-500/15 border border-emerald-500/35 text-xs text-emerald-200 flex items-center gap-3 mb-6">
+              <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
+              <div className="leading-relaxed">
+                Thông tin ca casting của bạn đã được <strong className="text-white">lưu trực tiếp vào link Google Sheet</strong> của ban tổ chức ngay lập tức. Lựa chọn của bạn đã được bảo đảm!
               </div>
-              <ul className="list-disc pl-5 space-y-1 text-[#C9D9EC]">
-                <li>Có mặt tại phòng casting trước ca thi ít nhất <strong>15 – 30 phút</strong> để check-in và chuẩn bị.</li>
-                <li>Mang theo <strong>Thẻ sinh viên HUFLIT</strong> (hoặc CCCD / VNeID) để ban tổ chức đối chiếu.</li>
-                <li>Chủ động chuẩn bị sẵn beat nhạc hoặc đạo cụ cá nhân cần thiết.</li>
-              </ul>
             </div>
 
             {/* Thao tác */}
@@ -585,7 +580,7 @@ export const CastingShiftRegistrationPage: React.FC<CastingShiftRegistrationPage
                   {isSubmitting ? (
                     <>
                       <Loader2 className="w-5 h-5 animate-spin" />
-                      <span>Đang Ghi Nhận...</span>
+                      <span>Đang Lưu Vào Google Sheet...</span>
                     </>
                   ) : (
                     <>

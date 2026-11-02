@@ -61,6 +61,7 @@ import { ApplicantDetailDrawer } from './ApplicantDetailDrawer'
 import { EmailConfirmationModal } from './EmailConfirmationModal'
 import { EditApplicantModal } from './EditApplicantModal'
 import { DeleteConfirmModal } from './DeleteConfirmModal'
+import { ShiftSyncModal } from './ShiftSyncModal'
 import { sound } from '../../lib/audioSynth'
 
 interface AdminApplicationsPageProps {
@@ -151,6 +152,9 @@ export const AdminApplicationsPage: React.FC<AdminApplicationsPageProps> = ({
   const [allCandidatesForEmail, setAllCandidatesForEmail] = useState<ApplicationItem[]>([])
   const [isLoadingEmailCandidates, setIsLoadingEmailCandidates] = useState(false)
   const [sentEmailIdsSet, setSentEmailIdsSet] = useState<Set<string>>(() => getSentEmailIds())
+
+  // Shift Sync Webhook Modal State
+  const [isShiftSyncModalOpen, setIsShiftSyncModalOpen] = useState(false)
 
   // Selected Detail Drawer
   const [selectedAppId, setSelectedAppId] = useState<string | null>(null)
@@ -987,6 +991,18 @@ export const AdminApplicationsPage: React.FC<AdminApplicationsPageProps> = ({
                 </div>
 
                 <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      sound.playClick()
+                      setIsShiftSyncModalOpen(true)
+                    }}
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#0E2A4D] hover:bg-[#123661] text-[#70D7FF] border border-[#70D7FF]/40 text-xs font-bold transition-all cursor-pointer shadow-md"
+                  >
+                    <FileSpreadsheet className="w-4 h-4" />
+                    <span>🔗 Link Đồng Bộ Sheet</span>
+                  </button>
+
                   <button
                     type="button"
                     onClick={() => exportShiftRegistrationsCsv()}
@@ -1904,6 +1920,12 @@ export const AdminApplicationsPage: React.FC<AdminApplicationsPageProps> = ({
           setSentEmailIdsSet(getSentEmailIds())
           loadData()
         }}
+      />
+
+      {/* Shift Sync Webhook Modal */}
+      <ShiftSyncModal
+        isOpen={isShiftSyncModalOpen}
+        onClose={() => setIsShiftSyncModalOpen(false)}
       />
 
       {/* Detail Slide Drawer */}

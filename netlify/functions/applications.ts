@@ -153,8 +153,11 @@ export const handler: Handler = async (event: HandlerEvent) => {
 
         await persistApplications(apps)
 
-        // Đồng bộ sang Google Apps Script Webhook
+        // Đồng bộ sang Google Apps Script Webhook (Tuyệt đối không gửi email)
         const webhookUrl =
+          body.shiftWebhookUrl ||
+          process.env.VITE_SHIFT_WEBHOOK_URL ||
+          process.env.SHIFT_WEBHOOK_URL ||
           process.env.VITE_WEBHOOK_URL ||
           process.env.WEBHOOK_URL ||
           'https://script.google.com/macros/s/AKfycbzpEErb2FDabdq7MXR0WwoMZ1GKUF4G4ML7XUQEuEfJyUp3oa-zkezxsIIJrt3PpjYQWA/exec'
@@ -168,9 +171,20 @@ export const handler: Handler = async (event: HandlerEvent) => {
             sheetName: 'Đăng Ký Ca Casting',
             skipEmail: true,
             sendEmail: false,
-            candidate: targetApp,
+            to: '', // Tuyệt đối không gửi email
+            email: '',
+            fullName: fullName || targetApp.fullName,
+            studentId: studentId || targetApp.studentId,
+            shiftDate: body.shiftDate || '',
+            shiftSession: body.shiftSession || '',
+            shiftTimeSlot: body.shiftTimeSlot || '',
             fullShiftLabel,
-            phone,
+            id: body.id || targetApp.id,
+            registeredAt: new Date(now).toLocaleString('vi-VN'),
+            candidate: {
+              ...targetApp,
+              email: '', // Không gửi email
+            },
             timestamp: now,
           }),
         }).catch(() => {})

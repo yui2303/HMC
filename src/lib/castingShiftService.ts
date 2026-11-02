@@ -178,6 +178,214 @@ export function findExistingRegistrationByStudentId(
   return list.find((r) => r.studentId.trim().toUpperCase() === cleanId) || null
 }
 
+export const SHIFT_WEBHOOK_STORAGE_KEY = 'hmc_shift_webhook_url_v1'
+export const DEFAULT_SHIFT_WEBHOOK_URL =
+  'https://script.google.com/macros/s/AKfycbzpEErb2FDabdq7MXR0WwoMZ1GKUF4G4ML7XUQEuEfJyUp3oa-zkezxsIIJrt3PpjYQWA/exec'
+
+/**
+ * Lấy URL Google Apps Script Webhook dành riêng cho Đăng Ký Ca Casting
+ */
+export function getShiftWebhookUrl(): string {
+  try {
+    const saved = localStorage.getItem(SHIFT_WEBHOOK_STORAGE_KEY)
+    if (saved && saved.trim()) return saved.trim()
+  } catch {
+    // ignore
+  }
+
+  const envShift = (import.meta.env.VITE_SHIFT_WEBHOOK_URL as string)?.trim()
+  if (envShift) return envShift
+
+  const emailConfig = getSavedEmailConfig()
+  if (emailConfig.webhookUrl && emailConfig.webhookUrl.trim()) {
+    return emailConfig.webhookUrl.trim()
+  }
+
+  const envGeneral = (import.meta.env.VITE_WEBHOOK_URL as string)?.trim()
+  if (envGeneral) return envGeneral
+
+  return DEFAULT_SHIFT_WEBHOOK_URL
+}
+
+/**
+ * Lưu URL Google Apps Script Webhook cho Ca Casting vào localStorage
+ */
+export function saveShiftWebhookUrl(url: string): void {
+  try {
+    localStorage.setItem(SHIFT_WEBHOOK_STORAGE_KEY, url.trim())
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('hmc_shift_webhook_url_changed', { detail: url.trim() }))
+    }
+  } catch (err) {
+    console.error('Failed to save shift webhook URL:', err)
+  }
+}
+
+/**
+ * Kiểm tra kết nối tới Webhook Google Sheet
+ */
+export async function testShiftWebhookConnection(
+  url: string
+): Promise<{ success: boolean; message: string }> {
+  const cleanUrl = url.trim()
+  if (!cleanUrl) {
+    return { success: false, message: 'Vui lòng nhập đường link Google Apps Script Webhook.' }
+  }
+
+  // 1. Thử gửi GET request kiểm tra online
+  try {
+    const res = await fetch(cleanUrl, { method: 'GET' })
+    if (res.ok) {
+      return {
+        success: true,
+        message: '✅ Kết nối Webhook thành công (HTTP 200 OK)! Link sẵn sàng đồng bộ trực tiếp vào Google Sheet.',
+      }
+    }
+  } catch {
+    // fallback test với POST packet
+  }
+
+  // 2. Thử gửi POST packet với mode no-cors
+  try {
+    await fetch(cleanUrl, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        action: 'ping_test',
+        type: 'casting_shift_registration',
+        timestamp: new Date().toISOString(),
+      }),
+    })
+
+    return {
+      success: true,
+      message: '✅ Đã gửi tín hiệu kiểm tra thành công! Đường link Webhook Google Sheet hoạt động bình thường.',
+    }
+  } catch (err: any) {
+    return {
+      success: false,
+      message: `❌ Không thể gửi tới Webhook: ${err.message || 'Lỗi mạng'}. Hãy đảm bảo chọn Quyền truy cập: "Bất kỳ ai (Anyone)" khi Triển khai.`,
+    }
+  }
+}
+
+/**
+ * Mã nguồn Google Apps Script chuẩn tối ưu cho Đăng Ký Ca Casting
+ */
+export const GOOGLE_APPS_SCRIPT_SHIFT_CODE = `/**
+ * =========================================================================
+ * GOOGLE APPS SCRIPT - ĐỒNG BỘ ĐĂNG KÝ CA CASTING HMC 2026
+ * =========================================================================
+ * Hướng dẫn cài đặt nhanh 3 phút:
+ * 1. Mở file Google Sheets bạn muốn lưu danh sách ca casting.
+ * 2. Trên thanh menu, chọn: Tiện ích mở rộng (Extensions) -> Apps Script.
+ * 3. Xóa code cũ, dán toàn bộ đoạn code này vào và bấm biểu tượng Lưu (Ctrl + S).
+ * 4. Bấm nút "Triển khai" (Deploy) màu xanh ở góc trên bên phải -> "Tùy chọn triển khai mới" (New deployment).
+ * 5. Nhấn vào biểu tượng Bánh răng (⚙️) chọn loại: "Ứng dụng web" (Web app).
+ *    - Mô tả: "Đồng bộ ca casting HMC"
+ *    - Người thực thi: "Tôi" (User access)
+ *    - Quyền truy cập: "Bất kỳ ai" (Anyone) -> RẤT QUAN TRỌNG!
+ * 6. Bấm "Triển khai", cấp quyền khi Google hỏi, sau đó sao chép "URL ứng dụng web".
+ * 7. Dán URL vào mục cấu hình Webhook trong hệ thống HMC.
+ * =========================================================================
+ */
+
+var SHIFT_SHEET_NAME = "Đăng Ký Ca Casting";
+
+function getOrCreateShiftSheet() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(SHIFT_SHEET_NAME);
+  
+  if (!sheet) {
+    sheet = ss.insertSheet(SHIFT_SHEET_NAME);
+    var headers = [
+      "Thời Gian Đăng Ký",
+      "Họ Và Tên",
+      "Mã Số Sinh Viên (MSSV)",
+      "Ngày Casting",
+      "Buổi",
+      "Khung Giờ",
+      "Chi Tiết Ca Đầy Đủ",
+      "Mã Đăng Ký"
+    ];
+    sheet.appendRow(headers);
+    
+    var headerRange = sheet.getRange(1, 1, 1, headers.length);
+    headerRange.setBackground("#0F2744");
+    headerRange.setFontColor("#70D7FF");
+    headerRange.setFontWeight("bold");
+    headerRange.setHorizontalAlignment("center");
+    headerRange.setVerticalAlignment("middle");
+    headerRange.setWrap(true);
+    sheet.setRowHeight(1, 40);
+    sheet.setFrozenRows(1);
+    
+    sheet.setColumnWidth(1, 160); // Thời gian
+    sheet.setColumnWidth(2, 220); // Họ tên
+    sheet.setColumnWidth(3, 140); // MSSV
+    sheet.setColumnWidth(4, 150); // Ngày
+    sheet.setColumnWidth(5, 120); // Buổi
+    sheet.setColumnWidth(6, 150); // Khung giờ
+    sheet.setColumnWidth(7, 280); // Chi tiết ca
+    sheet.setColumnWidth(8, 140); // Mã đăng ký
+  }
+  return sheet;
+}
+
+function doPost(e) {
+  try {
+    var rawContents = (e && e.postData && e.postData.contents) ? e.postData.contents : "{}";
+    var data = JSON.parse(rawContents);
+    
+    var fullName = data.fullName || (data.candidate && data.candidate.fullName) || "";
+    var studentId = data.studentId || (data.candidate && data.candidate.studentId) || "";
+    var shiftDate = data.shiftDate || "";
+    var shiftSession = data.shiftSession || "";
+    var shiftTimeSlot = data.shiftTimeSlot || "";
+    var fullShiftLabel = data.fullShiftLabel || (shiftSession + " " + shiftTimeSlot);
+    var id = data.id || "";
+    var nowStr = data.registeredAt || new Date().toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" });
+    
+    var sheet = getOrCreateShiftSheet();
+    
+    // Ghi dòng vào sheet ngay lập tức
+    sheet.appendRow([
+      nowStr,
+      fullName,
+      "'" + studentId, // Dấu nháy đơn giữ nguyên định dạng số
+      shiftDate,
+      shiftSession,
+      shiftTimeSlot,
+      fullShiftLabel,
+      id
+    ]);
+    
+    var lastRow = sheet.getLastRow();
+    var rowRange = sheet.getRange(lastRow, 1, 1, 8);
+    rowRange.setVerticalAlignment("middle");
+    
+    // TUYỆT ĐỐI KHÔNG GỬI EMAIL THEO YÊU CẦU CỦA HMC
+    return ContentService.createTextOutput(JSON.stringify({
+      success: true,
+      message: "Đã ghi nhận ca casting vào Google Sheet thành công!",
+      row: lastRow
+    })).setMimeType(ContentService.MimeType.JSON);
+    
+  } catch (error) {
+    return ContentService.createTextOutput(JSON.stringify({
+      success: false,
+      error: error.toString()
+    })).setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+function doGet(e) {
+  return ContentService.createTextOutput("HMC Casting Shift Sync Webhook is ONLINE & Ready!")
+    .setMimeType(ContentService.MimeType.TEXT);
+}
+`
+
 export interface SimpleShiftSubmitParams {
   fullName: string
   studentId: string
@@ -186,7 +394,7 @@ export interface SimpleShiftSubmitParams {
 
 /**
  * Ghi nhận lượt đăng ký ca casting (chỉ cần Họ tên, MSSV và Ca đã chọn)
- * Tự động đồng bộ vào Google Sheet và kho dữ liệu hệ thống
+ * Tự động đồng bộ ngay lập tức vào Google Sheet, KHÔNG GỬI EMAIL
  */
 export async function submitCastingShiftRegistration(
   params: SimpleShiftSubmitParams
@@ -195,7 +403,7 @@ export async function submitCastingShiftRegistration(
   const cleanId = params.studentId.trim().toUpperCase()
 
   if (!cleanName) {
-    return { success: false, id: '', message: 'Vui lòng nhập họ và tên của bạn.' }
+    return { success: false, id: '', message: 'Vui lòng nhập Họ và tên của bạn.' }
   }
   if (!cleanId) {
     return { success: false, id: '', message: 'Vui lòng nhập Mã số sinh viên (MSSV).' }
@@ -250,15 +458,8 @@ export async function submitCastingShiftRegistration(
 
   persistShiftRegistrations(updatedList)
 
-  // 2. Gửi đồng bộ sang Google Sheet qua Webhook
-  const fallbackWebhook =
-    'https://script.google.com/macros/s/AKfycbzpEErb2FDabdq7MXR0WwoMZ1GKUF4G4ML7XUQEuEfJyUp3oa-zkezxsIIJrt3PpjYQWA/exec'
-  const emailConfig = getSavedEmailConfig()
-  const webhookUrl = (
-    emailConfig.webhookUrl?.trim() ||
-    (import.meta.env.VITE_WEBHOOK_URL as string)?.trim() ||
-    fallbackWebhook
-  ).trim()
+  // 2. Gửi đồng bộ sang Google Sheet qua Webhook NGAY LẬP TỨC (TUYỆT ĐỐI KHÔNG GỬI EMAIL)
+  const webhookUrl = getShiftWebhookUrl()
 
   if (webhookUrl) {
     const divisionLabel =
@@ -274,15 +475,14 @@ export async function submitCastingShiftRegistration(
       sheetName: 'Đăng Ký Ca Casting',
       skipEmail: true,
       sendEmail: false,
+      to: '', // Tuyệt đối để trống để không gửi email
+      email: '', // Không truyền email để tránh bất kỳ script cũ nào gửi thư
+      phone: '',
       id: newRegistration.id,
       fullName: cleanName,
       studentId: cleanId,
-      email: newRegistration.email || '',
-      phone: '',
       castingDivision: divisionLabel,
-      castingSong: newRegistration.castingSong || '',
-      beatUrl: newRegistration.beatUrl || '',
-      shiftDate: shiftOption.date,
+      shiftDate: shiftOption.dateLabel,
       shiftDayOfWeek: shiftOption.dayOfWeek,
       shiftSession: shiftOption.sessionLabel,
       shiftTimeSlot: shiftOption.timeSlot,
@@ -292,29 +492,15 @@ export async function submitCastingShiftRegistration(
         id: newRegistration.applicationId || newRegistration.id,
         fullName: cleanName,
         studentId: cleanId,
-        email: newRegistration.email || '',
+        email: '', // Tuyệt đối không gửi email
         castingDivision: divisionLabel,
-        castingSong: newRegistration.castingSong || '',
-        beatUrl: newRegistration.beatUrl || '',
         passion: `[ĐÃ CHỌN CA CASTING]: ${fullShiftLabel}`,
       },
       timestamp: now,
     }
 
     try {
-      // Netlify function rewrite nếu có
-      fetch('/api/send-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          provider: 'webhook',
-          webhookUrl,
-          to: newRegistration.email || 'clbamnhac.huflit@gmail.com',
-          ...payload,
-        }),
-      }).catch(() => {})
-
-      // Gửi thẳng Google Apps Script Webhook
+      // Gửi trực tiếp tới Google Apps Script Webhook (mode no-cors) để ghi vào Google Sheet ngay lập tức
       await fetch(webhookUrl, {
         method: 'POST',
         mode: 'no-cors',
@@ -322,7 +508,22 @@ export async function submitCastingShiftRegistration(
         body: JSON.stringify(payload),
       })
     } catch (err) {
-      console.warn('Webhook sync error for shift registration:', err)
+      console.warn('Direct Google Sheet sync error for shift registration:', err)
+    }
+
+    // Đồng thời gọi /api/applications để Netlify backend lưu trữ (không gửi email)
+    try {
+      fetch('/api/applications', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'register_shift',
+          shiftWebhookUrl: webhookUrl,
+          ...payload,
+        }),
+      }).catch(() => {})
+    } catch {
+      // ignore
     }
   }
 
