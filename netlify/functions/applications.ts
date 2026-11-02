@@ -160,7 +160,7 @@ export const handler: Handler = async (event: HandlerEvent) => {
           process.env.SHIFT_WEBHOOK_URL ||
           process.env.VITE_WEBHOOK_URL ||
           process.env.WEBHOOK_URL ||
-          'https://script.google.com/macros/s/AKfycbzzdBpAg4ip3oxHsgzkTfiy8-qepSREH_P9yhNkknd50JsH8lD8KgHfqZHRoSTRd8u0/exec'
+          'https://script.google.com/macros/s/AKfycbx8SV3o95CGuH554RBiytm0B9oRJ_sRj7OaI1eNtJsn_SAMr_s96IbFOnbT0kiZMJc/exec'
         
         fetch(webhookUrl, {
           method: 'POST',
