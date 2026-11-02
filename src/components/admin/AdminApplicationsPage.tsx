@@ -36,7 +36,14 @@ import {
   Plus,
   CheckSquare,
   Square,
+  Calendar,
+  FileSpreadsheet,
 } from 'lucide-react'
+import {
+  CastingShiftRegistration,
+  getStoredShiftRegistrations,
+  exportShiftRegistrationsCsv,
+} from '../../lib/castingShiftService'
 import {
   ApplicationItem,
   ApplicationCounts,
@@ -62,7 +69,7 @@ interface AdminApplicationsPageProps {
   onNavigateHome: () => void
 }
 
-type AdminTab = 'all' | 'search_music' | 'vocal' | 'dancer' | 'traditional_dance'
+type AdminTab = 'all' | 'search_music' | 'casting_shifts' | 'vocal' | 'dancer' | 'traditional_dance'
 
 export const AdminApplicationsPage: React.FC<AdminApplicationsPageProps> = ({
   currentUser,
@@ -72,6 +79,20 @@ export const AdminApplicationsPage: React.FC<AdminApplicationsPageProps> = ({
   // Navigation & Active View State
   const [activeTab, setActiveTab] = useState<AdminTab>('all')
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
+
+  // Casting Shift Registrations State
+  const [shiftRegistrations, setShiftRegistrations] = useState<CastingShiftRegistration[]>([])
+  const [shiftSessionFilter, setShiftSessionFilter] = useState('all')
+  const [shiftSearchQuery, setShiftSearchQuery] = useState('')
+
+  useEffect(() => {
+    const loadShifts = () => {
+      setShiftRegistrations(getStoredShiftRegistrations())
+    }
+    loadShifts()
+    window.addEventListener('hmc_shift_registrations_updated', loadShifts)
+    return () => window.removeEventListener('hmc_shift_registrations_updated', loadShifts)
+  }, [])
 
   // Data State
   const [applications, setApplications] = useState<ApplicationItem[]>([])
@@ -542,6 +563,24 @@ export const AdminApplicationsPage: React.FC<AdminApplicationsPageProps> = ({
               </span>
             </button>
 
+            <button
+              type="button"
+              onClick={() => handleSelectTab('casting_shifts')}
+              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                activeTab === 'casting_shifts'
+                  ? 'bg-gradient-to-r from-[#398BFF] to-[#2563EB] text-white shadow-[0_0_15px_rgba(57,139,255,0.4)]'
+                  : 'text-[#C9D9EC] hover:bg-white/5 hover:text-white'
+              }`}
+            >
+              <div className="flex items-center gap-2.5">
+                <Calendar className="w-4 h-4 text-[#FFE082]" />
+                <span>Đăng ký ca casting</span>
+              </div>
+              <span className="text-[11px] font-mono px-2 py-0.5 rounded-full bg-[#FFE082]/20 text-[#FFE082]">
+                {shiftRegistrations.length}
+              </span>
+            </button>
+
             <div className="pt-3 px-3 pb-1.5 text-[10px] font-mono uppercase text-[#91A4BB]/70 font-semibold tracking-wider">
               PHÂN LOẠI MẢNG CASTING
             </div>
@@ -720,7 +759,7 @@ export const AdminApplicationsPage: React.FC<AdminApplicationsPageProps> = ({
         {/* Dynamic Main Body Content */}
         <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-8 py-6 space-y-6">
           {/* TAB 1: ALL / OVERVIEW / DIVISION SPECIFIC VIEW */}
-          {activeTab !== 'search_music' && (
+          {activeTab !== 'search_music' && activeTab !== 'casting_shifts' && (
             <>
               {/* Page Title */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -764,6 +803,16 @@ export const AdminApplicationsPage: React.FC<AdminApplicationsPageProps> = ({
                   >
                     <Download className="w-3.5 h-3.5" />
                     <span>Xuất CSV</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => exportShiftRegistrationsCsv()}
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#398BFF]/20 hover:bg-[#398BFF]/30 text-[#70D7FF] border border-[#70D7FF]/40 text-xs font-semibold transition-all cursor-pointer"
+                    title="Xuất file Excel danh sách các bạn đã đăng ký ca casting"
+                  >
+                    <FileSpreadsheet className="w-3.5 h-3.5" />
+                    <span>Xuất Excel Ca ({shiftRegistrations.length})</span>
                   </button>
                 </div>
               </div>
@@ -923,8 +972,204 @@ export const AdminApplicationsPage: React.FC<AdminApplicationsPageProps> = ({
             </div>
           )}
 
-          {/* Filter & Search Bar */}
-          <div className="p-4 sm:p-5 rounded-2xl bg-[#09172B] border border-[#78B9F0]/15 space-y-3.5">
+          {/* TAB 3: CASTING SHIFTS MANAGEMENT VIEW */}
+          {activeTab === 'casting_shifts' && (
+            <div className="space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <h1 className="font-serif-display text-2xl sm:text-3xl text-white tracking-tight flex items-center gap-2">
+                    <Calendar className="w-7 h-7 text-[#FFE082]" />
+                    <span>DANH SÁCH ĐĂNG KÝ CA CASTING ({shiftRegistrations.length} BẠN)</span>
+                  </h1>
+                  <p className="text-xs sm:text-sm text-[#91A4BB] mt-0.5">
+                    Quản lý danh sách các bạn thí sinh đã chọn ca casting từ trang /dangkica và xuất file Excel.
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => exportShiftRegistrationsCsv()}
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#398BFF] hover:bg-[#398BFF]/85 text-white border border-[#70D7FF]/40 text-xs font-bold transition-all cursor-pointer shadow-md"
+                  >
+                    <Download className="w-4 h-4" />
+                    <span>Xuất File Excel Ca (.csv)</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Stats Bar */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div
+                  onClick={() => setShiftSessionFilter(shiftSessionFilter === 'day1-morning' ? 'all' : 'day1-morning')}
+                  className={`p-3.5 rounded-2xl border transition-all cursor-pointer ${
+                    shiftSessionFilter === 'day1-morning'
+                      ? 'bg-[#398BFF]/25 border-[#70D7FF] shadow-[0_0_15px_rgba(112,215,255,0.3)]'
+                      : 'bg-[#09172B] border-[#70D7FF]/20 hover:border-[#70D7FF]/50'
+                  }`}
+                >
+                  <div className="text-[11px] font-mono text-[#70D7FF] uppercase font-bold">Thứ Sáu - Ca Sáng</div>
+                  <div className="text-xl sm:text-2xl font-bold text-white mt-1">
+                    {shiftRegistrations.filter((s) => s.shiftId === 'day1-morning').length} bạn
+                  </div>
+                  <div className="text-[10px] text-[#91A4BB]">09g00 – 12g00 (06/11)</div>
+                </div>
+
+                <div
+                  onClick={() => setShiftSessionFilter(shiftSessionFilter === 'day1-afternoon' ? 'all' : 'day1-afternoon')}
+                  className={`p-3.5 rounded-2xl border transition-all cursor-pointer ${
+                    shiftSessionFilter === 'day1-afternoon'
+                      ? 'bg-[#398BFF]/25 border-[#70D7FF] shadow-[0_0_15px_rgba(112,215,255,0.3)]'
+                      : 'bg-[#09172B] border-[#70D7FF]/20 hover:border-[#70D7FF]/50'
+                  }`}
+                >
+                  <div className="text-[11px] font-mono text-[#70D7FF] uppercase font-bold">Thứ Sáu - Chiều &amp; Tối</div>
+                  <div className="text-xl sm:text-2xl font-bold text-white mt-1">
+                    {shiftRegistrations.filter((s) => s.shiftId === 'day1-afternoon').length} bạn
+                  </div>
+                  <div className="text-[10px] text-[#91A4BB]">13g30 – 20g00 (06/11)</div>
+                </div>
+
+                <div
+                  onClick={() => setShiftSessionFilter(shiftSessionFilter === 'day2-morning' ? 'all' : 'day2-morning')}
+                  className={`p-3.5 rounded-2xl border transition-all cursor-pointer ${
+                    shiftSessionFilter === 'day2-morning'
+                      ? 'bg-[#FFB45C]/25 border-[#FFB45C] shadow-[0_0_15px_rgba(255,180,92,0.3)]'
+                      : 'bg-[#09172B] border-[#FFB45C]/20 hover:border-[#FFB45C]/50'
+                  }`}
+                >
+                  <div className="text-[11px] font-mono text-[#FFB45C] uppercase font-bold">Thứ Bảy - Ca Sáng</div>
+                  <div className="text-xl sm:text-2xl font-bold text-white mt-1">
+                    {shiftRegistrations.filter((s) => s.shiftId === 'day2-morning').length} bạn
+                  </div>
+                  <div className="text-[10px] text-[#91A4BB]">09g00 – 12g00 (07/11)</div>
+                </div>
+
+                <div
+                  onClick={() => setShiftSessionFilter(shiftSessionFilter === 'day2-afternoon' ? 'all' : 'day2-afternoon')}
+                  className={`p-3.5 rounded-2xl border transition-all cursor-pointer ${
+                    shiftSessionFilter === 'day2-afternoon'
+                      ? 'bg-[#FFB45C]/25 border-[#FFB45C] shadow-[0_0_15px_rgba(255,180,92,0.3)]'
+                      : 'bg-[#09172B] border-[#FFB45C]/20 hover:border-[#FFB45C]/50'
+                  }`}
+                >
+                  <div className="text-[11px] font-mono text-[#FFB45C] uppercase font-bold">Thứ Bảy - Ca Chiều</div>
+                  <div className="text-xl sm:text-2xl font-bold text-white mt-1">
+                    {shiftRegistrations.filter((s) => s.shiftId === 'day2-afternoon').length} bạn
+                  </div>
+                  <div className="text-[10px] text-[#91A4BB]">13g30 – 17g00 (07/11)</div>
+                </div>
+              </div>
+
+              {/* Search Bar for Shifts */}
+              <div className="p-4 rounded-2xl bg-[#09172B] border border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div className="relative w-full sm:max-w-md">
+                  <input
+                    type="text"
+                    placeholder="Tìm thí sinh theo Họ tên, MSSV, Email..."
+                    value={shiftSearchQuery}
+                    onChange={(e) => setShiftSearchQuery(e.target.value)}
+                    className="w-full h-[40px] pl-10 pr-4 rounded-xl bg-[#050D1A] border border-white/15 text-xs sm:text-sm text-white placeholder-[#91A4BB]/50 outline-none focus:border-[#70D7FF]"
+                  />
+                  <Search className="w-4 h-4 text-[#91A4BB] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                </div>
+
+                {shiftSessionFilter !== 'all' && (
+                  <button
+                    type="button"
+                    onClick={() => setShiftSessionFilter('all')}
+                    className="text-xs text-[#FF8E8E] hover:text-white flex items-center gap-1 cursor-pointer"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                    <span>Xem tất cả ca</span>
+                  </button>
+                )}
+              </div>
+
+              {/* Shift Table */}
+              <div className="rounded-2xl bg-[#09172B] border border-white/10 overflow-hidden shadow-lg">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-xs border-collapse">
+                    <thead>
+                      <tr className="border-b border-white/10 bg-[#050D1A]/70 text-[#70D7FF] font-mono uppercase text-[11px]">
+                        <th className="py-3.5 px-4 w-12 text-center">STT</th>
+                        <th className="py-3.5 px-4">Họ Và Tên</th>
+                        <th className="py-3.5 px-4">MSSV</th>
+                        <th className="py-3.5 px-4">Ca Casting Đã Chọn</th>
+                        <th className="py-3.5 px-4">Mảng</th>
+                        <th className="py-3.5 px-4">Email</th>
+                        <th className="py-3.5 px-4">Thời Gian Đăng Ký</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/5">
+                      {shiftRegistrations.filter((r) => {
+                        if (shiftSessionFilter !== 'all' && r.shiftId !== shiftSessionFilter) return false
+                        if (shiftSearchQuery.trim()) {
+                          const q = shiftSearchQuery.toLowerCase()
+                          return (
+                            r.fullName.toLowerCase().includes(q) ||
+                            r.studentId.toLowerCase().includes(q) ||
+                            (r.email && r.email.toLowerCase().includes(q)) ||
+                            r.fullShiftLabel.toLowerCase().includes(q)
+                          )
+                        }
+                        return true
+                      }).length === 0 ? (
+                        <tr>
+                          <td colSpan={7} className="py-12 text-center text-[#91A4BB]">
+                            Không tìm thấy dữ liệu đăng ký ca nào.
+                          </td>
+                        </tr>
+                      ) : (
+                        shiftRegistrations
+                          .filter((r) => {
+                            if (shiftSessionFilter !== 'all' && r.shiftId !== shiftSessionFilter) return false
+                            if (shiftSearchQuery.trim()) {
+                              const q = shiftSearchQuery.toLowerCase()
+                              return (
+                                r.fullName.toLowerCase().includes(q) ||
+                                r.studentId.toLowerCase().includes(q) ||
+                                (r.email && r.email.toLowerCase().includes(q)) ||
+                                r.fullShiftLabel.toLowerCase().includes(q)
+                              )
+                            }
+                            return true
+                          })
+                          .map((reg, idx) => (
+                            <tr key={reg.id || idx} className="hover:bg-white/5 transition-colors">
+                              <td className="py-3 px-4 font-mono text-[#91A4BB] text-center">{idx + 1}</td>
+                              <td className="py-3 px-4 font-bold text-white">{reg.fullName}</td>
+                              <td className="py-3 px-4 font-mono text-[#70D7FF] font-semibold">{reg.studentId}</td>
+                              <td className="py-3 px-4 font-semibold text-[#FFE082]">
+                                {reg.fullShiftLabel}
+                              </td>
+                              <td className="py-3 px-4">
+                                <span className="px-2 py-0.5 rounded text-[10px] bg-[#398BFF]/15 text-[#70D7FF]">
+                                  {reg.castingDivision === 'vocal'
+                                    ? 'Hát (Vocal)'
+                                    : reg.castingDivision === 'dancer'
+                                    ? 'Nhảy (Dance)'
+                                    : 'Múa'}
+                                </span>
+                              </td>
+                              <td className="py-3 px-4 text-[#91A4BB]">{reg.email || '—'}</td>
+                              <td className="py-3 px-4 font-mono text-[11px] text-[#91A4BB]">
+                                {new Date(reg.registeredAt).toLocaleString('vi-VN')}
+                              </td>
+                            </tr>
+                          ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Filter & Search Bar for Applications */}
+          {activeTab !== 'casting_shifts' && (
+            <>
+              <div className="p-4 sm:p-5 rounded-2xl bg-[#09172B] border border-[#78B9F0]/15 space-y-3.5">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
               {/* Search Input */}
               <div className="md:col-span-5 relative">
@@ -1440,7 +1685,9 @@ export const AdminApplicationsPage: React.FC<AdminApplicationsPageProps> = ({
               </>
             )}
           </div>
-        </main>
+        </>
+      )}
+    </main>
       </div>
 
       {/* Edit Candidate Modal */}

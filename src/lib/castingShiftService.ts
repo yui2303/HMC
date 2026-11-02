@@ -9,12 +9,11 @@ export interface CastingShiftOption {
   dayOfWeek: string // e.g. "Thứ Sáu"
   dayNumber: '01' | '02'
   session: 'morning' | 'afternoon'
-  sessionLabel: string // e.g. "BUỔI SÁNG" | "BUỔI CHIỀU & TỐI"
+  sessionLabel: string // e.g. "BUỔI SÁNG" | "BUỔI CHIỀU & TỐI" | "BUỔI CHIỀU"
   sessionTimeRange: string // e.g. "09g00 – 12g00"
-  timeSlot: string // e.g. "09g00 – 10g00"
-  timeSlotDescription?: string
+  timeSlot: string // e.g. "09g00 – 12g00"
+  timeSlotDescription: string
   accentColor: 'cyan' | 'amber'
-  maxCapacity?: number
 }
 
 export interface CastingShiftRegistration {
@@ -22,8 +21,8 @@ export interface CastingShiftRegistration {
   applicationId?: string
   fullName: string
   studentId: string
-  email: string
-  phone: string
+  email?: string
+  phone?: string
   castingDivision: 'vocal' | 'dancer' | 'traditional_dance'
   castingSong?: string
   beatUrl?: string
@@ -33,18 +32,16 @@ export interface CastingShiftRegistration {
   shiftSession: string
   shiftTimeSlot: string
   fullShiftLabel: string
-  note?: string
   registeredAt: string
 }
 
-// Danh sách các Ca & Khung giờ Casting chuẩn theo Lịch HMC
+// 4 ca casting chính xác (Mỗi ngày có 2 ca Sáng hoặc Chiều, thí sinh chọn đúng 1 trong các ca này)
 export const AVAILABLE_CASTING_SHIFTS: CastingShiftOption[] = [
   // ==========================================
   // NGÀY 01: THỨ SÁU - 06/11/2026
   // ==========================================
-  // Ca Sáng: 09g00 - 12g00
   {
-    id: 'day1-morning-slot1',
+    id: 'day1-morning',
     date: '2026-11-06',
     dateLabel: 'Thứ Sáu, 06/11/2026',
     dayOfWeek: 'Thứ Sáu',
@@ -52,57 +49,12 @@ export const AVAILABLE_CASTING_SHIFTS: CastingShiftOption[] = [
     session: 'morning',
     sessionLabel: 'BUỔI SÁNG',
     sessionTimeRange: '09g00 – 12g00',
-    timeSlot: '09g00 – 10g00',
-    timeSlotDescription: 'Ca sáng sớm (Phù hợp bạn học chiều)',
+    timeSlot: '09g00 – 12g00',
+    timeSlotDescription: 'Check-in ca sáng và casting',
     accentColor: 'cyan',
-    maxCapacity: 15,
   },
   {
-    id: 'day1-morning-slot2',
-    date: '2026-11-06',
-    dateLabel: 'Thứ Sáu, 06/11/2026',
-    dayOfWeek: 'Thứ Sáu',
-    dayNumber: '01',
-    session: 'morning',
-    sessionLabel: 'BUỔI SÁNG',
-    sessionTimeRange: '09g00 – 12g00',
-    timeSlot: '10g00 – 11g00',
-    timeSlotDescription: 'Ca giữa buổi sáng',
-    accentColor: 'cyan',
-    maxCapacity: 15,
-  },
-  {
-    id: 'day1-morning-slot3',
-    date: '2026-11-06',
-    dateLabel: 'Thứ Sáu, 06/11/2026',
-    dayOfWeek: 'Thứ Sáu',
-    dayNumber: '01',
-    session: 'morning',
-    sessionLabel: 'BUỔI SÁNG',
-    sessionTimeRange: '09g00 – 12g00',
-    timeSlot: '11g00 – 12g00',
-    timeSlotDescription: 'Ca cuối buổi sáng',
-    accentColor: 'cyan',
-    maxCapacity: 15,
-  },
-  {
-    id: 'day1-morning-full',
-    date: '2026-11-06',
-    dateLabel: 'Thứ Sáu, 06/11/2026',
-    dayOfWeek: 'Thứ Sáu',
-    dayNumber: '01',
-    session: 'morning',
-    sessionLabel: 'BUỔI SÁNG',
-    sessionTimeRange: '09g00 – 12g00',
-    timeSlot: 'Trọn ca sáng (09g00 – 12g00)',
-    timeSlotDescription: 'Linh hoạt đến trong buổi sáng',
-    accentColor: 'cyan',
-    maxCapacity: 20,
-  },
-
-  // Ca Chiều & Tối: 13g30 - 20g00
-  {
-    id: 'day1-afternoon-slot1',
+    id: 'day1-afternoon',
     date: '2026-11-06',
     dateLabel: 'Thứ Sáu, 06/11/2026',
     dayOfWeek: 'Thứ Sáu',
@@ -110,60 +62,16 @@ export const AVAILABLE_CASTING_SHIFTS: CastingShiftOption[] = [
     session: 'afternoon',
     sessionLabel: 'BUỔI CHIỀU & TỐI',
     sessionTimeRange: '13g30 – 20g00',
-    timeSlot: '13g30 – 15g30',
-    timeSlotDescription: 'Ca đầu giờ chiều',
+    timeSlot: '13g30 – 20g00',
+    timeSlotDescription: 'Check-in ca chiều và tiếp tục casting',
     accentColor: 'cyan',
-    maxCapacity: 20,
-  },
-  {
-    id: 'day1-afternoon-slot2',
-    date: '2026-11-06',
-    dateLabel: 'Thứ Sáu, 06/11/2026',
-    dayOfWeek: 'Thứ Sáu',
-    dayNumber: '01',
-    session: 'afternoon',
-    sessionLabel: 'BUỔI CHIỀU & TỐI',
-    sessionTimeRange: '13g30 – 20g00',
-    timeSlot: '15g30 – 17g30',
-    timeSlotDescription: 'Ca cuối buổi chiều',
-    accentColor: 'cyan',
-    maxCapacity: 20,
-  },
-  {
-    id: 'day1-afternoon-slot3',
-    date: '2026-11-06',
-    dateLabel: 'Thứ Sáu, 06/11/2026',
-    dayOfWeek: 'Thứ Sáu',
-    dayNumber: '01',
-    session: 'afternoon',
-    sessionLabel: 'BUỔI CHIỀU & TỐI',
-    sessionTimeRange: '13g30 – 20g00',
-    timeSlot: '17g30 – 20g00',
-    timeSlotDescription: 'Ca tối sau giờ học',
-    accentColor: 'cyan',
-    maxCapacity: 25,
-  },
-  {
-    id: 'day1-afternoon-full',
-    date: '2026-11-06',
-    dateLabel: 'Thứ Sáu, 06/11/2026',
-    dayOfWeek: 'Thứ Sáu',
-    dayNumber: '01',
-    session: 'afternoon',
-    sessionLabel: 'BUỔI CHIỀU & TỐI',
-    sessionTimeRange: '13g30 – 20g00',
-    timeSlot: 'Trọn ca chiều & tối (13g30 – 20g00)',
-    timeSlotDescription: 'Linh hoạt đến trong buổi chiều/tối',
-    accentColor: 'cyan',
-    maxCapacity: 30,
   },
 
   // ==========================================
   // NGÀY 02: THỨ BẢY - 07/11/2026
   // ==========================================
-  // Ca Sáng: 09g00 - 12g00
   {
-    id: 'day2-morning-slot1',
+    id: 'day2-morning',
     date: '2026-11-07',
     dateLabel: 'Thứ Bảy, 07/11/2026',
     dayOfWeek: 'Thứ Bảy',
@@ -171,57 +79,12 @@ export const AVAILABLE_CASTING_SHIFTS: CastingShiftOption[] = [
     session: 'morning',
     sessionLabel: 'BUỔI SÁNG',
     sessionTimeRange: '09g00 – 12g00',
-    timeSlot: '09g00 – 10g00',
-    timeSlotDescription: 'Ca sáng sớm cuối tuần',
+    timeSlot: '09g00 – 12g00',
+    timeSlotDescription: 'Check-in ca sáng và casting',
     accentColor: 'amber',
-    maxCapacity: 15,
   },
   {
-    id: 'day2-morning-slot2',
-    date: '2026-11-07',
-    dateLabel: 'Thứ Bảy, 07/11/2026',
-    dayOfWeek: 'Thứ Bảy',
-    dayNumber: '02',
-    session: 'morning',
-    sessionLabel: 'BUỔI SÁNG',
-    sessionTimeRange: '09g00 – 12g00',
-    timeSlot: '10g00 – 11g00',
-    timeSlotDescription: 'Ca giữa buổi sáng',
-    accentColor: 'amber',
-    maxCapacity: 15,
-  },
-  {
-    id: 'day2-morning-slot3',
-    date: '2026-11-07',
-    dateLabel: 'Thứ Bảy, 07/11/2026',
-    dayOfWeek: 'Thứ Bảy',
-    dayNumber: '02',
-    session: 'morning',
-    sessionLabel: 'BUỔI SÁNG',
-    sessionTimeRange: '09g00 – 12g00',
-    timeSlot: '11g00 – 12g00',
-    timeSlotDescription: 'Ca cuối buổi sáng',
-    accentColor: 'amber',
-    maxCapacity: 15,
-  },
-  {
-    id: 'day2-morning-full',
-    date: '2026-11-07',
-    dateLabel: 'Thứ Bảy, 07/11/2026',
-    dayOfWeek: 'Thứ Bảy',
-    dayNumber: '02',
-    session: 'morning',
-    sessionLabel: 'BUỔI SÁNG',
-    sessionTimeRange: '09g00 – 12g00',
-    timeSlot: 'Trọn ca sáng (09g00 – 12g00)',
-    timeSlotDescription: 'Linh hoạt đến trong buổi sáng',
-    accentColor: 'amber',
-    maxCapacity: 20,
-  },
-
-  // Ca Chiều: 13g30 - 17g00
-  {
-    id: 'day2-afternoon-slot1',
+    id: 'day2-afternoon',
     date: '2026-11-07',
     dateLabel: 'Thứ Bảy, 07/11/2026',
     dayOfWeek: 'Thứ Bảy',
@@ -229,38 +92,9 @@ export const AVAILABLE_CASTING_SHIFTS: CastingShiftOption[] = [
     session: 'afternoon',
     sessionLabel: 'BUỔI CHIỀU',
     sessionTimeRange: '13g30 – 17g00',
-    timeSlot: '13g30 – 15g00',
-    timeSlotDescription: 'Ca đầu buổi chiều',
+    timeSlot: '13g30 – 17g00',
+    timeSlotDescription: 'Check-in ca chiều và tiếp tục casting',
     accentColor: 'amber',
-    maxCapacity: 20,
-  },
-  {
-    id: 'day2-afternoon-slot2',
-    date: '2026-11-07',
-    dateLabel: 'Thứ Bảy, 07/11/2026',
-    dayOfWeek: 'Thứ Bảy',
-    dayNumber: '02',
-    session: 'afternoon',
-    sessionLabel: 'BUỔI CHIỀU',
-    sessionTimeRange: '13g30 – 17g00',
-    timeSlot: '15g00 – 17g00',
-    timeSlotDescription: 'Ca cuối buổi chiều đợt 2',
-    accentColor: 'amber',
-    maxCapacity: 20,
-  },
-  {
-    id: 'day2-afternoon-full',
-    date: '2026-11-07',
-    dateLabel: 'Thứ Bảy, 07/11/2026',
-    dayOfWeek: 'Thứ Bảy',
-    dayNumber: '02',
-    session: 'afternoon',
-    sessionLabel: 'BUỔI CHIỀU',
-    sessionTimeRange: '13g30 – 17g00',
-    timeSlot: 'Trọn ca chiều (13g30 – 17g00)',
-    timeSlotDescription: 'Linh hoạt đến trong buổi chiều',
-    accentColor: 'amber',
-    maxCapacity: 25,
   },
 ]
 
@@ -295,49 +129,33 @@ export function persistShiftRegistrations(list: CastingShiftRegistration[]): voi
 }
 
 /**
- * Tra cứu thông tin hồ sơ theo MSSV, Email hoặc Họ Tên từ kho dữ liệu ứng tuyển đã nộp
+ * Tìm thông tin ứng viên có sẵn trong hệ thống theo MSSV hoặc Họ tên (ngầm phía client)
  */
-export function lookupCandidateInfo(query: string): ApplicationItem | null {
-  const cleanQ = query.trim().toLowerCase()
-  if (!cleanQ || cleanQ.length < 2) return null
-
+export function matchApplicantByStudentIdOrName(
+  studentId: string,
+  fullName: string
+): ApplicationItem | null {
+  const cleanId = studentId.trim().toUpperCase()
+  const cleanName = fullName.trim().toLowerCase()
   const apps = getClientApplications()
-  // Ưu tiên khớp chính xác MSSV hoặc Email
-  const exactMatch = apps.find(
-    (a) => a.studentId.toLowerCase() === cleanQ || a.email.toLowerCase() === cleanQ
-  )
-  if (exactMatch) return exactMatch
 
-  // Khớp gần đúng (bắt đầu bằng MSSV hoặc Họ tên chứa từ khóa)
-  const partialMatch = apps.find(
-    (a) =>
-      a.studentId.toLowerCase().includes(cleanQ) ||
-      a.fullName.toLowerCase().includes(cleanQ) ||
-      a.email.toLowerCase().includes(cleanQ)
-  )
-  return partialMatch || null
+  // 1. Ưu tiên khớp chính xác MSSV
+  if (cleanId) {
+    const byId = apps.find((a) => a.studentId.trim().toUpperCase() === cleanId)
+    if (byId) return byId
+  }
+
+  // 2. Khớp họ tên
+  if (cleanName && cleanName.length >= 3) {
+    const byName = apps.find((a) => a.fullName.trim().toLowerCase() === cleanName)
+    if (byName) return byName
+  }
+
+  return null
 }
 
 /**
- * Tìm kiếm danh sách gợi ý ứng viên (autocomplete) khi nhập ô tra cứu
- */
-export function searchCandidateSuggestions(query: string, limit = 5): ApplicationItem[] {
-  const cleanQ = query.trim().toLowerCase()
-  if (!cleanQ || cleanQ.length < 2) return []
-
-  const apps = getClientApplications()
-  return apps
-    .filter(
-      (a) =>
-        a.studentId.toLowerCase().includes(cleanQ) ||
-        a.fullName.toLowerCase().includes(cleanQ) ||
-        a.email.toLowerCase().includes(cleanQ)
-    )
-    .slice(0, limit)
-}
-
-/**
- * Đếm số lượng thí sinh đã đăng ký theo từng ca casting
+ * Đếm số lượng thí sinh đã đăng ký theo từng ca
  */
 export function getShiftRegistrationCounts(): Record<string, number> {
   const list = getStoredShiftRegistrations()
@@ -349,47 +167,77 @@ export function getShiftRegistrationCounts(): Record<string, number> {
 }
 
 /**
- * Kiểm tra xem một thí sinh (theo MSSV hoặc Email) đã đăng ký ca hay chưa
+ * Kiểm tra xem thí sinh đã đăng ký ca chưa
  */
-export function findExistingRegistration(
-  studentId: string,
-  email: string
+export function findExistingRegistrationByStudentId(
+  studentId: string
 ): CastingShiftRegistration | null {
   const list = getStoredShiftRegistrations()
   const cleanId = studentId.trim().toUpperCase()
-  const cleanEmail = email.trim().toLowerCase()
+  if (!cleanId) return null
+  return list.find((r) => r.studentId.trim().toUpperCase() === cleanId) || null
+}
 
-  return (
-    list.find(
-      (r) =>
-        (cleanId && r.studentId.trim().toUpperCase() === cleanId) ||
-        (cleanEmail && r.email.trim().toLowerCase() === cleanEmail)
-    ) || null
-  )
+export interface SimpleShiftSubmitParams {
+  fullName: string
+  studentId: string
+  shiftId: string
 }
 
 /**
- * Ghi nhận lượt đăng ký ca casting vào Sheet Excel & Hệ thống
+ * Ghi nhận lượt đăng ký ca casting (chỉ cần Họ tên, MSSV và Ca đã chọn)
+ * Tự động đồng bộ vào Google Sheet và kho dữ liệu hệ thống
  */
 export async function submitCastingShiftRegistration(
-  data: Omit<CastingShiftRegistration, 'id' | 'registeredAt'>
-): Promise<{ success: boolean; id: string; message: string; sheetSynced: boolean }> {
+  params: SimpleShiftSubmitParams
+): Promise<{ success: boolean; id: string; message: string; registration?: CastingShiftRegistration }> {
+  const cleanName = params.fullName.trim()
+  const cleanId = params.studentId.trim().toUpperCase()
+
+  if (!cleanName) {
+    return { success: false, id: '', message: 'Vui lòng nhập họ và tên của bạn.' }
+  }
+  if (!cleanId) {
+    return { success: false, id: '', message: 'Vui lòng nhập Mã số sinh viên (MSSV).' }
+  }
+
+  const shiftOption = AVAILABLE_CASTING_SHIFTS.find((s) => s.id === params.shiftId)
+  if (!shiftOption) {
+    return { success: false, id: '', message: 'Vui lòng chọn 1 ca casting (Sáng hoặc Chiều).' }
+  }
+
+  // Tra cứu ngầm thông tin thí sinh từ 62 hồ sơ đã nộp nếu có
+  const matched = matchApplicantByStudentIdOrName(cleanId, cleanName)
+
   const now = new Date().toISOString()
   const randomSuffix = Math.random().toString(36).substring(2, 6).toUpperCase()
   const id = `CA-${Date.now().toString(36).toUpperCase().slice(-4)}-${randomSuffix}`
 
+  const fullShiftLabel = `${shiftOption.dayOfWeek}, ${shiftOption.dateLabel.split(', ')[1]} • ${shiftOption.sessionLabel} (${shiftOption.timeSlot})`
+
   const newRegistration: CastingShiftRegistration = {
-    ...data,
     id,
+    applicationId: matched?.id || '',
+    fullName: cleanName,
+    studentId: cleanId,
+    email: matched?.email || '',
+    phone: '',
+    castingDivision: matched?.castingDivision || 'vocal',
+    castingSong: matched?.castingSong || '',
+    beatUrl: matched?.beatUrl || '',
+    shiftId: shiftOption.id,
+    shiftDate: shiftOption.date,
+    shiftDayOfWeek: shiftOption.dayOfWeek,
+    shiftSession: shiftOption.sessionLabel,
+    shiftTimeSlot: shiftOption.timeSlot,
+    fullShiftLabel,
     registeredAt: now,
   }
 
-  // 1. Lưu vào LocalStorage (Cập nhật nếu đã có cùng MSSV/Email)
+  // 1. Lưu LocalStorage
   const existingList = getStoredShiftRegistrations()
   const existingIndex = existingList.findIndex(
-    (r) =>
-      r.studentId.trim().toUpperCase() === data.studentId.trim().toUpperCase() ||
-      r.email.trim().toLowerCase() === data.email.trim().toLowerCase()
+    (r) => r.studentId.trim().toUpperCase() === cleanId
   )
 
   let updatedList: CastingShiftRegistration[]
@@ -402,8 +250,7 @@ export async function submitCastingShiftRegistration(
 
   persistShiftRegistrations(updatedList)
 
-  // 2. Đồng bộ trực tiếp vào Google Sheet qua Webhook
-  let sheetSynced = false
+  // 2. Gửi đồng bộ sang Google Sheet qua Webhook
   const fallbackWebhook =
     'https://script.google.com/macros/s/AKfycbzpEErb2FDabdq7MXR0WwoMZ1GKUF4G4ML7XUQEuEfJyUp3oa-zkezxsIIJrt3PpjYQWA/exec'
   const emailConfig = getSavedEmailConfig()
@@ -415,9 +262,9 @@ export async function submitCastingShiftRegistration(
 
   if (webhookUrl) {
     const divisionLabel =
-      data.castingDivision === 'vocal'
+      newRegistration.castingDivision === 'vocal'
         ? 'Hát (Vocal)'
-        : data.castingDivision === 'dancer'
+        : newRegistration.castingDivision === 'dancer'
         ? 'Nhảy (Dance)'
         : 'Múa (Traditional / Contemporary)'
 
@@ -428,45 +275,41 @@ export async function submitCastingShiftRegistration(
       skipEmail: true,
       sendEmail: false,
       id: newRegistration.id,
-      fullName: data.fullName,
-      studentId: data.studentId,
-      email: data.email,
-      phone: data.phone,
+      fullName: cleanName,
+      studentId: cleanId,
+      email: newRegistration.email || '',
+      phone: '',
       castingDivision: divisionLabel,
-      castingSong: data.castingSong || 'Chưa điền (Bổ sung khi casting)',
-      beatUrl: data.beatUrl || 'Nộp beat tại bàn Check-in',
-      shiftDate: data.shiftDate,
-      shiftDayOfWeek: data.shiftDayOfWeek,
-      shiftSession: data.shiftSession,
-      shiftTimeSlot: data.shiftTimeSlot,
-      fullShiftLabel: data.fullShiftLabel,
-      note: data.note || '',
+      castingSong: newRegistration.castingSong || '',
+      beatUrl: newRegistration.beatUrl || '',
+      shiftDate: shiftOption.date,
+      shiftDayOfWeek: shiftOption.dayOfWeek,
+      shiftSession: shiftOption.sessionLabel,
+      shiftTimeSlot: shiftOption.timeSlot,
+      fullShiftLabel,
       registeredAt: new Date(now).toLocaleString('vi-VN'),
       candidate: {
-        id: data.applicationId || newRegistration.id,
-        fullName: data.fullName,
-        studentId: data.studentId,
-        email: data.email,
-        phone: data.phone,
+        id: newRegistration.applicationId || newRegistration.id,
+        fullName: cleanName,
+        studentId: cleanId,
+        email: newRegistration.email || '',
         castingDivision: divisionLabel,
-        castingSong: data.castingSong || '',
-        beatUrl: data.beatUrl || '',
-        hasPerformanceExperience: true,
-        performanceUrl: '',
-        passion: `[ĐÃ CHỌN CA CASTING]: ${data.fullShiftLabel} | SĐT: ${data.phone} | Ghi chú: ${data.note || 'Không'}`,
+        castingSong: newRegistration.castingSong || '',
+        beatUrl: newRegistration.beatUrl || '',
+        passion: `[ĐÃ CHỌN CA CASTING]: ${fullShiftLabel}`,
       },
       timestamp: now,
     }
 
     try {
-      // Netlify function proxy nếu có
+      // Netlify function rewrite nếu có
       fetch('/api/send-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           provider: 'webhook',
           webhookUrl,
-          to: data.email,
+          to: newRegistration.email || 'clbamnhac.huflit@gmail.com',
           ...payload,
         }),
       }).catch(() => {})
@@ -478,7 +321,6 @@ export async function submitCastingShiftRegistration(
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify(payload),
       })
-      sheetSynced = true
     } catch (err) {
       console.warn('Webhook sync error for shift registration:', err)
     }
@@ -487,13 +329,9 @@ export async function submitCastingShiftRegistration(
   // 3. Cập nhật vào danh sách Application trong clientStore (ghi chú admin)
   try {
     const apps = getClientApplications()
-    const targetApp = apps.find(
-      (a) =>
-        a.studentId.trim().toUpperCase() === data.studentId.trim().toUpperCase() ||
-        a.email.trim().toLowerCase() === data.email.trim().toLowerCase()
-    )
+    const targetApp = apps.find((a) => a.studentId.trim().toUpperCase() === cleanId)
     if (targetApp) {
-      targetApp.adminNote = `[Ca Casting: ${data.fullShiftLabel} | SĐT: ${data.phone}] ${targetApp.adminNote || ''}`.trim()
+      targetApp.adminNote = `[Ca Casting: ${fullShiftLabel}] ${targetApp.adminNote || ''}`.trim()
       localStorage.setItem('hmc_recruitment_store_v1', JSON.stringify(apps))
     }
   } catch {
@@ -503,8 +341,8 @@ export async function submitCastingShiftRegistration(
   return {
     success: true,
     id: newRegistration.id,
-    message: 'Đăng ký ca casting thành công! Thông tin đã được ghi nhận vào hệ thống.',
-    sheetSynced,
+    message: 'Đăng ký ca casting thành công! Thông tin đã được ghi nhận vào sheet excel.',
+    registration: newRegistration,
   }
 }
 
@@ -528,7 +366,6 @@ export function exportShiftRegistrationsCsv(
     'Họ Và Tên',
     'MSSV',
     'Email',
-    'Số Điện Thoại',
     'Mảng Casting',
     'Ngày Casting',
     'Thứ',
@@ -536,8 +373,7 @@ export function exportShiftRegistrationsCsv(
     'Khung Giờ Lựa Chọn',
     'Chi Tiết Ca Đầy Đủ',
     'Bài Hát / Tiết Mục',
-    'Link Beat / Nhạc Nền',
-    'Ghi Chú',
+    'Link Beat',
   ]
 
   const getDivisionLabel = (div: string) => {
@@ -559,8 +395,7 @@ export function exportShiftRegistrationsCsv(
     `"${new Date(r.registeredAt).toLocaleString('vi-VN')}"`,
     `"${r.fullName.replace(/"/g, '""')}"`,
     `"${r.studentId}"`,
-    `"${r.email}"`,
-    `"${r.phone || ''}"`,
+    `"${r.email || ''}"`,
     `"${getDivisionLabel(r.castingDivision)}"`,
     `"${r.shiftDate}"`,
     `"${r.shiftDayOfWeek}"`,
@@ -569,10 +404,9 @@ export function exportShiftRegistrationsCsv(
     `"${r.fullShiftLabel.replace(/"/g, '""')}"`,
     `"${(r.castingSong || '').replace(/"/g, '""')}"`,
     `"${(r.beatUrl || '').replace(/"/g, '""')}"`,
-    `"${(r.note || '').replace(/"/g, '""')}"`,
   ])
 
-  // Thêm UTF-8 BOM (\uFEFF) để Excel trên Windows hiển thị đúng 100% tiếng Việt
+  // Thêm UTF-8 BOM (\uFEFF) để Excel hiển thị đúng 100% tiếng Việt
   const csvContent = '\uFEFF' + [headers.join(','), ...rows.map((row) => row.join(','))].join('\r\n')
   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
   const url = URL.createObjectURL(blob)
