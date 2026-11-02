@@ -188,22 +188,26 @@ export const DEFAULT_SHIFT_WEBHOOK_URL =
 export function getShiftWebhookUrl(): string {
   try {
     const saved = localStorage.getItem(SHIFT_WEBHOOK_STORAGE_KEY)
-    if (saved && saved.trim()) return saved.trim()
+    if (
+      saved &&
+      saved.trim() &&
+      !saved.includes('AKfycbzpEErb2FDabdq7MXR0WwoMZ1GKUF4G4ML7XUQEuEfJyUp3oa-zkezxsIIJrt3PpjYQWA')
+    ) {
+      return saved.trim()
+    }
   } catch {
     // ignore
   }
 
   const envShift = (import.meta.env.VITE_SHIFT_WEBHOOK_URL as string)?.trim()
-  if (envShift) return envShift
-
-  const emailConfig = getSavedEmailConfig()
-  if (emailConfig.webhookUrl && emailConfig.webhookUrl.trim()) {
-    return emailConfig.webhookUrl.trim()
+  if (
+    envShift &&
+    !envShift.includes('AKfycbzpEErb2FDabdq7MXR0WwoMZ1GKUF4G4ML7XUQEuEfJyUp3oa-zkezxsIIJrt3PpjYQWA')
+  ) {
+    return envShift
   }
 
-  const envGeneral = (import.meta.env.VITE_WEBHOOK_URL as string)?.trim()
-  if (envGeneral) return envGeneral
-
+  // Luôn luôn trả về link mới của bạn (DEFAULT_SHIFT_WEBHOOK_URL)
   return DEFAULT_SHIFT_WEBHOOK_URL
 }
 
