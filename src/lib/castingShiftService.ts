@@ -280,61 +280,35 @@ export async function testShiftWebhookConnection(
 export const GOOGLE_APPS_SCRIPT_SHIFT_CODE = `/**
  * =========================================================================
  * GOOGLE APPS SCRIPT - ĐỒNG BỘ ĐĂNG KÝ CA CASTING HMC 2026
- * =========================================================================
- * Hướng dẫn cài đặt nhanh 3 phút:
- * 1. Mở file Google Sheets bạn muốn lưu danh sách ca casting.
- * 2. Trên thanh menu, chọn: Tiện ích mở rộng (Extensions) -> Apps Script.
- * 3. Xóa code cũ, dán toàn bộ đoạn code này vào và bấm biểu tượng Lưu (Ctrl + S).
- * 4. Bấm nút "Triển khai" (Deploy) màu xanh ở góc trên bên phải -> "Tùy chọn triển khai mới" (New deployment).
- * 5. Nhấn vào biểu tượng Bánh răng (⚙️) chọn loại: "Ứng dụng web" (Web app).
- *    - Mô tả: "Đồng bộ ca casting HMC"
- *    - Người thực thi: "Tôi" (User access)
- *    - Quyền truy cập: "Bất kỳ ai" (Anyone) -> RẤT QUAN TRỌNG!
- * 6. Bấm "Triển khai", cấp quyền khi Google hỏi, sau đó sao chép "URL ứng dụng web".
- * 7. Dán URL vào mục cấu hình Webhook trong hệ thống HMC.
+ * GHI TRỰC TIẾP VÀO FILE SHEET: 1hqZJJQ3_r55RtpmmglRMP20v6778pEukFsBRnKYALC0
  * =========================================================================
  */
 
-var SHIFT_SHEET_NAME = "Đăng Ký Ca Casting";
+var SPREADSHEET_ID = "1hqZJJQ3_r55RtpmmglRMP20v6778pEukFsBRnKYALC0";
+var TARGET_GID = 504730251;
 
 function getOrCreateShiftSheet() {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sheet = ss.getSheetByName(SHIFT_SHEET_NAME);
-  
-  if (!sheet) {
-    sheet = ss.insertSheet(SHIFT_SHEET_NAME);
-    var headers = [
-      "Thời Gian Đăng Ký",
-      "Họ Và Tên",
-      "Mã Số Sinh Viên (MSSV)",
-      "Ngày Casting",
-      "Buổi",
-      "Khung Giờ",
-      "Chi Tiết Ca Đầy Đủ",
-      "Mã Đăng Ký"
-    ];
-    sheet.appendRow(headers);
-    
-    var headerRange = sheet.getRange(1, 1, 1, headers.length);
-    headerRange.setBackground("#0F2744");
-    headerRange.setFontColor("#70D7FF");
-    headerRange.setFontWeight("bold");
-    headerRange.setHorizontalAlignment("center");
-    headerRange.setVerticalAlignment("middle");
-    headerRange.setWrap(true);
-    sheet.setRowHeight(1, 40);
-    sheet.setFrozenRows(1);
-    
-    sheet.setColumnWidth(1, 160); // Thời gian
-    sheet.setColumnWidth(2, 220); // Họ tên
-    sheet.setColumnWidth(3, 140); // MSSV
-    sheet.setColumnWidth(4, 150); // Ngày
-    sheet.setColumnWidth(5, 120); // Buổi
-    sheet.setColumnWidth(6, 150); // Khung giờ
-    sheet.setColumnWidth(7, 280); // Chi tiết ca
-    sheet.setColumnWidth(8, 140); // Mã đăng ký
+  var ss;
+  try {
+    ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  } catch (err) {
+    ss = SpreadsheetApp.getActiveSpreadsheet();
   }
-  return sheet;
+  
+  // 1. Ưu tiên tìm đúng tab mà bạn đang mở (gid=504730251)
+  var sheets = ss.getSheets();
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].getSheetId() === TARGET_GID) {
+      return sheets[i];
+    }
+  }
+  
+  // 2. Tìm theo tên tab "Đăng Ký Ca Casting"
+  var sheet = ss.getSheetByName("Đăng Ký Ca Casting");
+  if (sheet) return sheet;
+  
+  // 3. Mặc định dùng tab đầu tiên
+  return sheets[0];
 }
 
 function doPost(e) {
@@ -353,11 +327,33 @@ function doPost(e) {
     
     var sheet = getOrCreateShiftSheet();
     
-    // Ghi dòng vào sheet ngay lập tức
+    // Nếu trang tính còn trống thì tự động tạo tiêu đề
+    if (sheet.getLastRow() === 0) {
+      sheet.appendRow([
+        "Thời Gian Đăng Ký",
+        "Họ Và Tên",
+        "Mã Số Sinh Viên (MSSV)",
+        "Ngày Casting",
+        "Buổi",
+        "Khung Giờ",
+        "Chi Tiết Ca Đầy Đủ",
+        "Mã Đăng Ký"
+      ]);
+      var headerRange = sheet.getRange(1, 1, 1, 8);
+      headerRange.setBackground("#0F2744");
+      headerRange.setFontColor("#70D7FF");
+      headerRange.setFontWeight("bold");
+      headerRange.setHorizontalAlignment("center");
+      headerRange.setVerticalAlignment("middle");
+      sheet.setRowHeight(1, 40);
+      sheet.setFrozenRows(1);
+    }
+    
+    // Ghi dòng mới vào đúng trang tính của bạn
     sheet.appendRow([
       nowStr,
       fullName,
-      "'" + studentId, // Dấu nháy đơn giữ nguyên định dạng số
+      "'" + studentId, // Dấu nháy đơn giữ định dạng chuỗi số
       shiftDate,
       shiftSession,
       shiftTimeSlot,
@@ -366,8 +362,6 @@ function doPost(e) {
     ]);
     
     var lastRow = sheet.getLastRow();
-    var rowRange = sheet.getRange(lastRow, 1, 1, 8);
-    rowRange.setVerticalAlignment("middle");
     
     // TUYỆT ĐỐI KHÔNG GỬI EMAIL THEO YÊU CẦU CỦA HMC
     return ContentService.createTextOutput(JSON.stringify({
