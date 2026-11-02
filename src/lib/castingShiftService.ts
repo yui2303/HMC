@@ -180,7 +180,7 @@ export function findExistingRegistrationByStudentId(
 
 export const SHIFT_WEBHOOK_STORAGE_KEY = 'hmc_shift_webhook_url_v1'
 export const DEFAULT_SHIFT_WEBHOOK_URL =
-  'https://script.google.com/macros/s/AKfycbzpEErb2FDabdq7MXR0WwoMZ1GKUF4G4ML7XUQEuEfJyUp3oa-zkezxsIIJrt3PpjYQWA/exec'
+  'https://script.google.com/macros/s/AKfycbzzdBpAg4ip3oxHsgzkTfiy8-qepSREH_P9yhNkknd50JsH8lD8KgHfqZHRoSTRd8u0/exec'
 
 /**
  * Lấy URL Google Apps Script Webhook dành riêng cho Đăng Ký Ca Casting
