@@ -786,10 +786,11 @@ export const AdminApplicationsPage: React.FC<AdminApplicationsPageProps> = ({
                   <button
                     type="button"
                     onClick={handleOpenEmailModal}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#6366F1]/20 hover:bg-[#6366F1]/30 text-[#A5B4FC] border border-[#6366F1]/40 text-xs font-semibold transition-all cursor-pointer"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-[#6366F1]/30 to-[#398BFF]/30 hover:from-[#6366F1]/45 hover:to-[#398BFF]/45 text-[#A5B4FC] hover:text-white border border-[#6366F1]/50 text-xs font-bold transition-all cursor-pointer shadow-sm"
+                    title="Gửi email toàn bộ thí sinh trong 1 nút (nhắc nhở casting & đăng ký ca)"
                   >
                     <Mail className="w-3.5 h-3.5 text-[#818CF8]" />
-                    <span>Gửi Mail Xác Nhận</span>
+                    <span>Gửi Mail Thí Sinh (1 Click)</span>
                   </button>
 
                   <button
@@ -1111,6 +1112,7 @@ export const AdminApplicationsPage: React.FC<AdminApplicationsPageProps> = ({
                         <th className="py-3.5 px-4 w-12 text-center">STT</th>
                         <th className="py-3.5 px-4">Họ Và Tên</th>
                         <th className="py-3.5 px-4">MSSV</th>
+                        <th className="py-3.5 px-4">Số Điện Thoại</th>
                         <th className="py-3.5 px-4">Ca Casting Đã Chọn</th>
                         <th className="py-3.5 px-4">Mảng</th>
                         <th className="py-3.5 px-4">Email</th>
@@ -1125,6 +1127,7 @@ export const AdminApplicationsPage: React.FC<AdminApplicationsPageProps> = ({
                           return (
                             r.fullName.toLowerCase().includes(q) ||
                             r.studentId.toLowerCase().includes(q) ||
+                            (r.phone && r.phone.toLowerCase().includes(q)) ||
                             (r.email && r.email.toLowerCase().includes(q)) ||
                             r.fullShiftLabel.toLowerCase().includes(q)
                           )
@@ -1132,7 +1135,7 @@ export const AdminApplicationsPage: React.FC<AdminApplicationsPageProps> = ({
                         return true
                       }).length === 0 ? (
                         <tr>
-                          <td colSpan={7} className="py-12 text-center text-[#91A4BB]">
+                          <td colSpan={8} className="py-12 text-center text-[#91A4BB]">
                             Không tìm thấy dữ liệu đăng ký ca nào.
                           </td>
                         </tr>
@@ -1145,6 +1148,7 @@ export const AdminApplicationsPage: React.FC<AdminApplicationsPageProps> = ({
                               return (
                                 r.fullName.toLowerCase().includes(q) ||
                                 r.studentId.toLowerCase().includes(q) ||
+                                (r.phone && r.phone.toLowerCase().includes(q)) ||
                                 (r.email && r.email.toLowerCase().includes(q)) ||
                                 r.fullShiftLabel.toLowerCase().includes(q)
                               )
@@ -1156,6 +1160,7 @@ export const AdminApplicationsPage: React.FC<AdminApplicationsPageProps> = ({
                               <td className="py-3 px-4 font-mono text-[#91A4BB] text-center">{idx + 1}</td>
                               <td className="py-3 px-4 font-bold text-white">{reg.fullName}</td>
                               <td className="py-3 px-4 font-mono text-[#70D7FF] font-semibold">{reg.studentId}</td>
+                              <td className="py-3 px-4 font-mono text-emerald-400 font-medium">{reg.phone || '—'}</td>
                               <td className="py-3 px-4 font-semibold text-[#FFE082]">
                                 {reg.fullShiftLabel}
                               </td>

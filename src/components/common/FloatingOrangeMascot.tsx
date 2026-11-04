@@ -11,9 +11,9 @@ interface FloatingOrangeMascotProps {
 const FUN_QUOTES = [
   'nhấn vào mình điii 🍊👆',
   'HMC - Hai một cún 🐶🎵',
-  'Đăng ký CTV ngay 🎤✨',
+  'Đăng ký ca casting ngay 🎤✨',
   'Cam vừa hát hay, vừa nhảy đẹp 💃🕺',
-  'Cam đã đăng ký rồi, còn bạn thì sao? 🧡',
+  'Hẹn bạn vào năm sau nhé <3 🧡',
 ]
 
 export const FloatingOrangeMascot: React.FC<FloatingOrangeMascotProps> = ({ onOpenRegister }) => {

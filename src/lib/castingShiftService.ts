@@ -98,6 +98,117 @@ export const AVAILABLE_CASTING_SHIFTS: CastingShiftOption[] = [
   },
 ]
 
+export const INITIAL_SHIFT_REGISTRATIONS: CastingShiftRegistration[] = [
+  {
+    id: 'SHIFT-HMC-2026-0CF1-KMRQ',
+    applicationId: 'HMC-2026-0CF1-KMRQ',
+    fullName: 'Nguyễn Tuấn Kiệt',
+    studentId: '23DH114762',
+    email: 'nguyenkiet23032005@gmail.com',
+    phone: '',
+    castingDivision: 'vocal',
+    castingSong: 'Chưa điền (bổ sung khi casting)',
+    beatUrl: 'Nộp beat tại bàn Check-in Casting',
+    shiftId: 'day1-afternoon',
+    shiftDate: '2026-11-06',
+    shiftDayOfWeek: 'Thứ Sáu',
+    shiftSession: 'BUỔI CHIỀU & TỐI',
+    shiftTimeSlot: '13g30 – 20g00',
+    fullShiftLabel: 'Thứ Sáu, 06/11/2026 • BUỔI CHIỀU & TỐI (13g30 – 20g00)',
+    registeredAt: '2026-11-02T22:58:28+07:00'
+  },
+  {
+    id: 'SHIFT-CA-LNSC-KM0D',
+    applicationId: 'CA-LNSC-KM0D',
+    fullName: 'Lê Phạm Hoàng Quân',
+    studentId: '26DH220320',
+    email: 'clbamnhac.huflit@gmail.com',
+    phone: '',
+    castingDivision: 'vocal',
+    castingSong: 'Chưa điền (bổ sung khi casting)',
+    beatUrl: 'Nộp beat tại bàn Check-in Casting',
+    shiftId: 'day1-afternoon',
+    shiftDate: '2026-11-06',
+    shiftDayOfWeek: 'Thứ Sáu',
+    shiftSession: 'BUỔI CHIỀU & TỐI',
+    shiftTimeSlot: '13g30 – 20g00',
+    fullShiftLabel: 'Thứ Sáu, 06/11/2026 • BUỔI CHIỀU & TỐI (13g30 – 20g00)',
+    registeredAt: '2026-11-02T21:50:26+07:00'
+  },
+  {
+    id: 'SHIFT-HMC-2026-DLR0-UT04',
+    applicationId: 'HMC-2026-DLR0-UT04',
+    fullName: 'Cao Gia Minh',
+    studentId: '25DH711504',
+    email: 'minhcg1211@gmail.com',
+    phone: '',
+    castingDivision: 'dancer',
+    castingSong: 'Chưa điền (bổ sung khi casting)',
+    beatUrl: 'Nộp beat tại bàn Check-in Casting',
+    shiftId: 'day2-afternoon',
+    shiftDate: '2026-11-07',
+    shiftDayOfWeek: 'Thứ Bảy',
+    shiftSession: 'BUỔI CHIỀU',
+    shiftTimeSlot: '13g30 – 17g00',
+    fullShiftLabel: 'Thứ Bảy, 07/11/2026 • BUỔI CHIỀU (13g30 – 17g00)',
+    registeredAt: '2026-11-02T22:15:33+07:00'
+  },
+  {
+    id: 'SHIFT-HMC-2026-H284-31W2',
+    applicationId: 'HMC-2026-H284-31W2',
+    fullName: 'Nguyễn Quốc Thái',
+    studentId: '25DH100544',
+    email: '25dh100544@st.huflit.edu.vn',
+    phone: '0399488207',
+    castingDivision: 'dancer',
+    castingSong: 'Chưa điền (bổ sung khi casting)',
+    beatUrl: 'Nộp beat tại bàn Check-in Casting',
+    shiftId: 'day1-afternoon',
+    shiftDate: '2026-11-06',
+    shiftDayOfWeek: 'Thứ Sáu',
+    shiftSession: 'BUỔI CHIỀU & TỐI',
+    shiftTimeSlot: '13g30 – 20g00',
+    fullShiftLabel: 'Thứ Sáu, 06/11/2026 • BUỔI CHIỀU & TỐI (13g30 – 20g00)',
+    registeredAt: '2026-11-02T21:58:39+07:00'
+  },
+  {
+    id: 'SHIFT-HMC-2026-696C-I8Z1',
+    applicationId: 'HMC-2026-696C-I8Z1',
+    fullName: 'Nguyễn Phạm Quốc Đoàn',
+    studentId: '25DH710146',
+    email: 'ngdol5310@gmail.com',
+    phone: '',
+    castingDivision: 'dancer',
+    castingSong: 'Chưa điền (bổ sung khi casting)',
+    beatUrl: 'Nộp beat tại bàn Check-in Casting',
+    shiftId: 'day1-morning',
+    shiftDate: '2026-11-06',
+    shiftDayOfWeek: 'Thứ Sáu',
+    shiftSession: 'BUỔI SÁNG',
+    shiftTimeSlot: '09g00 – 12g00',
+    fullShiftLabel: 'Thứ Sáu, 06/11/2026 • BUỔI SÁNG (09g00 – 12g00)',
+    registeredAt: '2026-11-02T21:40:48+07:00'
+  },
+  {
+    id: 'SHIFT-HMC-2026-PVKH-OS9Y',
+    applicationId: 'HMC-2026-PVKH-OS9Y',
+    fullName: 'Nguyễn Thanh Tú',
+    studentId: '25DH100379',
+    email: 'ttu111109@gmail.com',
+    phone: '',
+    castingDivision: 'vocal',
+    castingSong: 'Chưa điền (bổ sung khi casting)',
+    beatUrl: 'Nộp beat tại bàn Check-in Casting',
+    shiftId: 'day1-afternoon',
+    shiftDate: '2026-11-06',
+    shiftDayOfWeek: 'Thứ Sáu',
+    shiftSession: 'BUỔI CHIỀU & TỐI',
+    shiftTimeSlot: '13g30 – 20g00',
+    fullShiftLabel: 'Thứ Sáu, 06/11/2026 • BUỔI CHIỀU & TỐI (13g30 – 20g00)',
+    registeredAt: '2026-11-02T21:05:37+07:00'
+  }
+]
+
 const SHIFT_STORAGE_KEY = 'hmc_casting_shift_registrations_v1'
 
 /**
@@ -106,11 +217,17 @@ const SHIFT_STORAGE_KEY = 'hmc_casting_shift_registrations_v1'
 export function getStoredShiftRegistrations(): CastingShiftRegistration[] {
   try {
     const raw = localStorage.getItem(SHIFT_STORAGE_KEY)
-    if (!raw) return []
-    const parsed = JSON.parse(raw)
-    return Array.isArray(parsed) ? parsed : []
+    let list: CastingShiftRegistration[] = []
+    if (raw) {
+      const parsed = JSON.parse(raw)
+      if (Array.isArray(parsed)) list = parsed
+    }
+    const map = new Map<string, CastingShiftRegistration>()
+    INITIAL_SHIFT_REGISTRATIONS.forEach((s) => map.set(s.studentId.toUpperCase(), s))
+    list.forEach((s) => map.set(s.studentId.toUpperCase(), s))
+    return Array.from(map.values())
   } catch {
-    return []
+    return INITIAL_SHIFT_REGISTRATIONS
   }
 }
 
@@ -180,7 +297,7 @@ export function findExistingRegistrationByStudentId(
 
 export const SHIFT_WEBHOOK_STORAGE_KEY = 'hmc_shift_webhook_url_v1'
 export const DEFAULT_SHIFT_WEBHOOK_URL =
-  'https://script.google.com/macros/s/AKfycbx8SV3o95CGuH554RBiytm0B9oRJ_sRj7OaI1eNtJsn_SAMr_s96IbFOnbT0kiZMJc/exec'
+  'https://script.google.com/macros/s/AKfycbzLm2hseMd-mRKI7D9NnV_EEfvFLpDR2qKrAegYqY4kZBCbf5m84cXUPIItElZR3oq8/exec'
 
 /**
  * Lấy URL Google Apps Script Webhook dành riêng cho Đăng Ký Ca Casting
@@ -191,7 +308,8 @@ export function getShiftWebhookUrl(): string {
     if (
       saved &&
       saved.trim() &&
-      !saved.includes('AKfycbzpEErb2FDabdq7MXR0WwoMZ1GKUF4G4ML7XUQEuEfJyUp3oa-zkezxsIIJrt3PpjYQWA')
+      !saved.includes('AKfycbzpEErb2FDabdq7MXR0WwoMZ1GKUF4G4ML7XUQEuEfJyUp3oa-zkezxsIIJrt3PpjYQWA') &&
+      !saved.includes('AKfycbx8SV3o95CGuH554RBiytm0B9oRJ_sRj7OaI1eNtJsn_SAMr_s96IbFOnbT0kiZMJc')
     ) {
       return saved.trim()
     }
@@ -202,7 +320,8 @@ export function getShiftWebhookUrl(): string {
   const envShift = (import.meta.env.VITE_SHIFT_WEBHOOK_URL as string)?.trim()
   if (
     envShift &&
-    !envShift.includes('AKfycbzpEErb2FDabdq7MXR0WwoMZ1GKUF4G4ML7XUQEuEfJyUp3oa-zkezxsIIJrt3PpjYQWA')
+    !envShift.includes('AKfycbzpEErb2FDabdq7MXR0WwoMZ1GKUF4G4ML7XUQEuEfJyUp3oa-zkezxsIIJrt3PpjYQWA') &&
+    !envShift.includes('AKfycbx8SV3o95CGuH554RBiytm0B9oRJ_sRj7OaI1eNtJsn_SAMr_s96IbFOnbT0kiZMJc')
   ) {
     return envShift
   }
@@ -318,6 +437,7 @@ function doPost(e) {
     
     var fullName = data.fullName || (data.candidate && data.candidate.fullName) || "";
     var studentId = data.studentId || (data.candidate && data.candidate.studentId) || "";
+    var phone = data.phone || (data.candidate && data.candidate.phone) || "";
     var shiftDate = data.shiftDate || "";
     var shiftSession = data.shiftSession || "";
     var shiftTimeSlot = data.shiftTimeSlot || "";
@@ -327,19 +447,20 @@ function doPost(e) {
     
     var sheet = getOrCreateShiftSheet();
     
-    // Nếu trang tính còn trống thì tự động tạo tiêu đề
+    // Nếu trang tính còn trống thì tự động tạo tiêu đề với 9 cột chuẩn
     if (sheet.getLastRow() === 0) {
       sheet.appendRow([
         "Thời Gian Đăng Ký",
         "Họ Và Tên",
         "Mã Số Sinh Viên (MSSV)",
+        "Số Điện Thoại",
         "Ngày Casting",
         "Buổi",
         "Khung Giờ",
         "Chi Tiết Ca Đầy Đủ",
         "Mã Đăng Ký"
       ]);
-      var headerRange = sheet.getRange(1, 1, 1, 8);
+      var headerRange = sheet.getRange(1, 1, 1, 9);
       headerRange.setBackground("#0F2744");
       headerRange.setFontColor("#70D7FF");
       headerRange.setFontWeight("bold");
@@ -347,13 +468,35 @@ function doPost(e) {
       headerRange.setVerticalAlignment("middle");
       sheet.setRowHeight(1, 40);
       sheet.setFrozenRows(1);
+    } else {
+      // Nếu sheet đã có sẵn nhưng chưa có cột Số Điện Thoại thì tự động chèn sau cột MSSV
+      var headers = sheet.getRange(1, 1, 1, Math.max(sheet.getLastColumn(), 1)).getValues()[0];
+      var hasPhoneCol = false;
+      for (var h = 0; h < headers.length; h++) {
+        var hStr = (headers[h] || "").toString().toLowerCase();
+        if (hStr.indexOf("điện thoại") !== -1 || hStr.indexOf("sđt") !== -1 || hStr.indexOf("phone") !== -1) {
+          hasPhoneCol = true;
+          break;
+        }
+      }
+      if (!hasPhoneCol) {
+        sheet.insertColumnAfter(3);
+        var newHeaderCell = sheet.getRange(1, 4);
+        newHeaderCell.setValue("Số Điện Thoại");
+        newHeaderCell.setBackground("#0F2744");
+        newHeaderCell.setFontColor("#70D7FF");
+        newHeaderCell.setFontWeight("bold");
+        newHeaderCell.setHorizontalAlignment("center");
+        newHeaderCell.setVerticalAlignment("middle");
+      }
     }
     
-    // Ghi dòng mới vào đúng trang tính của bạn
+    // Ghi dòng mới vào đúng trang tính của bạn (giữ định dạng số bằng dấu nháy đơn)
     sheet.appendRow([
       nowStr,
       fullName,
-      "'" + studentId, // Dấu nháy đơn giữ định dạng chuỗi số
+      "'" + studentId,
+      "'" + phone,
       shiftDate,
       shiftSession,
       shiftTimeSlot,
@@ -366,7 +509,7 @@ function doPost(e) {
     // TUYỆT ĐỐI KHÔNG GỬI EMAIL THEO YÊU CẦU CỦA HMC
     return ContentService.createTextOutput(JSON.stringify({
       success: true,
-      message: "Đã ghi nhận ca casting vào Google Sheet thành công!",
+      message: "Đã ghi nhận ca casting và số điện thoại vào Google Sheet thành công!",
       row: lastRow
     })).setMimeType(ContentService.MimeType.JSON);
     
@@ -387,11 +530,12 @@ function doGet(e) {
 export interface SimpleShiftSubmitParams {
   fullName: string
   studentId: string
+  phone: string
   shiftId: string
 }
 
 /**
- * Ghi nhận lượt đăng ký ca casting (chỉ cần Họ tên, MSSV và Ca đã chọn)
+ * Ghi nhận lượt đăng ký ca casting (Họ tên, MSSV, Số điện thoại và Ca đã chọn)
  * Tự động đồng bộ ngay lập tức vào Google Sheet, KHÔNG GỬI EMAIL
  */
 export async function submitCastingShiftRegistration(
@@ -399,12 +543,16 @@ export async function submitCastingShiftRegistration(
 ): Promise<{ success: boolean; id: string; message: string; registration?: CastingShiftRegistration }> {
   const cleanName = params.fullName.trim()
   const cleanId = params.studentId.trim().toUpperCase()
+  const cleanPhone = (params.phone || '').trim()
 
   if (!cleanName) {
     return { success: false, id: '', message: 'Vui lòng nhập Họ và tên của bạn.' }
   }
   if (!cleanId) {
     return { success: false, id: '', message: 'Vui lòng nhập Mã số sinh viên (MSSV).' }
+  }
+  if (!cleanPhone) {
+    return { success: false, id: '', message: 'Vui lòng nhập Số điện thoại liên hệ.' }
   }
 
   const shiftOption = AVAILABLE_CASTING_SHIFTS.find((s) => s.id === params.shiftId)
@@ -427,7 +575,7 @@ export async function submitCastingShiftRegistration(
     fullName: cleanName,
     studentId: cleanId,
     email: matched?.email || '',
-    phone: '',
+    phone: cleanPhone || matched?.phone || '',
     castingDivision: matched?.castingDivision || 'vocal',
     castingSong: matched?.castingSong || '',
     beatUrl: matched?.beatUrl || '',
@@ -475,7 +623,7 @@ export async function submitCastingShiftRegistration(
       sendEmail: false,
       to: '', // Tuyệt đối để trống để không gửi email
       email: '', // Không truyền email để tránh bất kỳ script cũ nào gửi thư
-      phone: '',
+      phone: cleanPhone || matched?.phone || '',
       id: newRegistration.id,
       fullName: cleanName,
       studentId: cleanId,
@@ -490,9 +638,10 @@ export async function submitCastingShiftRegistration(
         id: newRegistration.applicationId || newRegistration.id,
         fullName: cleanName,
         studentId: cleanId,
+        phone: cleanPhone || matched?.phone || '',
         email: '', // Tuyệt đối không gửi email
         castingDivision: divisionLabel,
-        passion: `[ĐÃ CHỌN CA CASTING]: ${fullShiftLabel}`,
+        passion: `[ĐÃ CHỌN CA CASTING]: ${fullShiftLabel} - SĐT: ${cleanPhone}`,
       },
       timestamp: now,
     }
@@ -564,6 +713,7 @@ export function exportShiftRegistrationsCsv(
     'Thời Gian Ghi Nhận',
     'Họ Và Tên',
     'MSSV',
+    'Số Điện Thoại',
     'Email',
     'Mảng Casting',
     'Ngày Casting',
@@ -594,6 +744,7 @@ export function exportShiftRegistrationsCsv(
     `"${new Date(r.registeredAt).toLocaleString('vi-VN')}"`,
     `"${r.fullName.replace(/"/g, '""')}"`,
     `"${r.studentId}"`,
+    `"${r.phone || ''}"`,
     `"${r.email || ''}"`,
     `"${getDivisionLabel(r.castingDivision)}"`,
     `"${r.shiftDate}"`,

@@ -196,9 +196,14 @@ export const EmailConfirmationModal: React.FC<EmailConfirmationModalProps> = ({
     'preview_email'
   )
   const [divisionScope, setDivisionScope] = useState<'all' | 'vocal' | 'dancer' | 'traditional_dance'>('all')
-  const [customNote, setCustomNote] = useState(
+
+  const REMINDER_DEFAULT_NOTE =
+    'Sắp đến ngày casting rồi bạn ơi! Bạn hãy nhanh tay bấm vào nút "ĐĂNG KÝ CA CASTING NGAY" ở trên để chọn ca Sáng hoặc Chiều phù hợp nhất với lịch của mình nhé. HMC rất mong chờ sự xuất hiện của bạn! <3'
+  const CONFIRMATION_DEFAULT_NOTE =
     'Lưu ý: Các bạn vui lòng mang theo Thẻ sinh viên HUFLIT (hoặc CCCD/VNeID) khi đến check-in tại Phòng Hội thảo nhé!'
-  )
+
+  const [emailType, setEmailType] = useState<'reminder' | 'confirmation'>('reminder')
+  const [customNote, setCustomNote] = useState(REMINDER_DEFAULT_NOTE)
   const [isSending, setIsSending] = useState(false)
   const [progress, setProgress] = useState<EmailDispatchProgress>({
     current: 0,
@@ -297,7 +302,7 @@ export const EmailConfirmationModal: React.FC<EmailConfirmationModalProps> = ({
     sound.playClick()
 
     try {
-      const res = await sendTestRealEmail(testEmailTarget, emailConfig, customNote)
+      const res = await sendTestRealEmail(testEmailTarget, emailConfig, customNote, { emailType })
       if (res.success) {
         sound.playSuccess()
         setTestSendStatus({
@@ -326,9 +331,12 @@ export const EmailConfirmationModal: React.FC<EmailConfirmationModalProps> = ({
       return
     }
 
-    const confirmSend = window.confirm(
-      `Xác nhận gửi email xác nhận tham gia Casting kèm liên kết thể lệ website cho ${targetCandidates.length} thí sinh?`
-    )
+    const confirmMessage =
+      emailType === 'reminder'
+        ? `Xác nhận gửi email NHẮC NHỞ CASTING & ĐĂNG KÝ CA cho ${targetCandidates.length} thí sinh?`
+        : `Xác nhận gửi email XÁC NHẬN THAM GIA CASTING cho ${targetCandidates.length} thí sinh?`
+
+    const confirmSend = window.confirm(confirmMessage)
     if (!confirmSend) return
 
     setIsSending(true)
@@ -342,6 +350,7 @@ export const EmailConfirmationModal: React.FC<EmailConfirmationModalProps> = ({
           customNote: customNote.trim(),
           includePdfAttachment: true,
           config: emailConfig,
+          emailType,
         },
         (p) => setProgress(p)
       )
@@ -572,6 +581,47 @@ export const EmailConfirmationModal: React.FC<EmailConfirmationModalProps> = ({
                 </div>
               )}
 
+              {/* Email Type Selector */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-2xl bg-[#050D1A]/80 border border-white/10">
+                <span className="text-xs font-semibold uppercase tracking-wider text-[#70D7FF] flex items-center gap-2">
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>Chọn Mẫu Thư Gửi:</span>
+                </span>
+
+                <div className="flex rounded-xl bg-[#09172B] p-1 border border-white/10 text-xs">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEmailType('reminder')
+                      setCustomNote(REMINDER_DEFAULT_NOTE)
+                      sound.playClick()
+                    }}
+                    className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                      emailType === 'reminder'
+                        ? 'bg-gradient-to-r from-[#398BFF] to-[#70D7FF] text-[#030F20] shadow-sm'
+                        : 'text-[#91A4BB] hover:text-white'
+                    }`}
+                  >
+                    <span>⏰ Nhắc Nhở Casting &amp; Đăng Ký Ca</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEmailType('confirmation')
+                      setCustomNote(CONFIRMATION_DEFAULT_NOTE)
+                      sound.playClick()
+                    }}
+                    className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                      emailType === 'confirmation'
+                        ? 'bg-[#398BFF] text-white shadow-sm'
+                        : 'text-[#91A4BB] hover:text-white'
+                    }`}
+                  >
+                    <span>📋 Xác Nhận Hồ Sơ &amp; Thể Lệ</span>
+                  </button>
+                </div>
+              </div>
+
               {/* Custom Note input from Admin */}
               <div className="p-4 rounded-2xl bg-[#050D1A]/70 border border-[#78B9F0]/20 space-y-2">
                 <label className="text-xs font-semibold uppercase tracking-wider text-[#70D7FF] flex items-center gap-2">
@@ -613,7 +663,7 @@ export const EmailConfirmationModal: React.FC<EmailConfirmationModalProps> = ({
                       disabled={selectedPreviewIndex >= targetCandidates.length - 1}
                       onClick={() =>
                         setSelectedPreviewIndex((prev) =>
-                          Math.min(targetCandidates.length - 1, prev + 1)
+                           Math.min(targetCandidates.length - 1, prev + 1)
                         )
                       }
                       className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 disabled:opacity-30 cursor-pointer"
@@ -631,6 +681,7 @@ export const EmailConfirmationModal: React.FC<EmailConfirmationModalProps> = ({
                   dangerouslySetInnerHTML={{
                     __html: generatePersonalizedEmailHtml(previewCandidate, {
                       customNote: customNote.trim(),
+                      emailType,
                     }),
                   }}
                 />

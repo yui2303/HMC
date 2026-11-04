@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Calendar,
   Clock,
@@ -9,6 +9,7 @@ import {
   ArrowRight,
   User,
   ShieldCheck,
+  Phone,
   AlertCircle,
   Loader2,
   Radio,
@@ -22,6 +23,7 @@ import {
   CastingShiftOption,
   CastingShiftRegistration,
   submitCastingShiftRegistration,
+  matchApplicantByStudentIdOrName,
 } from '../../lib/castingShiftService'
 
 interface CastingShiftRegistrationPageProps {
@@ -31,9 +33,20 @@ interface CastingShiftRegistrationPageProps {
 export const CastingShiftRegistrationPage: React.FC<CastingShiftRegistrationPageProps> = ({
   onNavigateHome,
 }) => {
-  // Chỉ cần 2 trường thông tin: Họ và tên & MSSV
+  // 3 trường thông tin cần thiết: Họ và tên, MSSV & Số điện thoại
   const [fullName, setFullName] = useState('')
   const [studentId, setStudentId] = useState('')
+  const [phone, setPhone] = useState('')
+
+  // Tự động khớp số điện thoại nếu thí sinh đã nộp hồ sơ trước đó
+  useEffect(() => {
+    if ((studentId.trim() || fullName.trim()) && !phone) {
+      const matched = matchApplicantByStudentIdOrName(studentId, fullName)
+      if (matched?.phone) {
+        setPhone(matched.phone)
+      }
+    }
+  }, [studentId, fullName])
 
   // Chọn 1 trong các ca (Sáng hoặc Chiều của 1 ngày)
   const [selectedShift, setSelectedShift] = useState<CastingShiftOption | null>(null)
@@ -67,6 +80,15 @@ export const CastingShiftRegistrationPage: React.FC<CastingShiftRegistrationPage
       setErrorMessage('Vui lòng nhập Mã số sinh viên (MSSV).')
       return
     }
+    if (!phone.trim()) {
+      setErrorMessage('Vui lòng nhập Số điện thoại liên hệ của bạn.')
+      return
+    }
+    const cleanPhoneDigits = phone.trim().replace(/[\s.-]/g, '')
+    if (!/^(0|\+84)[0-9]{9,10}$/.test(cleanPhoneDigits)) {
+      setErrorMessage('Số điện thoại không đúng định dạng (Ví dụ: 0912345678).')
+      return
+    }
     if (!selectedShift) {
       setErrorMessage('Vui lòng chọn 1 ca casting (Sáng hoặc Chiều) ở bảng bên dưới!')
       const scheduleEl = document.getElementById('schedule-cards-section')
@@ -81,6 +103,7 @@ export const CastingShiftRegistrationPage: React.FC<CastingShiftRegistrationPage
       const res = await submitCastingShiftRegistration({
         fullName: fullName.trim(),
         studentId: studentId.trim().toUpperCase(),
+        phone: phone.trim(),
         shiftId: selectedShift.id,
       })
 
@@ -199,6 +222,12 @@ export const CastingShiftRegistrationPage: React.FC<CastingShiftRegistrationPage
                   <span className="text-[#91A4BB]">Mã số sinh viên:</span>
                   <span className="text-white font-mono font-semibold">{submissionSuccess.studentId}</span>
                 </div>
+                {submissionSuccess.phone && (
+                  <div className="flex justify-between">
+                    <span className="text-[#91A4BB]">Số điện thoại:</span>
+                    <span className="text-[#70D7FF] font-mono font-semibold">{submissionSuccess.phone}</span>
+                  </div>
+                )}
               </div>
 
               <div className="p-4 rounded-2xl bg-[#050D1A]/70 border border-[#70D7FF]/30 space-y-2 text-xs sm:text-sm">
@@ -220,7 +249,7 @@ export const CastingShiftRegistrationPage: React.FC<CastingShiftRegistrationPage
             <div className="p-4 rounded-2xl bg-emerald-500/15 border border-emerald-500/35 text-xs text-emerald-200 flex items-center gap-3 mb-6">
               <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
               <div className="leading-relaxed">
-                Thông tin ca casting của bạn đã được <strong className="text-white">lưu trực tiếp vào link Google Sheet</strong> của ban tổ chức ngay lập tức. Lựa chọn của bạn đã được bảo đảm!
+                Thông tin ca casting và số điện thoại của bạn đã được <strong className="text-white">lưu trực tiếp vào Google Sheet</strong> của ban tổ chức ngay lập tức. Lựa chọn của bạn đã được bảo đảm!
               </div>
             </div>
 
@@ -269,11 +298,11 @@ export const CastingShiftRegistrationPage: React.FC<CastingShiftRegistrationPage
           </h1>
 
           <p className="text-xs sm:text-sm text-[#91A4BB] leading-relaxed">
-            Điền Họ tên, MSSV và chọn <strong>1 trong 2 ca (Sáng hoặc Chiều)</strong> trong ngày bạn muốn tham gia casting.
+            Điền Họ tên, MSSV, Số điện thoại và chọn <strong>1 trong 2 ca (Sáng hoặc Chiều)</strong> trong ngày bạn muốn tham gia casting.
           </p>
         </div>
 
-        {/* FORM NHẬP THÔNG TIN (CHỈ TÊN VÀ MSSV) */}
+        {/* FORM NHẬP THÔNG TIN (HỌ TÊN, MSSV & SĐT) */}
         <section className="mb-8">
           <div className="glass-panel p-5 sm:p-6 rounded-3xl border border-[#70D7FF]/25 bg-[#09172B]/85 shadow-[0_10px_35px_rgba(0,0,0,0.5)]">
             <div className="flex items-center gap-2.5 pb-4 mb-4 border-b border-white/10">
@@ -285,12 +314,12 @@ export const CastingShiftRegistrationPage: React.FC<CastingShiftRegistrationPage
                   Thông Tin Thí Sinh
                 </h2>
                 <p className="text-xs text-[#91A4BB]">
-                  Vui lòng nhập chính xác họ tên và mã số sinh viên HUFLIT
+                  Vui lòng nhập chính xác họ tên, mã số sinh viên và số điện thoại liên hệ
                 </p>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {/* Họ và tên */}
               <div>
                 <label className="block text-xs font-medium text-[#C9D9EC] mb-1.5 flex items-center gap-1">
@@ -320,6 +349,22 @@ export const CastingShiftRegistrationPage: React.FC<CastingShiftRegistrationPage
                   onChange={(e) => setStudentId(e.target.value)}
                   placeholder="Ví dụ: 25DH711114"
                   className="w-full px-4 py-3 rounded-2xl bg-[#050D1A] border border-white/15 focus:border-[#70D7FF] focus:ring-2 focus:ring-[#70D7FF]/30 text-white text-sm uppercase font-mono outline-none transition-all placeholder-[#91A4BB]/40"
+                />
+              </div>
+
+              {/* Số điện thoại */}
+              <div>
+                <label className="block text-xs font-medium text-[#C9D9EC] mb-1.5 flex items-center gap-1">
+                  <Phone className="w-3.5 h-3.5 text-[#70D7FF]" />
+                  <span>Số điện thoại <span className="text-red-400">*</span></span>
+                </label>
+                <input
+                  type="tel"
+                  required
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="Ví dụ: 0901234567"
+                  className="w-full px-4 py-3 rounded-2xl bg-[#050D1A] border border-white/15 focus:border-[#70D7FF] focus:ring-2 focus:ring-[#70D7FF]/30 text-white text-sm font-mono outline-none transition-all placeholder-[#91A4BB]/40"
                 />
               </div>
             </div>
@@ -558,7 +603,7 @@ export const CastingShiftRegistrationPage: React.FC<CastingShiftRegistrationPage
                       {selectedShift.dayOfWeek}, {selectedShift.dateLabel.split(', ')[1]} • {selectedShift.sessionLabel} ({selectedShift.timeSlot})
                     </div>
                     <div className="text-xs text-[#91A4BB]">
-                      Thí sinh: <strong className="text-white">{fullName || '(Chưa nhập tên)'}</strong> {studentId && `— MSSV: ${studentId}`}
+                      Thí sinh: <strong className="text-white">{fullName || '(Chưa nhập tên)'}</strong> {studentId && `— MSSV: ${studentId}`} {phone && `— SĐT: ${phone}`}
                     </div>
                   </div>
                 ) : (

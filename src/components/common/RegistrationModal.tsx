@@ -63,6 +63,9 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, on
   const [emailDeliveryStatus, setEmailDeliveryStatus] = useState<{ sent?: boolean; error?: string } | null>(null)
   const [showConfirmClose, setShowConfirmClose] = useState(false)
 
+  // Cổng đăng ký CTV đã kết thúc hạn (21g00 ngày 04/11/2026)
+  const IS_REGISTRATION_CLOSED = true
+
   // Check if user has entered significant data
   const isFormDirty = Boolean(
     formData.fullName.trim() ||
@@ -265,7 +268,9 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, on
       <div
         ref={modalRef}
         data-lenis-prevent="true"
-        className="relative w-full sm:max-w-[1040px] h-[100dvh] sm:h-auto sm:max-h-[90vh] bg-[#050D1A]/96 border border-[#70D7FF]/20 rounded-none sm:rounded-[32px] shadow-[0_25px_80px_rgba(0,0,0,0.92),0_0_40px_rgba(57,139,255,0.18)] text-[#F4F7FB] z-10 flex flex-col overflow-hidden my-0 sm:my-auto transition-all duration-300"
+        className={`relative w-full ${
+          IS_REGISTRATION_CLOSED ? 'sm:max-w-[560px]' : 'sm:max-w-[1040px]'
+        } h-[100dvh] sm:h-auto sm:max-h-[90vh] bg-[#050D1A]/96 border border-[#70D7FF]/20 rounded-none sm:rounded-[32px] shadow-[0_25px_80px_rgba(0,0,0,0.92),0_0_40px_rgba(57,139,255,0.18)] text-[#F4F7FB] z-10 flex flex-col overflow-hidden my-0 sm:my-auto transition-all duration-300`}
         style={{
           backgroundImage:
             'radial-gradient(circle at 80% 10%, rgba(57, 139, 255, 0.08) 0%, transparent 60%), radial-gradient(circle at 10% 90%, rgba(112, 215, 255, 0.06) 0%, transparent 50%)',
@@ -273,7 +278,7 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, on
         onClick={(e) => e.stopPropagation()}
       >
         {/* Top Header Bar with safe area padding */}
-        <div className="shrink-0 flex items-center justify-between px-4 sm:px-10 py-3.5 sm:py-4 bg-[#050D1A]/95 backdrop-blur-md border-b border-white/10 pt-safe">
+        <div className="shrink-0 flex items-center justify-between px-4 sm:px-8 py-3.5 sm:py-4 bg-[#050D1A]/95 backdrop-blur-md border-b border-white/10 pt-safe">
           <div className="flex items-center gap-2.5 sm:gap-3">
             <span className="w-2 h-2 rounded-full bg-[#70D7FF] shadow-[0_0_8px_#70D7FF]" />
             <span className="text-[11px] sm:text-xs font-mono tracking-[0.2em] sm:tracking-[0.28em] text-[#70D7FF] uppercase font-semibold">
@@ -291,20 +296,83 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, on
           </button>
         </div>
 
-        {/* Progress Bar */}
-        <div className="w-full bg-[#071A33] h-1 shrink-0 relative">
-          <div
-            className="h-full bg-gradient-to-r from-[#398BFF] via-[#70D7FF] to-[#398BFF] transition-all duration-300 shadow-[0_0_10px_#70D7FF]"
-            style={{ width: `${progressPercent}%` }}
-          />
-        </div>
+        {IS_REGISTRATION_CLOSED ? (
+          /* REGISTRATION CLOSED NOTICE */
+          <div className="p-6 sm:p-10 text-center flex flex-col items-center justify-center max-w-lg mx-auto animate-in fade-in zoom-in-95 duration-300 my-auto">
+            {/* Cute Heart Glow Icon */}
+            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-tr from-[#FF6B6B]/20 via-[#FFE082]/20 to-[#70D7FF]/20 border-2 border-[#FFE082]/40 flex items-center justify-center text-[#FFB45C] shadow-[0_0_35px_rgba(255,180,92,0.3)] mb-5 animate-pulse">
+              <Heart className="w-10 h-10 sm:w-12 sm:h-12 text-[#FF6B8B] fill-[#FF6B8B]/40 stroke-[2.2]" />
+            </div>
 
-        {/* Modal Body with safe bottom padding */}
-        <div
-          data-lenis-prevent="true"
-          className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-4 sm:px-10 py-5 sm:py-8 custom-scrollbar pb-safe"
-          style={{ WebkitOverflowScrolling: 'touch' }}
-        >
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FFE082]/15 border border-[#FFE082]/35 text-[#FFE082] text-xs font-mono font-bold tracking-wider uppercase mb-3.5 shadow-[0_0_15px_rgba(255,224,130,0.15)]">
+              <Clock className="w-4 h-4" />
+              <span>HỘI TUYỂN CỘNG TÁC VIÊN HMC 2026</span>
+            </div>
+
+            {/* Main Title - EXACT REQUEST */}
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight leading-snug mb-3 text-balance">
+              hết thời gian đăng kí hẹn bạn vào năm sau nhé &lt;3
+            </h2>
+
+            {/* Subtext */}
+            <p className="text-xs sm:text-sm text-[#91A4BB] leading-relaxed max-w-md mb-6">
+              Cổng tiếp nhận hồ sơ đăng ký Cộng tác viên HMC 2026 đã chính thức khép lại. CLB Âm nhạc HUFLIT chân thành cảm ơn tình cảm và sự quan tâm của bạn!
+            </p>
+
+            {/* Box for already registered applicants: Pick shift */}
+            <div className="w-full p-4 sm:p-5 rounded-2xl sm:rounded-3xl bg-[#09172B]/90 border border-[#70D7FF]/35 text-left mb-5 shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+              <div className="flex items-center gap-2 text-xs font-bold text-[#70D7FF] uppercase tracking-wider mb-1.5">
+                <Sparkles className="w-4 h-4 text-[#FFE082]" />
+                <span>BẠN ĐÃ NỘP HỒ SƠ ỨNG TUYỂN TRƯỚC ĐÓ?</span>
+              </div>
+              <p className="text-xs text-[#C9D9EC] leading-relaxed mb-3.5">
+                Nếu bạn đã gửi hồ sơ CTV, hãy vào cổng đăng ký ca casting để chọn khung giờ biểu diễn phù hợp nhất nhé!
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  sound.playClick()
+                  onClose()
+                  window.history.pushState({}, '', '/dangkica')
+                  window.dispatchEvent(new PopStateEvent('popstate'))
+                }}
+                className="btn-primary-glow w-full flex items-center justify-center gap-2 py-3 rounded-2xl text-xs sm:text-sm font-bold text-white tracking-wide cursor-pointer shadow-md"
+              >
+                <Calendar className="w-4 h-4 text-[#FFE082]" />
+                <span>Chọn Ca &amp; Khung Giờ Casting Ngay</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Close Button */}
+            <button
+              type="button"
+              onClick={() => {
+                sound.playClick()
+                onClose()
+              }}
+              className="w-full py-3.5 rounded-2xl bg-white/10 hover:bg-white/15 text-white text-xs sm:text-sm font-semibold transition-all cursor-pointer"
+            >
+              Đóng thông báo
+            </button>
+          </div>
+        ) : (
+          <>
+            {/* Progress Bar */}
+            <div className="w-full bg-[#071A33] h-1 shrink-0 relative">
+              <div
+                className="h-full bg-gradient-to-r from-[#398BFF] via-[#70D7FF] to-[#398BFF] transition-all duration-300 shadow-[0_0_10px_#70D7FF]"
+                style={{ width: `${progressPercent}%` }}
+              />
+            </div>
+
+            {/* Modal Body with safe bottom padding */}
+            <div
+              data-lenis-prevent="true"
+              className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-4 sm:px-10 py-5 sm:py-8 custom-scrollbar pb-safe"
+              style={{ WebkitOverflowScrolling: 'touch' }}
+            >
           {isSubmitted ? (
             /* SUCCESS STATE */
             <div className="text-center py-8 sm:py-16 max-w-xl mx-auto flex flex-col items-center animate-in fade-in zoom-in-95 duration-300">
@@ -1167,6 +1235,8 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, on
             </form>
           )}
         </div>
+        </>
+      )}
 
         {/* 3. Close Safety Confirmation Dialog */}
         {showConfirmClose && (

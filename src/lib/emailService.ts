@@ -17,6 +17,8 @@ export interface SendEmailOptions {
   senderName?: string
   includePdfAttachment?: boolean
   config?: EmailProviderConfig
+  emailType?: 'reminder' | 'confirmation'
+  customSubject?: string
 }
 
 export interface EmailDispatchResult {
@@ -107,6 +109,7 @@ export function generatePersonalizedEmailHtml(
   candidate: ApplicationItem,
   options: SendEmailOptions = {}
 ): string {
+  const isReminder = options.emailType === 'reminder'
   const divisionLabel =
     candidate.castingDivision === 'vocal'
       ? 'Hát (Vocal)'
@@ -133,10 +136,10 @@ export function generatePersonalizedEmailHtml(
           HUFLIT MUSIC CLUB (HMC)
         </div>
         <h1 style="margin: 0; color: #FFFFFF; font-size: 20px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">
-          XÁC NHẬN ĐĂNG KÝ CASTING CTV 2026
+          ${isReminder ? '⏰ NHẮC NHỞ: SẮP ĐẾN NGÀY CASTING CLB RỒI ĐÓ BẠN ƠI!' : 'XÁC NHẬN ĐĂNG KÝ CASTING CTV 2026'}
         </h1>
         <p style="margin: 6px 0 0 0; color: #70D7FF; font-size: 13px; font-weight: 600;">
-          Kèm Kế Hoạch &amp; Thể Lệ Tuyển Thành Viên Năm Học 2026 – 2027
+          ${isReminder ? 'Đăng ký ca casting ngay để chọn khung giờ biểu diễn phù hợp nhất nhé!' : 'Kèm Kế Hoạch &amp; Thể Lệ Tuyển Thành Viên Năm Học 2026 – 2027'}
         </p>
       </div>
 
@@ -147,7 +150,11 @@ export function generatePersonalizedEmailHtml(
         </p>
 
         <p style="margin: 0 0 18px 0; line-height: 1.6; color: #C9D9EC; font-size: 13.5px;">
-          Ban Chủ nhiệm <strong>CLB Âm nhạc HUFLIT (HMC)</strong> xin gửi lời cảm ơn bạn đã quan tâm và hoàn tất đăng ký tham gia Đợt Tuyển Cộng tác viên năm học 2026 – 2027. Hồ sơ của bạn đã được ghi nhận chính thức vào hệ thống!
+          ${
+            isReminder
+              ? 'Chỉ còn ít ngày nữa là đến buổi <strong>Casting Hội tuyển CTV CLB Âm nhạc HUFLIT (HMC) 2026</strong> rồi đó bạn ơi! Ban Tổ Chức gửi mail này nhằm nhắc nhở bạn kiểm tra lại thông tin và <strong>nhanh tay đăng ký ca casting</strong> (Sáng hoặc Chiều) để giữ khung giờ biểu diễn ưng ý nhất.'
+              : 'Ban Chủ nhiệm <strong>CLB Âm nhạc HUFLIT (HMC)</strong> xin gửi lời cảm ơn bạn đã quan tâm và hoàn tất đăng ký tham gia Đợt Tuyển Cộng tác viên năm học 2026 – 2027. Hồ sơ của bạn đã được ghi nhận chính thức vào hệ thống!'
+          }
         </p>
 
         <!-- CANDIDATE DETAILS CARD -->
@@ -238,6 +245,22 @@ export function generatePersonalizedEmailHtml(
           </ul>
         </div>
 
+        <!-- CALL TO ACTION: ĐĂNG KÝ CA CASTING -->
+        <div style="text-align: center; margin: 26px 0; padding: 24px 20px; background: linear-gradient(135deg, rgba(14, 42, 77, 0.95), rgba(9, 23, 43, 0.95)); border: 2px solid #70D7FF; border-radius: 16px; box-shadow: 0 0 25px rgba(112, 215, 255, 0.25);">
+          <div style="color: #FFE082; font-size: 13.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">
+            ⚡ BƯỚC QUAN TRỌNG: ĐĂNG KÝ CA &amp; KHUNG GIỜ CASTING
+          </div>
+          <p style="color: #E2EBF6; font-size: 13px; margin: 0 0 16px 0; line-height: 1.5;">
+            Để Ban Tổ Chức sắp xếp thứ tự biểu diễn chu đáo nhất, bạn hãy chọn ngay 1 ca casting (Sáng hoặc Chiều) tại liên kết bên dưới nhé:
+          </p>
+          <a href="https://ctvhmc.netlify.app/dangkica" target="_blank" rel="noopener noreferrer" style="display: inline-block; background: linear-gradient(135deg, #398BFF 0%, #70D7FF 100%); color: #050D1A; font-weight: 800; font-size: 13.5px; text-decoration: none; padding: 13px 30px; border-radius: 30px; box-shadow: 0 4px 20px rgba(112, 215, 255, 0.5); text-transform: uppercase; letter-spacing: 0.5px;">
+            👉 BẤM VÀO ĐÂY ĐỂ ĐĂNG KÝ CA CASTING NGAY
+          </a>
+          <p style="color: #91A4BB; font-size: 11.5px; margin: 12px 0 0 0;">
+            Đường link trực tiếp: <a href="https://ctvhmc.netlify.app/dangkica" style="color: #70D7FF; text-decoration: underline;">https://ctvhmc.netlify.app/dangkica</a>
+          </p>
+        </div>
+
         <!-- CHECKLIST / RULES REMINDER -->
         <div style="margin-bottom: 25px;">
           <div style="color: #FFFFFF; font-weight: 700; font-size: 13.5px; margin-bottom: 8px;">
@@ -293,7 +316,12 @@ export async function sendSingleRealEmail(
 ): Promise<{ success: boolean; error?: string }> {
   const activeConfig = config || options.config || getSavedEmailConfig()
   const htmlBody = generatePersonalizedEmailHtml(candidate, options)
-  const subject = `[HMC 2026] Xác nhận đăng ký Casting CTV - ${candidate.fullName} (${candidate.studentId})`
+  const isReminder = options.emailType === 'reminder'
+  const subject =
+    options.customSubject ||
+    (isReminder
+      ? `[HMC 2026] ⏰ Sắp đến ngày Casting rồi bạn ơi! Đăng ký ca casting ngay nhé 🎵 - ${candidate.fullName}`
+      : `[HMC 2026] Xác nhận đăng ký Casting CTV - ${candidate.fullName} (${candidate.studentId})`)
 
   // 1. Resend API via Netlify Serverless Function (Server-to-server, bypasses browser CORS)
   if (activeConfig.provider === 'resend') {
@@ -523,7 +551,8 @@ export async function sendSingleRealEmail(
 export async function sendTestRealEmail(
   targetEmail: string,
   config?: EmailProviderConfig,
-  customNote?: string
+  customNote?: string,
+  options?: SendEmailOptions
 ): Promise<{ success: boolean; error?: string }> {
   const sampleCandidate: ApplicationItem = {
     id: 'HMC-TEST-001',
@@ -542,7 +571,7 @@ export async function sendTestRealEmail(
     updatedAt: new Date().toISOString(),
   }
 
-  return sendSingleRealEmail(targetEmail, sampleCandidate, { customNote }, config)
+  return sendSingleRealEmail(targetEmail, sampleCandidate, { customNote, ...options }, config)
 }
 
 /**

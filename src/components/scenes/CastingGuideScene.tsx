@@ -309,9 +309,9 @@ export const CastingGuideScene: React.FC<CastingGuideSceneProps> = ({
 
               {/* ACTION CTA BOX */}
               <div className="glass-panel p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-[#70D7FF]/40 bg-gradient-to-br from-[#09172B] via-[#0D2442] to-[#09172B] space-y-3 sm:space-y-4 shadow-[0_0_30px_rgba(57,139,255,0.25)]">
-                <div className="flex items-center gap-2 text-xs text-[#34D399] font-medium">
-                  <CheckCircle2 className="w-4 h-4" />
-                  <span>Cổng đăng ký trực tuyến đang mở</span>
+                <div className="flex items-center gap-2 text-xs text-[#FFE082] font-medium">
+                  <CheckCircle2 className="w-4 h-4 text-[#70D7FF]" />
+                  <span>Cổng đăng ký ca casting đang mở</span>
                 </div>
 
                 <div className="space-y-2.5">
