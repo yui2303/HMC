@@ -5,6 +5,7 @@ import {
   Activity,
   Calendar,
   Mail,
+  Send,
   CreditCard,
   Music,
   ExternalLink,
@@ -27,6 +28,7 @@ interface ApplicantDetailDrawerProps {
   onApplicationUpdated: (updated: ApplicationItem) => void
   onEditRequest?: (app: ApplicationItem) => void
   onDeleteRequest?: (app: ApplicationItem) => void
+  onSendEmailRequest?: (app: ApplicationItem) => void
 }
 
 export const ApplicantDetailDrawer: React.FC<ApplicantDetailDrawerProps> = ({
@@ -36,6 +38,7 @@ export const ApplicantDetailDrawer: React.FC<ApplicantDetailDrawerProps> = ({
   onApplicationUpdated,
   onEditRequest,
   onDeleteRequest,
+  onSendEmailRequest,
 }) => {
   const application = applications.find((a) => a.id === applicationId) || null
 
@@ -174,6 +177,18 @@ export const ApplicantDetailDrawer: React.FC<ApplicantDetailDrawerProps> = ({
           </div>
 
           <div className="flex items-center gap-2">
+            {onSendEmailRequest && (
+              <button
+                type="button"
+                onClick={() => onSendEmailRequest(application)}
+                className="px-3 py-1.5 rounded-xl bg-[#10B981]/20 hover:bg-[#10B981]/35 text-[#34D399] border border-[#10B981]/40 text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer shadow-sm"
+                title="Gửi thử email cho thí sinh này"
+              >
+                <Mail className="w-3.5 h-3.5" />
+                <span>Gửi thử mail</span>
+              </button>
+            )}
+
             {onEditRequest && (
               <button
                 type="button"
@@ -285,6 +300,20 @@ export const ApplicantDetailDrawer: React.FC<ApplicantDetailDrawerProps> = ({
                 <span>{new Date(application.createdAt).toLocaleString('vi-VN')}</span>
               </div>
             </div>
+
+            {onSendEmailRequest && (
+              <div className="pt-2 border-t border-white/10 flex items-center justify-between gap-2">
+                <span className="text-[11px] text-[#91A4BB]">Kiểm tra thông báo email cho thí sinh:</span>
+                <button
+                  type="button"
+                  onClick={() => onSendEmailRequest(application)}
+                  className="px-3 py-1.5 rounded-xl bg-[#10B981]/20 hover:bg-[#10B981]/35 text-[#34D399] border border-[#10B981]/40 text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer"
+                >
+                  <Send className="w-3 h-3" />
+                  <span>Gửi thử email</span>
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Quick Status Selector */}

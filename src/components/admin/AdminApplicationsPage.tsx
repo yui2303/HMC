@@ -62,6 +62,7 @@ import { EmailConfirmationModal } from './EmailConfirmationModal'
 import { EditApplicantModal } from './EditApplicantModal'
 import { DeleteConfirmModal } from './DeleteConfirmModal'
 import { ShiftSyncModal } from './ShiftSyncModal'
+import { SingleApplicantEmailModal } from './SingleApplicantEmailModal'
 import { sound } from '../../lib/audioSynth'
 
 interface AdminApplicationsPageProps {
@@ -149,6 +150,7 @@ export const AdminApplicationsPage: React.FC<AdminApplicationsPageProps> = ({
 
   // Email Confirmation Modal State
   const [isEmailModalOpen, setIsEmailModalOpen] = useState(false)
+  const [singleEmailCandidate, setSingleEmailCandidate] = useState<ApplicationItem | null>(null)
   const [allCandidatesForEmail, setAllCandidatesForEmail] = useState<ApplicationItem[]>([])
   const [isLoadingEmailCandidates, setIsLoadingEmailCandidates] = useState(false)
   const [sentEmailIdsSet, setSentEmailIdsSet] = useState<Set<string>>(() => getSentEmailIds())
@@ -1542,9 +1544,18 @@ export const AdminApplicationsPage: React.FC<AdminApplicationsPageProps> = ({
 
                             <td className="py-3 px-4">{renderStatusBadge(app.status)}</td>
 
-                            {/* ROW ACTIONS: SỬA & XÓA & XEM */}
+                            {/* ROW ACTIONS: GỬI THỬ MAIL & SỬA & XÓA & XEM */}
                             <td className="py-3 px-4 text-right" onClick={(e) => e.stopPropagation()}>
                               <div className="flex items-center justify-end gap-1.5">
+                                <button
+                                  type="button"
+                                  onClick={() => setSingleEmailCandidate(app)}
+                                  className="p-1.5 rounded-lg bg-[#10B981]/15 hover:bg-[#10B981]/30 text-[#34D399] border border-[#10B981]/35 transition-all cursor-pointer"
+                                  title="Gửi thử email cho thí sinh này"
+                                >
+                                  <Mail className="w-3.5 h-3.5" />
+                                </button>
+
                                 <button
                                   type="button"
                                   onClick={() => handleOpenEdit(app)}
@@ -1639,12 +1650,13 @@ export const AdminApplicationsPage: React.FC<AdminApplicationsPageProps> = ({
                         </div>
                       )}
 
-                      {/* Mobile Actions: Sửa, Xóa, Xem */}
-                      <div className="grid grid-cols-3 gap-2 pt-2 border-t border-white/10">
+                      {/* Mobile Actions: Sửa, Xóa, Gửi thử mail, Xem */}
+                      <div className="grid grid-cols-4 gap-1.5 pt-2 border-t border-white/10">
                         <button
                           type="button"
                           onClick={() => handleOpenEdit(app)}
                           className="py-1.5 rounded-xl bg-[#398BFF]/20 text-[#70D7FF] text-xs font-semibold flex items-center justify-center gap-1 border border-[#70D7FF]/30"
+                          title="Sửa thông tin"
                         >
                           <Edit2 className="w-3.5 h-3.5" />
                           <span>Sửa</span>
@@ -1652,8 +1664,19 @@ export const AdminApplicationsPage: React.FC<AdminApplicationsPageProps> = ({
 
                         <button
                           type="button"
+                          onClick={() => setSingleEmailCandidate(app)}
+                          className="py-1.5 rounded-xl bg-[#10B981]/20 text-[#34D399] text-xs font-semibold flex items-center justify-center gap-1 border border-[#10B981]/30"
+                          title="Gửi thử email cho thí sinh"
+                        >
+                          <Mail className="w-3.5 h-3.5" />
+                          <span>Gửi mail</span>
+                        </button>
+
+                        <button
+                          type="button"
                           onClick={() => handleOpenDeleteSingle(app)}
                           className="py-1.5 rounded-xl bg-red-500/20 text-red-300 text-xs font-semibold flex items-center justify-center gap-1 border border-red-500/30"
+                          title="Xóa hồ sơ"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                           <span>Xóa</span>
@@ -1664,7 +1687,7 @@ export const AdminApplicationsPage: React.FC<AdminApplicationsPageProps> = ({
                           onClick={() => setSelectedAppId(app.id)}
                           className="py-1.5 rounded-xl bg-white/10 text-white text-xs font-semibold flex items-center justify-center"
                         >
-                          Xem chi tiết
+                          Xem
                         </button>
                       </div>
                     </div>
@@ -1933,6 +1956,14 @@ export const AdminApplicationsPage: React.FC<AdminApplicationsPageProps> = ({
         onClose={() => setIsShiftSyncModalOpen(false)}
       />
 
+      {/* Single Applicant Email Test Modal */}
+      <SingleApplicantEmailModal
+        isOpen={!!singleEmailCandidate}
+        candidate={singleEmailCandidate}
+        onClose={() => setSingleEmailCandidate(null)}
+        currentAdminEmail={currentUser.email}
+      />
+
       {/* Detail Slide Drawer */}
       {selectedAppId && (
         <ApplicantDetailDrawer
@@ -1946,6 +1977,9 @@ export const AdminApplicationsPage: React.FC<AdminApplicationsPageProps> = ({
           }}
           onDeleteRequest={(app) => {
             handleOpenDeleteSingle(app)
+          }}
+          onSendEmailRequest={(app) => {
+            setSingleEmailCandidate(app)
           }}
         />
       )}
